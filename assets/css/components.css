@@ -1,0 +1,131 @@
+/* ── BUTTONS ── */
+.btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: var(--font-bn); font-weight: var(--fw-semibold); font-size: var(--text-base);
+    padding: 12px 24px; border-radius: var(--r-base);
+    cursor: pointer; transition: all 0.3s ease; text-decoration: none; border: none;
+    line-height: 1; letter-spacing: 0.02em;
+}
+.btn-primary { background: var(--m1-primary); color: var(--white); box-shadow: var(--shadow-2); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-3); background: var(--m1-dark); }
+.btn-primary:active { transform: translateY(0); box-shadow: var(--shadow-1); }
+.btn-primary:focus { outline: 3px solid rgba(46,125,50,0.4); outline-offset: 2px; }
+
+.btn-secondary { background: transparent; color: var(--m1-primary); border: 2px solid var(--m1-primary); padding: 10px 22px; }
+.btn-secondary:hover { background: rgba(46,125,50,0.1); }
+
+.btn-ghost { background: transparent; color: var(--m1-primary); }
+.btn-ghost:hover { background: var(--gray-100); }
+
+.btn-danger { background: var(--danger); color: var(--white); box-shadow: var(--shadow-2); }
+.btn-danger:hover { background: var(--danger-dark); }
+
+.btn-sm { padding: 8px 16px; font-size: var(--text-sm); }
+.btn-icon { width: 40px; height: 40px; border-radius: 50%; padding: 0; background: transparent; color: var(--gray-700); }
+.btn-icon:hover { background: var(--gray-100); }
+
+/* ── CARDS ── */
+.card {
+    background: var(--white); border-radius: var(--r-md); padding: var(--sp-6);
+    box-shadow: var(--shadow-2); transition: all 0.3s ease; position: relative;
+}
+.card:hover { box-shadow: var(--shadow-4); transform: translateY(-4px); }
+.card-module { border-left: 4px solid var(--m1-primary); }
+
+.stat-card {
+    background: var(--grad-m1); color: var(--white); border-radius: var(--r-lg);
+    padding: var(--sp-6); box-shadow: var(--shadow-3);
+}
+.stat-card-blue { background: var(--grad-m2); }
+.stat-card-orange { background: var(--grad-m3); }
+.stat-card-purple { background: var(--grad-m4); }
+
+.stat-card .icon { font-size: 48px; position: absolute; top: 16px; right: 16px; opacity: 0.3; }
+.stat-card .value { font-family: var(--font-mono); font-size: var(--text-4xl); font-weight: var(--fw-bold); margin: 8px 0; }
+.stat-card .label { font-size: var(--text-sm); opacity: 0.9; text-transform: uppercase; }
+
+/* ── FORMS ── */
+.form-group { margin-bottom: var(--sp-6); }
+.label { display: block; font-size: var(--text-sm); font-weight: var(--fw-medium); color: var(--gray-700); margin-bottom: var(--sp-2); }
+.label .req { color: var(--danger); }
+
+.input, .select, .textarea {
+    width: 100%; height: 48px; padding: 12px 16px;
+    border: 2px solid var(--gray-300); border-radius: var(--r-base);
+    font-size: var(--text-base); background: var(--white); color: var(--gray-900);
+    transition: all 0.2s ease;
+}
+.textarea { height: auto; min-height: 120px; resize: vertical; }
+.input:focus, .select:focus, .textarea:focus { border-color: var(--m1-primary); outline: none; box-shadow: 0 0 0 3px rgba(46,125,50,0.1); }
+.input::placeholder { color: var(--gray-400); }
+
+/* ── BADGES ── */
+.badge {
+    display: inline-block; padding: 4px 12px; border-radius: var(--r-full);
+    font-size: var(--text-xs); font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: 0.05em;
+}
+.badge-success { background: var(--success-bg); color: var(--success-dark); }
+.badge-warning { background: var(--warning-bg); color: var(--warning-dark); }
+.badge-danger { background: var(--danger-bg); color: var(--danger-dark); }
+.badge-info { background: var(--info-bg); color: var(--info-dark); }
+.badge-neutral { background: var(--gray-100); color: var(--gray-800); }
+.badge-farmer { background: var(--m1-primary); color: var(--white); }
+.badge-buyer { background: var(--m2-primary); color: var(--white); }
+.badge-agent { background: var(--m3-primary); color: var(--white); }
+
+/* ── TABLES ── */
+.table-wrapper { background: var(--white); border-radius: var(--r-md); box-shadow: var(--shadow-2); overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; }
+.table th { background: var(--gray-50); border-bottom: 2px solid var(--gray-200); padding: 16px; font-size: var(--text-sm); font-weight: var(--fw-semibold); text-transform: uppercase; color: var(--gray-700); text-align: left; }
+.table td { padding: 16px; border-bottom: 1px solid var(--gray-200); font-size: var(--text-sm); color: var(--gray-800); }
+.table tr:hover td { background: var(--gray-50); }
+.table .mono { font-family: var(--font-mono); font-weight: var(--fw-semibold); }
+
+/* ── AVATAR ── */
+.avatar {
+    width: 40px; height: 40px; border-radius: var(--r-circle); object-fit: cover;
+    background: var(--gray-200); display: flex; align-items: center; justify-content: center;
+    font-weight: var(--fw-bold); color: var(--gray-600);
+}
+
+/* ── FLASH MESSAGES ── */
+.flash-stack { position: fixed; top: 84px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; max-width: 380px; }
+.flash {
+    display: flex; align-items: flex-start; gap: 10px; padding: 14px 16px;
+    border-radius: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    font-size: 14px; font-weight: 500; line-height: 1.4;
+    animation: flashIn 0.3s ease;
+    background: #fff; border-left: 4px solid var(--info);
+    color: var(--gray-800);
+}
+.flash i { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.flash span { flex: 1; }
+.flash-close { background: transparent; border: 0; cursor: pointer; font-size: 18px; color: var(--gray-400); padding: 0 4px; }
+.flash-close:hover { color: var(--gray-700); }
+.flash-success { border-left-color: var(--success); }
+.flash-success i { color: var(--success); }
+.flash-danger  { border-left-color: var(--danger); }
+.flash-danger i  { color: var(--danger); }
+.flash-warning { border-left-color: var(--warning); }
+.flash-warning i { color: var(--warning); }
+.flash-info    { border-left-color: var(--info); }
+.flash-info i    { color: var(--info); }
+@keyframes flashIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+@media(max-width: 600px) { .flash-stack { left: 12px; right: 12px; max-width: none; top: 80px; } }
+
+/* ── EMPTY STATES ── */
+.empty-state { text-align: center; padding: 48px 24px; color: var(--gray-500); }
+.empty-state i { font-size: 56px; color: var(--gray-300); display: block; margin-bottom: 12px; }
+.empty-state h4 { color: var(--gray-700); margin-bottom: 8px; font-size: 18px; }
+.empty-state p { font-size: 14px; margin: 0 0 18px; }
+
+/* ── ALERTS (inline) ── */
+.alert {
+    padding: 12px 16px; border-radius: var(--r-base); margin-bottom: 16px;
+    font-size: 14px; display: flex; gap: 10px; align-items: center;
+    border-left: 4px solid;
+}
+.alert-success { background: var(--success-bg); color: var(--success-dark); border-color: var(--success); }
+.alert-danger  { background: var(--danger-bg);  color: var(--danger-dark);  border-color: var(--danger); }
+.alert-warning { background: var(--warning-bg); color: var(--warning-dark); border-color: var(--warning); }
+.alert-info    { background: var(--info-bg);    color: var(--info-dark);    border-color: var(--info); }

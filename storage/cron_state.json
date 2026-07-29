@@ -1,0 +1,52 @@
+{
+    "cache_cleanup": {
+        "last_run_at": 1781432696,
+        "last_ok": true,
+        "duration_ms": 29
+    },
+    "crop_expiry": {
+        "last_run_at": 1781432700,
+        "last_ok": false,
+        "error": "Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it (host=localhost, db=agrofin)"
+    },
+    "demand_analytics": {
+        "last_run_at": 1781432704,
+        "last_ok": false,
+        "error": "Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it (host=localhost, db=agrofin)"
+    },
+    "loan_reminder": {
+        "last_run_at": 1781432708,
+        "last_ok": false,
+        "error": "Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it (host=localhost, db=agrofin)"
+    },
+    "log_rotate": {
+        "last_run_at": 1781432708,
+        "last_ok": true,
+        "duration_ms": 100
+    },
+    "market_price_fetch": {
+        "last_run_at": 1781432712,
+        "last_ok": false,
+        "error": "Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it (host=localhost, db=agrofin)"
+    },
+    "otp_cleanup": {
+        "last_run_at": 1781432717,
+        "last_ok": false,
+        "error": "Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it (host=localhost, db=agrofin)"
+    },
+    "subscription_scheduler": {
+        "last_run_at": 1781460002,
+        "last_ok": false,
+        "error": "SQLSTATE[HY000]: General error: 1267 Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_unicode_ci,IMPLICIT) for operation '='"
+    },
+    "weather_expiry": {
+        "last_run_at": 1781460002,
+        "last_ok": true,
+        "duration_ms": 6
+    },
+    "weather_fetch": {
+        "last_run_at": 1781460136,
+        "last_ok": true,
+        "duration_ms": 134646
+    }
+}
