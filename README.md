@@ -1,10 +1,10 @@
-# 🌾 AgroFin
+# 🌾 AgroMart
 
 **Smart Farmer Marketplace & Financial Intelligence System**
 
 A unified agricultural platform built for Bangladeshi farmers — combining a direct marketplace, microloans, real-time market prices, weather intelligence, and an AI assistant — all in Bangla.
 
-Built by **Team FirstFail** 
+Built by **Team UIU_Return0** 
 
 ---
 
@@ -80,8 +80,8 @@ Database documentation available in the `docs/` folder.
 
 ## 📂 Project Structure
 
-```
-AgroFin/
+```text
+AgroMart/
 ├── Controllers/     # 13 MVC controllers (Auth, Farmer, Buyer, Agent, Admin, etc.)
 ├── Models/          # 24 data models
 ├── views/           # 71 view files organized by role
@@ -139,19 +139,19 @@ AgroFin/
 
 **1. Clone the repository**
 ```bash
-git clone https://github.com/redwan212/AgroFin.git
+git clone https://github.com/adhamzarif/AgroMart
 ```
 
 **2. Move to XAMPP htdocs**
-Copy the `AgroFin` folder to `C:\xampp\htdocs\`.
+Copy the `AgroMart` folder to `C:\xampp\htdocs\`.
 
 **3. Start XAMPP**
 Start **Apache** and **MySQL** from the XAMPP Control Panel.
 
 **4. Create the database**
 - Open phpMyAdmin: `http://localhost/phpmyadmin`
-- Click "New" → name the database `agrofin` → Create
-- Select the `agrofin` database → Import tab → choose `database.sql` → Go
+- Click "New" → name the database `agromart` → Create
+- Select the `agromart` database → Import tab → choose `database.sql` → Go
 
 **5. Configure environment**
 ```bash
@@ -163,7 +163,7 @@ Open `.env` and fill in:
 - `APP_KEY` — any random 32-character string
 
 **6. Open the app**
-Visit `http://localhost/AgroFin` in your browser.
+Visit `http://localhost/AgroMart` in your browser.
 
 ---
 
@@ -192,12 +192,12 @@ To enable scheduled background tasks (weather fetching, price updates, loan remi
 
 On Linux/Mac:
 ```bash
-*/15 * * * * php /path/to/AgroFin/cron/run.php
+*/15 * * * * php /path/to/AgroMart/cron/run.php
 ```
 
 On Windows (Task Scheduler): create a task that runs every 15 minutes invoking:
 ```cmd
-C:\xampp\php\php.exe C:\xampp\htdocs\AgroFin\cron\run.php
+C:\xampp\php\php.exe C:\xampp\htdocs\AgroMart\cron\run.php
 ```
 
 To run a specific task manually:
@@ -223,9 +223,9 @@ Tests cover both unit (individual class behavior) and integration (full request/
 ## 📄 Documentation
 
 The `docs/` folder contains:
-- **`AgroFin_Relational_Schema.md`** — All 39 tables documented in detail
-- **`AgroFin_Normalization_Analysis.md`** — 1NF → BCNF analysis with examples
-- **`AgroFin_SQL_Query_Demonstration.md`** — Advanced SQL features used (triggers, views, FOR UPDATE, UPSERT, etc.)
+- **`AgroMart_Relational_Schema.md`** — All 39 tables documented in detail
+- **`AgroMart_Normalization_Analysis.md`** — 1NF → BCNF analysis with examples
+- **`AgroMart_SQL_Query_Demonstration.md`** — Advanced SQL features used (triggers, views, FOR UPDATE, UPSERT, etc.)
 
 ---
 
