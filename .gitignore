@@ -1,0 +1,41 @@
+# ── Dependencies ──
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# ── Secrets — NEVER commit these ──
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env
+
+# ── Build output ──
+dist/
+build/
+frontend/dist/
+*.tsbuildinfo
+
+# ── Test / coverage ──
+coverage/
+.nyc_output/
+
+# ── Logs ──
+*.log
+npm-debug.log*
+logs/
+
+# ── Runtime / uploads (user data, not source) ──
+uploads/
+storage/cache/
+storage/logs/
+*.lock
+cron_state.json
+
+# ── Editor / OS ──
+.DS_Store
+*.swp
+.idea/
+# keep .vscode/settings.json (shared), ignore the rest
+.vscode/*
+!.vscode/settings.json
