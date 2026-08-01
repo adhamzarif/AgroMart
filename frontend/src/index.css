@@ -1,0 +1,5 @@
+:root { font-family: system-ui, sans-serif; }
+body { margin: 0; }
+input, select, button { padding: 6px 8px; font-size: 14px; }
+input, select { width: 100%; box-sizing: border-box; }
+button { cursor: pointer; }
