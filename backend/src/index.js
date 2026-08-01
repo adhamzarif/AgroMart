@@ -1,47 +1,34 @@
 // index.js — Express application entry point.
-// Ports from: index.php (bootstrap + front controller).
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import { env, isDev } from './config/env.js';
 import { ping } from './config/db.js';
+import authRoutes from './routes/auth.routes.js';        // ← CHANGE 1
 
 const app = express();
 
-// ── Security headers (was: missing entirely in the PHP app — a flagged gap) ──
 app.use(helmet());
-
-// ── CORS: allow the React dev server to call the API ──
 app.use(cors({ origin: env.CLIENT_ORIGIN, credentials: true }));
-
-// ── Body parsing ──
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ── Health check — the Phase 0 milestone ──
-// GET /api/health -> { ok: true, db: true }
+// Health check
 app.get('/api/health', async (_req, res) => {
   let db = false;
-  try {
-    db = await ping();
-  } catch {
-    db = false;
-  }
-  // If the DB is down, report 503 (the old PHP app returned 200 on DB failure —
-  // a flagged bug that broke monitoring). We do it right here.
+  try { db = await ping(); } catch { db = false; }
   res.status(db ? 200 : 503).json({ ok: db, db, env: env.NODE_ENV });
 });
 
-// ── Routes get mounted here as phases land ──
-// import authRoutes from './routes/auth.routes.js';
-// app.use('/api/auth', authRoutes);
+// ── Routes ──
+app.use('/api/auth', authRoutes);                        // ← CHANGE 2
 
-// ── 404 ──
+// 404
 app.use((_req, res) => {
   res.status(404).json({ error: 'Not found' });
 });
 
-// ── Central error handler (was: the try/catch around Router::dispatch) ──
+// Central error handler
 // eslint-disable-next-line no-unused-vars
 app.use((err, _req, res, _next) => {
   console.error('[error]', err.message);
