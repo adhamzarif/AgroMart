@@ -1,22 +1,19 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { LangProvider } from './context/LangContext.jsx';
+import Navbar from './components/layout/Navbar.jsx';
+import Home from './pages/Home.jsx';
 import Register from './pages/auth/Register.jsx';
-
-function Home() {
-  return (
-    <div style={{ maxWidth: 420, margin: '40px auto', fontFamily: 'system-ui' }}>
-      <h1>AgroMart</h1>
-      <p><Link to="/register">Create an account →</Link></p>
-    </div>
-  );
-}
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-    </BrowserRouter>
+    <LangProvider>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </BrowserRouter>
+    </LangProvider>
   );
 }
