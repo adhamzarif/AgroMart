@@ -40,13 +40,7 @@ CREATE INDEX idx_users_account_status ON users(account_status, created_at DESC);
 CREATE INDEX idx_users_district       ON users(district_id, account_status);
 CREATE INDEX idx_users_last_seen      ON users(last_seen_at DESC);
 
--- keep updated_at fresh on every UPDATE
-CREATE OR REPLACE FUNCTION set_updated_at() RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updated_at = NOW();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+-- (set_updated_at() is defined in 000_prelude.sql)
 
 CREATE TRIGGER users_set_updated_at
   BEFORE UPDATE ON users
