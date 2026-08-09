@@ -252,8 +252,8 @@ The `docs/` folder contains:
 
 ---
 
-## 👥 Team FirstFail
-DBMS Lab Project 
+## 👥 Team UIU_Return0
+SWE Lab Project 
 
 ## 📝 License
 
