@@ -39,3 +39,5 @@ cron_state.json
 # keep .vscode/settings.json (shared), ignore the rest
 .vscode/*
 !.vscode/settings.json
+backend/storage/uploads/
+frontend/public/crops/
