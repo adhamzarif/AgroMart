@@ -1,0 +1,54 @@
+// crop.model.js — crop data access for the marketplace.
+// Ports the "list available crops with farmer + category + district" query
+// (was: CropModel.php listing methods / vw_active_crops_with_details).
+import { fetchAll, fetchOne } from '../config/db.js';
+
+/**
+ * List available crops for the marketplace, newest first.
+ * Supports optional filters: category_id, district_id, search (crop name), and pagination.
+ */
+export async function listAvailableCrops({ categoryId, districtId, search, limit = 12, offset = 0 } = {}) {
+  const where = [`c.status = 'available'`];
+  const params = [];
+  let i = 1;
+
+  if (categoryId) { where.push(`c.category_id = $${i++}`); params.push(categoryId); }
+  if (districtId) { where.push(`u.district_id = $${i++}`); params.push(districtId); }
+  if (search)     { where.push(`c.crop_name ILIKE $${i++}`); params.push(`%${search}%`); }
+
+  // limit + offset are the last two params
+  const limitIdx = i++;
+  const offsetIdx = i++;
+  params.push(limit, offset);
+
+  const sql = `
+    SELECT c.crop_id, c.crop_name, c.quantity, c.unit, c.price_per_unit,
+           c.is_organic, c.images, c.created_at,
+           cc.category_name,
+           u.full_name  AS farmer_name,
+           d.district_name,
+           (c.created_at > NOW() - INTERVAL '7 days') AS is_new
+    FROM crops c
+    JOIN users u            ON c.farmer_id = u.user_id
+    JOIN crop_categories cc ON c.category_id = cc.category_id
+    LEFT JOIN districts d    ON u.district_id = d.district_id
+    WHERE ${where.join(' AND ')}
+    ORDER BY c.created_at DESC
+    LIMIT $${limitIdx} OFFSET $${offsetIdx}`;
+
+  return fetchAll(sql, params);
+}
+
+/** Single crop with full detail (for the detail page). */
+export function getCropById(cropId) {
+  return fetchOne(
+    `SELECT c.*, cc.category_name, u.full_name AS farmer_name, u.phone AS farmer_phone,
+            d.district_name
+     FROM crops c
+     JOIN users u            ON c.farmer_id = u.user_id
+     JOIN crop_categories cc ON c.category_id = cc.category_id
+     LEFT JOIN districts d    ON u.district_id = d.district_id
+     WHERE c.crop_id = $1`,
+    [cropId]
+  );
+}
