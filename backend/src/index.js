@@ -5,6 +5,7 @@ import cors from 'cors';
 import { env, isDev } from './config/env.js';
 import { ping } from './config/db.js';
 import authRoutes from './routes/auth.routes.js';        // ← CHANGE 1
+import cropRoutes from './routes/crops.routes.js';     // ← ADD THIS
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.get('/api/health', async (_req, res) => {
 
 // ── Routes ──
 app.use('/api/auth', authRoutes);                        // ← CHANGE 2
+app.use('/api/crops', cropRoutes);
 
 // 404
 app.use((_req, res) => {

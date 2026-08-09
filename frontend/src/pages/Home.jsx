@@ -4,10 +4,12 @@ import { Link } from 'react-router-dom';
 import { useLang } from '../context/LangContext.jsx';
 import Button from '../components/ui/Button.jsx';
 import StatCard from '../components/ui/StatCard.jsx';
+import FeaturedCrops from '../components/sections/FeaturedCrops.jsx';
 
 export default function Home() {
   const { t } = useLang();
   return (
+    <>
     <section className="relative overflow-hidden bg-gradient-to-br from-m1-dark via-m1 to-m1-light">
       {/* soft curved bottom */}
       <div className="absolute inset-x-0 bottom-0 h-16 rounded-t-[50%] bg-white/95" />
@@ -70,5 +72,7 @@ export default function Home() {
       </div>
       <div className="h-16 bg-white" />
     </section>
+    <FeaturedCrops />
+    </>
   );
 }
