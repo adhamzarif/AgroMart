@@ -40,4 +40,3 @@ cron_state.json
 .vscode/*
 !.vscode/settings.json
 backend/storage/uploads/
-frontend/public/crops/
