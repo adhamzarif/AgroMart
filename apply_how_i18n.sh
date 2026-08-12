@@ -1,35 +1,24 @@
-// strings.js — bilingual UI text. bn = Bengali (default), en = English.
-export const strings = {
-  bn: {
-    brand: 'AgroMart',
-    nav_home: 'হোম',
-    nav_features: 'ফিচারসমূহ',
-    nav_marketplace: 'মার্কেটপ্লেস',
-    nav_prices: 'লাইভ দাম',
-    nav_how: 'কীভাবে কাজ করে',
-    nav_contact: 'যোগাযোগ',
-    login: 'লগইন',
-    register: 'রেজিস্টার',
-    hero_badge: 'বাংলাদেশের স্মার্ট কৃষি প্ল্যাটফর্ম',
-    hero_title_1: 'কৃষকের ফসল, বাজারদর ও ',
-    hero_title_accent: 'অর্থায়ন',
-    hero_title_2: 'এক জায়গায়',
-    hero_sub: 'AgroMart কৃষক, ক্রেতা এবং এজেন্টদের জন্য সহজ, স্বচ্ছ ও ডেটা-চালিত কৃষি মার্কেটপ্লেস। সরাসরি বিক্রি, লাইভ মূল্য, নিরাপদ অর্ডার এবং স্মার্ট লোন সহায়তা একই প্ল্যাটফর্মে।',
-    hero_cta_start: 'শুরু করুন',
-    hero_cta_how: 'কিভাবে কাজ করে',
-    stat_farmers: 'নিবন্ধিত কৃষক',
-    stat_prices: 'ফসলের লাইভ মূল্য',
-    stat_txns: 'নিরাপদ লেনদেন',
-    badge_new: 'নতুন',
-    per: 'প্রতি',
-    details: 'বিস্তারিত',
-    footer_tagline: 'বাংলাদেশের কৃষকদের জন্য একটি স্মার্ট, স্বচ্ছ কৃষি প্ল্যাটফর্ম।',
-    footer_links: 'দ্রুত লিংক',
-    footer_contact: 'যোগাযোগ',
-    footer_rights: 'সর্বস্বত্ব সংরক্ষিত।',
-    market_error: 'ফসল লোড করা যায়নি।',
-    market_empty: 'এই মুহূর্তে কোনো ফসল নেই।',
-    // HowItWorks
+#!/usr/bin/env bash
+set -e
+export PYTHONUTF8=1
+export PYTHONIOENCODING=utf-8
+
+STRINGS_FILE="frontend/src/i18n/strings.js"
+if [ ! -f "$STRINGS_FILE" ]; then
+  echo "ERROR: $STRINGS_FILE not found. Run from project root."
+  exit 1
+fi
+
+echo "==> Patching $STRINGS_FILE"
+
+python <<'PYEOF'
+import io, re, sys
+
+path = "frontend/src/i18n/strings.js"
+with io.open(path, "r", encoding="utf-8") as f:
+    src = f.read()
+
+BN_BLOCK = """    // HowItWorks
     how_badge: 'কীভাবে এটি কাজ করে',
     how_title: 'AgroMart কীভাবে কাজ করে',
     how_sub: 'কৃষক, ক্রেতা এবং এজেন্টদের জন্য সহজ ধাপ — একই প্ল্যাটফর্মে সরাসরি বিক্রি, স্বচ্ছ মূল্য ও নিরাপদ লেনদেন।',
@@ -56,37 +45,9 @@ export const strings = {
     stat_districts: 'সেবা প্রদত্ত জেলা',
     how_cta_title: 'আজই শুরু করুন',
     how_cta_sub: 'বিনামূল্যে রেজিস্টার করুন, দাম দেখুন, এবং সরাসরি কৃষি বাজারে যোগ দিন।',
-  },
-  en: {
-    brand: 'AgroMart',
-    nav_home: 'Home',
-    nav_features: 'Features',
-    nav_marketplace: 'Marketplace',
-    nav_prices: 'Live Prices',
-    nav_how: 'How it works',
-    nav_contact: 'Contact',
-    login: 'Login',
-    register: 'Register',
-    hero_badge: "Bangladesh's smart agriculture platform",
-    hero_title_1: "Farmers' crops, market prices & ",
-    hero_title_accent: 'financing',
-    hero_title_2: 'in one place',
-    hero_sub: 'AgroMart is a simple, transparent, data-driven agricultural marketplace for farmers, buyers and agents. Direct sales, live prices, secure orders and smart loan support — all on one platform.',
-    hero_cta_start: 'Get started',
-    hero_cta_how: 'How it works',
-    stat_farmers: 'Registered farmers',
-    stat_prices: 'Live crop prices',
-    stat_txns: 'Secure transactions',
-    badge_new: 'New',
-    per: 'per',
-    details: 'Details',
-    footer_tagline: 'A smart, transparent agriculture platform for the farmers of Bangladesh.',
-    footer_links: 'Quick links',
-    footer_contact: 'Contact',
-    footer_rights: 'All rights reserved.',
-    market_error: 'Could not load crops.',
-    market_empty: 'No crops available right now.',
-    // HowItWorks
+"""
+
+EN_BLOCK = """    // HowItWorks
     how_badge: 'How it works',
     how_title: 'How AgroMart works',
     how_sub: 'Simple steps for farmers, buyers, and agents — direct sales, transparent prices, and secure transactions on one platform.',
@@ -113,5 +74,31 @@ export const strings = {
     stat_districts: 'Districts served',
     how_cta_title: 'Get started today',
     how_cta_sub: 'Register for free, browse live prices, and join the direct agri-marketplace.',
-  },
-};
+"""
+
+if "how_title" in src and "stat_crops" in src:
+    print("  Already patched — skipping.")
+    sys.exit(0)
+
+pattern = re.compile(r"(    market_empty: '[^']*',\n)")
+matches = list(pattern.finditer(src))
+
+if len(matches) < 2:
+    print(f"  ERROR: expected 2 'market_empty' anchors, found {len(matches)}.")
+    sys.exit(1)
+
+bn_end = matches[0].end()
+en_end = matches[1].end()
+
+new_src = src[:en_end] + EN_BLOCK + src[en_end:]
+new_src = new_src[:bn_end] + BN_BLOCK + new_src[bn_end:]
+
+with io.open(path, "w", encoding="utf-8") as f:
+    f.write(new_src)
+
+print("  Inserted BN block after bn: market_empty")
+print("  Inserted EN block after en: market_empty")
+print("  27 keys per language added.")
+PYEOF
+
+echo "==> Done. Refresh browser with Ctrl+Shift+R at http://localhost:5173/how-it-works"
