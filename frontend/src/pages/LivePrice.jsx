@@ -7,15 +7,15 @@ const toBnNum = (num) => {
 };
 
 const seedCrops = [
-    { id: 1, key: 'crop_kachamorich', catKey: 'lp_spices', market: 160, agrofin: 140, gap: 20, emoji: '🌶️', image: '/crops/kachamorich.jpg' },
-    { id: 2, key: 'crop_begun', catKey: 'lp_vegetables', market: 70, agrofin: 58, gap: 12, emoji: '🍆', image: '/crops/begun.jpg' },
-    { id: 3, key: 'crop_lau', catKey: 'lp_vegetables', market: 60, agrofin: 50, gap: 10, emoji: '🥒', image: '/crops/lau.jpg' },
-    { id: 4, key: 'crop_alu', catKey: 'lp_vegetables', market: 40, agrofin: 32, gap: 8, emoji: '🥔', image: '/crops/alu.jpg' },
-    { id: 5, key: 'crop_tomato', catKey: 'lp_vegetables', market: 85, agrofin: 70, gap: 15, emoji: '🍅', image: '/crops/tomato.jpg' },
-    { id: 6, key: 'crop_peyaj', catKey: 'lp_spices', market: 100, agrofin: 88, gap: 12, emoji: '🧅', image: '/crops/peyaj.jpg' },
-    { id: 7, key: 'crop_shorisha', catKey: 'lp_grains', market: 110, agrofin: 95, gap: 15, emoji: '🌻', image: '/crops/shorisha.jpg' },
-    { id: 8, key: 'crop_mugdal', catKey: 'lp_grains', market: 130, agrofin: 115, gap: 15, emoji: '🫘', image: '/crops/mugdal.jpg' },
-    { id: 9, key: 'crop_mosurdal', catKey: 'lp_grains', market: 140, agrofin: 125, gap: 15, emoji: '🍲', image: '/crops/mosurdal.jpg' }
+    { id: 1, key: 'crop_kachamorich', catKey: 'lp_spices', market: 160, agrofin: 140, gap: 20, image: '/crops/kachamorich.jpg' },
+    { id: 2, key: 'crop_begun', catKey: 'lp_vegetables', market: 70, agrofin: 58, gap: 12, image: '/crops/begun.jpg' },
+    { id: 3, key: 'crop_lau', catKey: 'lp_vegetables', market: 60, agrofin: 50, gap: 10, image: '/crops/lau.jpg' },
+    { id: 4, key: 'crop_alu', catKey: 'lp_vegetables', market: 40, agrofin: 32, gap: 8, image: '/crops/alu.jpg' },
+    { id: 5, key: 'crop_tomato', catKey: 'lp_vegetables', market: 85, agrofin: 70, gap: 15, image: '/crops/tomato.jpg' },
+    { id: 6, key: 'crop_peyaj', catKey: 'lp_spices', market: 100, agrofin: 88, gap: 12, image: '/crops/peyaj.jpg' },
+    { id: 7, key: 'crop_shorisha', catKey: 'lp_grains', market: 110, agrofin: 95, gap: 15, image: '/crops/shorisha.jpg' },
+    { id: 8, key: 'crop_mugdal', catKey: 'lp_grains', market: 130, agrofin: 115, gap: 15, image: '/crops/mugdal.jpg' },
+    { id: 9, key: 'crop_mosurdal', catKey: 'lp_grains', market: 140, agrofin: 125, gap: 15, image: '/crops/mosurdal.jpg' }
 ];
 
 const LivePrice = () => {
@@ -59,18 +59,19 @@ const LivePrice = () => {
     return (
         <div style={{ background: '#f0f7ee', minHeight: '100vh', paddingBottom: '64px' }}>
             
-            {/* 🟢 সবুজ ব্যানার হেডার অংশ (Green Header Banner) */}
+            {/* Header Banner */}
             <div style={{ background: '#1e5e2f', padding: '40px 16px 60px', textAlign: 'center', color: '#fff' }}>
                 <span style={{ background: 'rgba(255, 255, 255, 0.2)', padding: '6px 16px', borderRadius: '20px', fontSize: '13px', fontWeight: '500', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                     <span style={{ height: '8px', width: '8px', backgroundColor: '#4caf50', borderRadius: '50%', display: 'inline-block' }}></span>
                     {t('lp_badge')}
                 </span>
                 
-                <h1 style={{ fontSize: '28px', fontWeight: '800', marginTop: '16px', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                {/* Clean Title Without Emoji */}
+                <h1 style={{ fontSize: '28px', fontWeight: '800', marginTop: '16px', marginBottom: '20px', textAlign: 'center' }}>
                     {userRole === 'buyer' ? t('lp_buyerTitle') : t('lp_farmerTitle')}
                 </h1>
 
-                {/* ক্রেতা দৃশ্য / কৃষক দৃশ্য Switcher */}
+                {/* Buyer / Farmer Switcher */}
                 <div style={{ display: 'inline-flex', background: 'rgba(0, 0, 0, 0.2)', padding: '4px', borderRadius: '30px' }}>
                     <button 
                         onClick={() => setUserRole('buyer')}
@@ -86,7 +87,7 @@ const LivePrice = () => {
                             transition: 'all 0.3s ease'
                         }}
                     >
-                        🛒 {t('lp_buyerBtn')}
+                        {t('lp_buyerBtn')}
                     </button>
                     <button 
                         onClick={() => setUserRole('farmer')}
@@ -102,13 +103,13 @@ const LivePrice = () => {
                             transition: 'all 0.3s ease'
                         }}
                     >
-                        👨‍🌾 {t('lp_farmerBtn')}
+                        {t('lp_farmerBtn')}
                     </button>
                 </div>
             </div>
 
-            {/* Main Content Container (Search + Cards) */}
-            <div className="container" style={{ maxWidth: '1100px', margin: '-30px auto 0', padding: '0 16px', relative: 'z-index-10' }}>
+            {/* Main Content Container */}
+            <div className="container" style={{ maxWidth: '1100px', margin: '-30px auto 0', padding: '0 16px', position: 'relative', zIndex: 10 }}>
                 
                 {/* Search & Filter */}
                 <div style={{ background: '#fff', padding: '16px', borderRadius: '12px', display: 'flex', gap: '12px', marginBottom: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
@@ -142,16 +143,13 @@ const LivePrice = () => {
                                 />
                             </div>
 
-                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                <span style={{ fontSize: '20px' }}>{c.emoji || '🌾'}</span>
-                                <div>
-                                    <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '700' }}>
-                                        {t(c.key)}
-                                    </h3>
-                                    <small style={{ color: '#666' }}>
-                                        {t(c.catKey)}
-                                    </small>
-                                </div>
+                            <div>
+                                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '700' }}>
+                                    {t(c.key)}
+                                </h3>
+                                <small style={{ color: '#666' }}>
+                                    {t(c.catKey)}
+                                </small>
                             </div>
                             
                             <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
