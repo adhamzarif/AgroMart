@@ -5,6 +5,7 @@ import { LangProvider } from './context/LangContext.jsx';
 import Navbar from './components/layout/Navbar.jsx';
 import Home from './pages/Home.jsx';
 import Register from './pages/auth/Register.jsx';
+import LivePrice from './pages/LivePrice.jsx';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/farmer/crops/new" element={<CropForm/>} />
           <Route path="/how-it-works" element={<HowItWorks/>} />
+          <Route path="/prices" element={<LivePrice />} />
         </Routes>
       </BrowserRouter>
     </LangProvider>

@@ -33,6 +33,7 @@ export const strings = {
     featured_title: 'সর্বশেষ ফসল',
     featured_sub: 'সরাসরি কৃষকের কাছ থেকে তাজা ফসল',
     featured_see_all: 'সব দেখুন',
+    
   },
   en: {
     brand: 'AgroMart',
