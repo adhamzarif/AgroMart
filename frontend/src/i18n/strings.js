@@ -88,6 +88,10 @@ export const strings = {
     lp_orderNow: 'অর্ডার করুন',
     lp_listNow: 'তালিকাভুক্ত করুন',
     lp_noListings: 'কোনো তালিকা নেই',
+
+    featured_title: 'সর্বশেষ ফসল',
+    featured_sub: 'সরাসরি কৃষকের কাছ থেকে তাজা ফসল',
+    featured_see_all: 'সব দেখুন',
 },
   en: {
     brand: 'AgroMart',
@@ -177,5 +181,9 @@ export const strings = {
     lp_orderNow: 'Order now',
     lp_listNow: 'List this crop',
     lp_noListings: 'No listings',
+
+    featured_title: 'Latest crops',
+    featured_sub: 'Fresh produce directly from farmers',
+    featured_see_all: 'See all',
 },
 };

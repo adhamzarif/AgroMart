@@ -13,7 +13,7 @@ export default function FeaturedCrops() {
 
   useEffect(() => {
     let alive = true;
-    getCrops({ limit: 6 })
+    getCrops({ limit: 6, distinct: 1 })
       .then((res) => {
         if (!alive) return;
         const list = res.crops || [];
