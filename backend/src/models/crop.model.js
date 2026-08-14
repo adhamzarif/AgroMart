@@ -1,3 +1,4 @@
+// FEATURED_DEDUPE_PATCHED
 // crop.model.js — crop data access for the marketplace.
 // Ports the "list available crops with farmer + category + district" query
 // (was: CropModel.php listing methods / vw_active_crops_with_details).
@@ -7,7 +8,7 @@ import { fetchAll, fetchOne } from '../config/db.js';
  * List available crops for the marketplace, newest first.
  * Supports optional filters: category_id, district_id, search (crop name), and pagination.
  */
-export async function listAvailableCrops({ categoryId, districtId, search, limit = 12, offset = 0 } = {}) {
+export async function listAvailableCrops({ categoryId, districtId, search, limit = 12, offset = 0, distinct = false } = {}) {
   const where = [`c.status = 'available'`];
   const params = [];
   let i = 1;
@@ -22,7 +23,7 @@ export async function listAvailableCrops({ categoryId, districtId, search, limit
   params.push(limit, offset);
 
   const sql = `
-    SELECT c.crop_id, c.crop_name, c.quantity, c.unit, c.price_per_unit,
+    SELECT ${distinct ? 'DISTINCT ON (c.crop_name) ' : ''}c.crop_id, c.crop_name, c.quantity, c.unit, c.price_per_unit,
            c.is_organic, c.images, c.created_at,
            cc.category_name,
            u.full_name  AS farmer_name,
@@ -33,7 +34,7 @@ export async function listAvailableCrops({ categoryId, districtId, search, limit
     JOIN crop_categories cc ON c.category_id = cc.category_id
     LEFT JOIN districts d    ON u.district_id = d.district_id
     WHERE ${where.join(' AND ')}
-    ORDER BY c.created_at DESC
+    ORDER BY ${distinct ? 'c.crop_name, ' : ''}c.created_at DESC
     LIMIT $${limitIdx} OFFSET $${offsetIdx}`;
 
   return fetchAll(sql, params);
