@@ -48,7 +48,6 @@ const CROP_EN = {
 };
 const cropDisplayName = (row, lang) => (lang === 'en' && CROP_EN[row.crop_name]) || row.crop_name;
 
-
 // PRICE_LABEL_PATCHED
 // LP_TRANSLATE_PATCHED
 const LivePrice = () => {
@@ -72,12 +71,15 @@ const LivePrice = () => {
         return () => { alive = false; };
     }, [userRole]);
 
-    const filteredCrops = crops.filter((c) => {
-        const cropName = (c.crop_name || '').toLowerCase();
-        const matchesSearch = cropName.includes(search.toLowerCase());
-        const matchesCat = category ? catKeyOf(c) === category : true;
-        return matchesSearch && matchesCat;
-    });
+const filteredCrops = crops.filter((c) => {
+    const bnName = (c.crop_name || '').toLowerCase();
+    const enName = (CROP_EN[c.crop_name] || '').toLowerCase();
+    const searchLower = search.toLowerCase();
+
+    const matchesSearch = bnName.includes(searchLower) || enName.includes(searchLower);
+    const matchesCat = category ? catKeyOf(c) === category : true;
+    return matchesSearch && matchesCat;
+});
 
     return (
         <div style={{ background: '#f0f7ee', minHeight: '100vh', paddingBottom: '64px' }}>
