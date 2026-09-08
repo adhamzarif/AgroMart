@@ -473,7 +473,7 @@ cd backend
 npm install
 ```
 
-The backend has its own `package.json` and `package-lock.json`. fileciteturn4file0L67-L69
+The backend has its own `package.json` and `package-lock.json`.
 
 ---
 
@@ -517,7 +517,7 @@ cd ../frontend
 npm install
 ```
 
-The frontend includes Vite, Tailwind configuration, React source files, and its own dependency manifest. fileciteturn4file0L110-L112 fileciteturn4file0L67-L69
+The frontend includes Vite, Tailwind configuration, React source files, and its own dependency manifest.
 
 ---
 
@@ -569,7 +569,7 @@ frontend/src/api/
 └── stats.api.js
 ```
 
-This separation keeps API communication independent from React page and component code. fileciteturn4file0L89-L97 fileciteturn5file2L59-L60
+This separation keeps API communication independent from React page and component code.
 
 ---
 
@@ -614,7 +614,7 @@ The backend also provides storage for uploaded crop images under:
 backend/storage/uploads/crops/
 ```
 
-The project tree confirms both the frontend demo-image directory and backend crop-upload storage. fileciteturn4file0L98-L101 fileciteturn5file4L139-L147
+The project tree confirms both the frontend demo-image directory and backend crop-upload storage.
 
 ---
 
