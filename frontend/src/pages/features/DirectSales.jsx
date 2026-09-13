@@ -2,6 +2,8 @@
 import { Link } from 'react-router-dom';
 import { useLang } from '../../context/LangContext.jsx';
 
+const HERO_IMG = 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=1600';
+
 export default function DirectSales() {
   const { t } = useLang();
 
@@ -28,15 +30,23 @@ export default function DirectSales() {
         <span className="text-gray-900">{t('feat_market_title')}</span>
       </div>
 
-      {/* Hero */}
-      <section className="mx-auto max-w-6xl px-6 py-12 text-center">
-        <div className="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-2xl bg-green-50 text-4xl">
+      {/* Hero with background image */}
+      <section
+        className="relative overflow-hidden px-6 py-24 text-center text-white"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(${HERO_IMG})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-2xl bg-white/20 backdrop-blur text-4xl">
           🛒
         </div>
-        <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl font-display">
+        <h1 className="text-4xl font-bold text-white sm:text-5xl font-display drop-shadow">
           {t('ds_hero_title')}
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
+        <p className="mx-auto mt-4 max-w-2xl text-lg text-white/90">
           {t('ds_hero_sub')}
         </p>
         <div className="mt-8 flex justify-center gap-3">
@@ -48,13 +58,13 @@ export default function DirectSales() {
           </Link>
           <Link
             to="/marketplace"
-            className="rounded-full border border-gray-200 px-6 py-3 text-sm font-semibold text-gray-700 hover:border-m1 hover:text-m1"
+            className="rounded-full border border-white/40 px-6 py-3 text-sm font-semibold text-white hover:bg-white hover:text-m1"
           >
             {t('ds_cta_browse')}
           </Link>
         </div>
+        </div>
       </section>
-
       {/* Benefits */}
       <section className="bg-gray-50 py-14">
         <div className="mx-auto max-w-6xl px-6">
