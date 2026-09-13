@@ -23,13 +23,6 @@ export default function DirectSales() {
 
   return (
     <div className="bg-white">
-      {/* Breadcrumb */}
-      <div className="mx-auto max-w-6xl px-6 pt-8 text-sm text-gray-500">
-        <Link to="/features" className="hover:text-m1">{t('nav_features')}</Link>
-        <span className="mx-2">/</span>
-        <span className="text-gray-900">{t('feat_market_title')}</span>
-      </div>
-
       {/* Hero with background image */}
       <section
         className="relative overflow-hidden px-6 py-24 text-center text-white"
