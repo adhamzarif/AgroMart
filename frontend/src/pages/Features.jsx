@@ -27,7 +27,7 @@ const FEATURES = [
     icon: '💳',
     title: 'feat_payments_title',
     desc: 'feat_payments_desc',
-    to: null,
+    to: '/features/secure-payments',
     img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800',
   },
   {
