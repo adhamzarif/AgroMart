@@ -41,7 +41,7 @@ const FEATURES = [
     icon: '🤖',
     title: 'feat_ai_title',
     desc: 'feat_ai_desc',
-    to: null,
+    to: '/features/ai-advisor',
     img: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800',
   },
 ];
