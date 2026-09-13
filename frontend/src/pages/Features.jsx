@@ -84,9 +84,6 @@ export default function Features() {
   return (
     <section className="mx-auto max-w-6xl px-6 py-14">
       <div className="mb-12 text-center">
-        <span className="inline-block rounded-full bg-green-50 px-4 py-1 text-xs font-semibold text-green-800">
-          {t('feat_badge')}
-        </span>
         <h1 className="mt-4 text-3xl font-bold text-gray-900 sm:text-4xl font-display">
           {t('feat_title')}
         </h1>
