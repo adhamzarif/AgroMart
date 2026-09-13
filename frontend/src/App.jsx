@@ -3,6 +3,7 @@ import { LangProvider } from './context/LangContext.jsx';
 import Navbar from './components/layout/Navbar.jsx';
 
 import Home from './pages/Home.jsx';
+import Contact from './pages/Contact.jsx';
 import Register from './pages/auth/Register.jsx';
 import CropForm from './pages/farmer/CropForm.jsx';
 import HowItWorks from './pages/HowItWorks.jsx';
@@ -35,6 +36,7 @@ export default function App() {
           <Route path="/features/ai-advisor" element={<AiAdvisor />} />
           <Route path="/features/micro-loans" element={<MicroLoans />} />
           <Route path="/features/secure-payments" element={<SecurePayments />} />
+          <Route path="/contact" element={<Contact />} />
         </Routes>
       </BrowserRouter>
     </LangProvider>

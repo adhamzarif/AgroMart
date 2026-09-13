@@ -258,6 +258,25 @@ export const strings = {
     sp_step4_desc: 'নিশ্চিতকরণের পর টাকা কৃষকের ওয়ালেটে জমা হয়, রশিদ ইস্যু হয়।',
     sp_cta_title: 'নিরাপদে লেনদেন শুরু করুন',
     sp_cta_sub: 'বিনামূল্যে নিবন্ধন করুন — সব বড় পেমেন্ট পদ্ধতি সমর্থিত।',
+    // Contact page
+    contact_badge: 'যোগাযোগ',
+    contact_title: 'আমাদের সাথে যোগাযোগ করুন',
+    contact_sub: 'কোনো প্রশ্ন, পরামর্শ বা সহায়তার প্রয়োজন? আমাদের জানান — দ্রুত সাড়া দেব।',
+    contact_phone_title: 'ফোন',
+    contact_email_title: 'ইমেইল',
+    contact_office_title: 'অফিস',
+    contact_hours: 'সকাল ৯টা – রাত ৯টা (সপ্তাহের সাতদিন)',
+    contact_email_hint: '২৪ ঘণ্টার মধ্যে উত্তর পাবেন',
+    contact_address: 'বাড়ি ৭, রোড ২৭, বনানী, ঢাকা ১২১৩',
+    contact_name: 'নাম',
+    contact_phone: 'ফোন নম্বর',
+    contact_email: 'ইমেইল',
+    contact_message: 'আপনার বার্তা',
+    contact_send: 'বার্তা পাঠান',
+    contact_sending: 'পাঠানো হচ্ছে...',
+    contact_success: 'ধন্যবাদ! আপনার বার্তা পেয়েছি — শীঘ্রই যোগাযোগ করব।',
+    contact_error: 'দুঃখিত, কিছু ভুল হয়েছে। আবার চেষ্টা করুন।',
+
 
 
 
@@ -524,6 +543,25 @@ export const strings = {
     sp_step4_desc: 'On confirmation, funds move to the farmer\'s wallet and a receipt is issued.',
     sp_cta_title: 'Start transacting securely',
     sp_cta_sub: 'Register free — all major payment methods supported.',
+    // Contact page
+    contact_badge: 'Contact',
+    contact_title: 'Get in touch',
+    contact_sub: 'Questions, suggestions or need help? Let us know — we\'ll respond quickly.',
+    contact_phone_title: 'Phone',
+    contact_email_title: 'Email',
+    contact_office_title: 'Office',
+    contact_hours: '9 AM – 9 PM (all week)',
+    contact_email_hint: 'We reply within 24 hours',
+    contact_address: 'House 7, Road 27, Banani, Dhaka 1213',
+    contact_name: 'Name',
+    contact_phone: 'Phone number',
+    contact_email: 'Email',
+    contact_message: 'Your message',
+    contact_send: 'Send message',
+    contact_sending: 'Sending...',
+    contact_success: 'Thanks! Got your message — we\'ll be in touch shortly.',
+    contact_error: 'Sorry, something went wrong. Please try again.',
+
 
 
 
