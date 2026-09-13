@@ -20,7 +20,7 @@ const FEATURES = [
     icon: '🌦️',
     title: 'feat_weather_title',
     desc: 'feat_weather_desc',
-    to: null,
+    to: '/features/weather-alerts',
     img: 'https://images.unsplash.com/photo-1561553873-e8491a564fd0?w=800',
   },
   {
