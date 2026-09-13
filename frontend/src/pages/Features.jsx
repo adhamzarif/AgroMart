@@ -3,7 +3,7 @@ import { useLang } from '../context/LangContext.jsx';
 
 const FEATURES = [
   { icon: '🛒', title: 'feat_market_title',   desc: 'feat_market_desc',   to: '/features/direct-sales' },
-  { icon: '📈', title: 'feat_prices_title',   desc: 'feat_prices_desc',   to: null },
+  { icon: '📈', title: 'feat_prices_title',   desc: 'feat_prices_desc',   to: '/features/live-prices' },
   { icon: '🌦️', title: 'feat_weather_title',  desc: 'feat_weather_desc',  to: null },
   { icon: '💳', title: 'feat_payments_title', desc: 'feat_payments_desc', to: null },
   { icon: '🏦', title: 'feat_loans_title',    desc: 'feat_loans_desc',    to: null },

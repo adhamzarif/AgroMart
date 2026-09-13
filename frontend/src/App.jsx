@@ -6,6 +6,7 @@ import Register from './pages/auth/Register.jsx';
 import Marketplace from './pages/Marketplace.jsx';
 import Features from './pages/Features.jsx';
 import DirectSales from './pages/features/DirectSales.jsx';
+import LiveMarketPrices from './pages/features/LiveMarketPrices.jsx';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/features" element={<Features />} />
           <Route path="/features/direct-sales" element={<DirectSales />} />
+          <Route path="/features/live-prices" element={<LiveMarketPrices />} />
         </Routes>
       </BrowserRouter>
     </LangProvider>
