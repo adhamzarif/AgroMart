@@ -2,9 +2,15 @@
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { env, isDev } from './config/env.js';
 import { ping } from './config/db.js';
 import authRoutes from './routes/auth.routes.js';        // ← CHANGE 1
+import cropRoutes from './routes/crops.routes.js';
+import priceRoutes from './routes/prices.routes.js';
+import statsRoutes from './routes/stats.routes.js';
+import categoryRoutes from './routes/categories.routes.js';     // ← ADD THIS
 
 const app = express();
 
@@ -22,6 +28,13 @@ app.get('/api/health', async (_req, res) => {
 
 // ── Routes ──
 app.use('/api/auth', authRoutes);                        // ← CHANGE 2
+app.use('/api/crops', cropRoutes);
+app.use('/api/prices', priceRoutes);
+app.use('/api/stats', statsRoutes);
+const __b2dir = path.dirname(fileURLToPath(import.meta.url));
+app.use('/uploads', express.static(path.resolve(__b2dir, '../storage/uploads')));
+app.use('/api/categories', categoryRoutes);
+
 
 // 404
 app.use((_req, res) => {
