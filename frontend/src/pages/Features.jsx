@@ -1,13 +1,40 @@
+import { Link } from 'react-router-dom';
 import { useLang } from '../context/LangContext.jsx';
 
 const FEATURES = [
-  { icon: '🛒', title: 'feat_market_title',   desc: 'feat_market_desc' },
-  { icon: '📈', title: 'feat_prices_title',   desc: 'feat_prices_desc' },
-  { icon: '🌦️', title: 'feat_weather_title',  desc: 'feat_weather_desc' },
-  { icon: '💳', title: 'feat_payments_title', desc: 'feat_payments_desc' },
-  { icon: '🏦', title: 'feat_loans_title',    desc: 'feat_loans_desc' },
-  { icon: '🤖', title: 'feat_ai_title',       desc: 'feat_ai_desc' },
+  { icon: '🛒', title: 'feat_market_title',   desc: 'feat_market_desc',   to: '/features/direct-sales' },
+  { icon: '📈', title: 'feat_prices_title',   desc: 'feat_prices_desc',   to: null },
+  { icon: '🌦️', title: 'feat_weather_title',  desc: 'feat_weather_desc',  to: null },
+  { icon: '💳', title: 'feat_payments_title', desc: 'feat_payments_desc', to: null },
+  { icon: '🏦', title: 'feat_loans_title',    desc: 'feat_loans_desc',    to: null },
+  { icon: '🤖', title: 'feat_ai_title',       desc: 'feat_ai_desc',       to: null },
 ];
+
+function Card({ f, t }) {
+  const inner = (
+    <>
+      <div className="mb-4 grid h-12 w-12 place-items-center rounded-lg bg-green-50 text-2xl">
+        {f.icon}
+      </div>
+      <h3 className="mb-2 text-lg font-bold text-gray-900">{t(f.title)}</h3>
+      <p className="text-sm leading-relaxed text-gray-600">{t(f.desc)}</p>
+      {f.to && (
+        <span className="mt-4 inline-block text-sm font-semibold text-m1">
+          {t('feat_learn_more')} →
+        </span>
+      )}
+    </>
+  );
+
+  const className =
+    'block rounded-xl border border-gray-100 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md';
+
+  return f.to ? (
+    <Link to={f.to} className={className}>{inner}</Link>
+  ) : (
+    <div className={className}>{inner}</div>
+  );
+}
 
 export default function Features() {
   const { t } = useLang();
@@ -23,18 +50,7 @@ export default function Features() {
         <p className="mx-auto mt-3 max-w-2xl text-gray-500">{t('feat_sub')}</p>
       </div>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {FEATURES.map((f) => (
-          <div
-            key={f.title}
-            className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
-          >
-            <div className="mb-4 grid h-12 w-12 place-items-center rounded-lg bg-green-50 text-2xl">
-              {f.icon}
-            </div>
-            <h3 className="mb-2 text-lg font-bold text-gray-900">{t(f.title)}</h3>
-            <p className="text-sm leading-relaxed text-gray-600">{t(f.desc)}</p>
-          </div>
-        ))}
+        {FEATURES.map((f) => <Card key={f.title} f={f} t={t} />)}
       </div>
     </section>
   );
