@@ -9,6 +9,7 @@ import DirectSales from './pages/features/DirectSales.jsx';
 import LiveMarketPrices from './pages/features/LiveMarketPrices.jsx';
 import WeatherAlerts from './pages/features/WeatherAlerts.jsx';
 import AiAdvisor from './pages/features/AiAdvisor.jsx';
+import MicroLoans from './pages/features/MicroLoans.jsx';
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="/features/live-prices" element={<LiveMarketPrices />} />
           <Route path="/features/weather-alerts" element={<WeatherAlerts />} />
           <Route path="/features/ai-advisor" element={<AiAdvisor />} />
+          <Route path="/features/micro-loans" element={<MicroLoans />} />
         </Routes>
       </BrowserRouter>
     </LangProvider>

@@ -34,7 +34,7 @@ const FEATURES = [
     icon: '🏦',
     title: 'feat_loans_title',
     desc: 'feat_loans_desc',
-    to: null,
+    to: '/features/micro-loans',
     img: 'https://images.unsplash.com/photo-1579621970588-a35d0e7ab9b6?w=800',
   },
   {
