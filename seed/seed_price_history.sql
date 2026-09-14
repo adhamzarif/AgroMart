@@ -1,65 +1,29 @@
--- seed_price_history.sql
--- Seeds market_prices (today's bazar rates) and 7 days of price_history so the
--- Live Prices page has real trend data to compute arrows from. Safe to re-run.
--- Run: psql -U agromart -d agromart -h localhost -f seed_price_history.sql
-
-BEGIN;
-
--- Make sure the reference district exists (used as the "market")
-INSERT INTO districts (district_name, division)
-VALUES ('Dhaka','Dhaka')
-ON CONFLICT (district_name) DO NOTHING;
-
--- Today's bazar rates for the 9 seed crops. Each is (crop_name, wholesale, retail).
--- Retail is the "bazar rate" shown as bazar_rate; wholesale is the market-buyer level.
-DELETE FROM market_prices WHERE price_date = CURRENT_DATE
-  AND crop_name IN ('কাঁচামরিচ','বেগুন','লাউ','সরিষা','মুগ ডাল','মসুর ডাল','আলু','টমেটো','পেঁয়াজ');
-
-INSERT INTO market_prices (crop_name, district_id, wholesale_price, retail_price, unit, price_date, source)
-SELECT c.name, (SELECT district_id FROM districts WHERE district_name='Dhaka'),
-       c.wp, c.rp, c.unit, CURRENT_DATE, 'DAM'
-FROM (VALUES
-  ('কাঁচামরিচ',  50.00, 75.00, 'kg'),
-  ('বেগুন',      35.00, 55.00, 'kg'),
-  ('লাউ',        18.00, 30.00, 'piece'),
-  ('সরিষা',      65.00, 90.00, 'kg'),
-  ('মুগ ডাল',   120.00,160.00, 'kg'),
-  ('মসুর ডাল',  100.00,140.00, 'kg'),
-  ('আলু',        22.00, 35.00, 'kg'),
-  ('টমেটো',      38.00, 60.00, 'kg'),
-  ('পেঁয়াজ',    48.00, 70.00, 'kg')
-) AS c(name, wp, rp, unit);
-
--- 7 days of history for each — realistic ±10% wobble per day, with a slight trend
--- so arrows have direction. Seed uses a repeatable formula.
-DELETE FROM price_history WHERE price_date >= CURRENT_DATE - INTERVAL '7 days'
-  AND crop_name IN ('কাঁচামরিচ','বেগুন','লাউ','সরিষা','মুগ ডাল','মসুর ডাল','আলু','টমেটো','পেঁয়াজ');
-
-INSERT INTO price_history (crop_name, district_id, wholesale_price, retail_price, unit, price_date)
-SELECT c.name,
-       (SELECT district_id FROM districts WHERE district_name='Dhaka'),
-       ROUND((c.wp * (1 + c.trend * d / 7.0) * (0.95 + 0.10 * ((d * 3) % 7) / 7.0))::numeric, 2),
-       ROUND((c.rp * (1 + c.trend * d / 7.0) * (0.95 + 0.10 * ((d * 3) % 7) / 7.0))::numeric, 2),
-       c.unit,
-       CURRENT_DATE - (d || ' days')::interval
-FROM (VALUES
-  ('কাঁচামরিচ',  50.00, 75.00, 'kg',   0.12),   -- rising
-  ('বেগুন',      35.00, 55.00, 'kg',  -0.08),   -- falling
-  ('লাউ',        18.00, 30.00, 'piece', 0.02),  -- stable
-  ('সরিষা',      65.00, 90.00, 'kg',   0.05),   -- rising a bit
-  ('মুগ ডাল',   120.00,160.00, 'kg',  -0.03),   -- slightly falling
-  ('মসুর ডাল',  100.00,140.00, 'kg',   0.01),   -- stable
-  ('আলু',        22.00, 35.00, 'kg',  -0.15),   -- falling
-  ('টমেটো',      38.00, 60.00, 'kg',   0.20),   -- rising sharply
-  ('পেঁয়াজ',    48.00, 70.00, 'kg',   0.08)    -- rising
-) AS c(name, wp, rp, unit, trend),
-generate_series(1, 7) AS d;
-
-COMMIT;
-
--- Show what we have
-SELECT crop_name, wholesale_price, retail_price, price_date
-FROM price_history
-WHERE price_date >= CURRENT_DATE - INTERVAL '7 days'
-ORDER BY crop_name, price_date DESC
-LIMIT 15;
+-- Regenerate 90 days of history for market_prices. Safe to re-run.
+DELETE FROM market_prices WHERE source = 'SEED';
+DO $$
+DECLARE
+  crops TEXT[] := ARRAY['লাউ', 'কাঁচামরিচ', 'বেগুন', 'আলু', 'টমেটো'];
+  units TEXT[] := ARRAY['piece', 'kg', 'kg', 'kg', 'kg'];
+  base_wholesale NUMERIC[] := ARRAY[20, 75, 45, 27, 50];
+  retail_ratio NUMERIC[] := ARRAY[1.45, 1.42, 1.44, 1.48, 1.46];
+  ci INT; di INT; day_offset INT;
+  wholesale NUMERIC; retail NUMERIC;
+  noise NUMERIC; drift NUMERIC; shock NUMERIC;
+  district_multiplier NUMERIC;
+BEGIN
+  FOR ci IN 1..array_length(crops, 1) LOOP
+    FOR di IN 1..9 LOOP
+      district_multiplier := 0.85 + (di * 0.04);
+      FOR day_offset IN 0..89 LOOP
+        noise := 0.94 + random() * 0.12;
+        drift := 1.0 + ((day_offset - 45) * 0.003 * (CASE WHEN ci % 2 = 0 THEN -1 ELSE 1 END));
+        shock := CASE WHEN random() < 0.05 THEN 0.85 + random() * 0.30 ELSE 1.0 END;
+        wholesale := ROUND(base_wholesale[ci] * district_multiplier * noise * drift * shock, 2);
+        retail := ROUND(wholesale * retail_ratio[ci], 2);
+        INSERT INTO market_prices (crop_name, district_id, wholesale_price, retail_price, unit, price_date, source)
+        VALUES (crops[ci], di, wholesale, retail, units[ci], CURRENT_DATE - day_offset, 'SEED')
+        ON CONFLICT (crop_name, district_id, price_date) DO NOTHING;
+      END LOOP;
+    END LOOP;
+  END LOOP;
+END $$;
