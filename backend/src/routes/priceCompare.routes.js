@@ -55,3 +55,39 @@ router.get('/crops', async (_req, res, next) => {
 });
 
 export default router;
+
+// GET /api/prices/history?crop=<name>&district_id=<id>&days=30
+// Returns { rows: [{ price_date, wholesale_price, retail_price }, ...] }
+// sorted by date ascending, ready for a line chart.
+router.get('/history', async (req, res, next) => {
+  try {
+    const { crop, district_id, days = 30 } = req.query;
+    if (!crop || !district_id) {
+      return res.status(400).json({ error: 'crop and district_id required' });
+    }
+    const daysNum = Math.min(365, Math.max(1, Number(days)));
+
+    const rows = await fetchAll(
+      `SELECT price_date, wholesale_price, retail_price, unit
+       FROM market_prices
+       WHERE crop_name = $1
+         AND district_id = $2
+         AND price_date >= CURRENT_DATE - $3::int
+       ORDER BY price_date ASC`,
+      [crop, district_id, daysNum]
+    );
+
+    const districts = await fetchAll(
+      `SELECT district_id, district_name FROM districts ORDER BY district_name`
+    );
+
+    res.json({
+      crop,
+      district_id: Number(district_id),
+      days: daysNum,
+      rows,
+      districts,
+      count: rows.length,
+    });
+  } catch (err) { next(err); }
+});

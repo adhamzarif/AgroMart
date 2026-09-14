@@ -12,7 +12,7 @@ export default function LiveMarketPrices() {
       img: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600' },
     { icon: '🗺️', title: 'lmp_benefit2_title', desc: 'lmp_benefit2_desc', to: '/prices/compare',
       img: 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600' },
-    { icon: '📉', title: 'lmp_benefit3_title', desc: 'lmp_benefit3_desc',
+    { icon: '📉', title: 'lmp_benefit3_title', desc: 'lmp_benefit3_desc', to: '/prices/history',
       img: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600' },
     { icon: '🔔', title: 'lmp_benefit4_title', desc: 'lmp_benefit4_desc',
       img: '/crops/tomato.jpg' },
