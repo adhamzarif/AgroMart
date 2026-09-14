@@ -9,13 +9,13 @@ export default function LiveMarketPrices() {
 
   const benefits = [
     { icon: '📊', title: 'lmp_benefit1_title', desc: 'lmp_benefit1_desc',
-      img: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600' },
+      img: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600' },
     { icon: '🗺️', title: 'lmp_benefit2_title', desc: 'lmp_benefit2_desc',
-      img: 'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=600' },
+      img: 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600' },
     { icon: '📉', title: 'lmp_benefit3_title', desc: 'lmp_benefit3_desc',
-      img: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=600' },
+      img: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600' },
     { icon: '🔔', title: 'lmp_benefit4_title', desc: 'lmp_benefit4_desc',
-      img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600' },
+      img: '/crops/tomato.jpg' },
   ];
 
   const steps = [
