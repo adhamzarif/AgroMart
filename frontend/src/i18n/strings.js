@@ -276,6 +276,34 @@ export const strings = {
     contact_sending: 'পাঠানো হচ্ছে...',
     contact_success: 'ধন্যবাদ! আপনার বার্তা পেয়েছি — শীঘ্রই যোগাযোগ করব।',
     contact_error: 'দুঃখিত, কিছু ভুল হয়েছে। আবার চেষ্টা করুন।',
+    // Price Compare page
+    pc_title: 'জেলাভিত্তিক দাম তুলনা',
+    pc_sub: 'একই ফসল বিভিন্ন জেলায় কত দামে বিক্রি হচ্ছে — এক নজরে তুলনা করুন।',
+    pc_select_crop: 'ফসল বাছাই করুন',
+    pc_showing: 'দেখানো হচ্ছে',
+    pc_districts: 'জেলা',
+    pc_per: 'প্রতি',
+    pc_cheapest: 'সবচেয়ে সস্তা',
+    pc_priciest: 'সবচেয়ে দামি',
+    pc_gap: 'পার্থক্য',
+    pc_gap_pct: 'বেশি',
+    pc_chart_title: 'জেলাভিত্তিক খুচরা দাম',
+    pc_district: 'জেলা',
+    pc_wholesale: 'পাইকারি',
+    pc_retail: 'খুচরা',
+    pc_updated: 'হালনাগাদ',
+    pc_best: 'সেরা',
+    // Price Compare — extra keys
+    pc_badge: 'দাম তুলনা',
+    pc_avg: 'গড়',
+    pc_table_title: 'জেলাভিত্তিক বিস্তারিত দাম',
+    pc_table_sub: 'সবচেয়ে সস্তা জেলা সবার উপরে — কেনাকাটা বা বিক্রির সিদ্ধান্তে সাহায্য করবে।',
+    pc_savings: 'সাশ্রয়',
+    pc_highest: 'সর্বোচ্চ',
+    pc_source: 'উৎস',
+    pc_disclaimer: 'দাম প্রতিদিন হালনাগাদ হয়, স্থানীয় বাজারে সামান্য ভিন্ন হতে পারে।',
+
+
 
 
 
@@ -561,6 +589,34 @@ export const strings = {
     contact_sending: 'Sending...',
     contact_success: 'Thanks! Got your message — we\'ll be in touch shortly.',
     contact_error: 'Sorry, something went wrong. Please try again.',
+    // Price Compare page
+    pc_title: 'Compare prices across districts',
+    pc_sub: 'See how the same crop is priced in different districts — at a glance.',
+    pc_select_crop: 'Select crop',
+    pc_showing: 'Showing',
+    pc_districts: 'districts',
+    pc_per: 'per',
+    pc_cheapest: 'Cheapest',
+    pc_priciest: 'Most expensive',
+    pc_gap: 'Gap',
+    pc_gap_pct: 'higher',
+    pc_chart_title: 'Retail price by district',
+    pc_district: 'District',
+    pc_wholesale: 'Wholesale',
+    pc_retail: 'Retail',
+    pc_updated: 'Updated',
+    pc_best: 'Best',
+    // Price Compare — extra keys
+    pc_badge: 'Price comparison',
+    pc_avg: 'avg',
+    pc_table_title: 'District-by-district price detail',
+    pc_table_sub: 'Cheapest district is on top — helpful for buying and selling decisions.',
+    pc_savings: 'Savings',
+    pc_highest: 'Highest',
+    pc_source: 'Source',
+    pc_disclaimer: 'Prices update daily and may vary slightly at local markets.',
+
+
 
 
 

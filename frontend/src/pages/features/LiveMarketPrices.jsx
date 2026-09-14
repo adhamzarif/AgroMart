@@ -8,10 +8,14 @@ export default function LiveMarketPrices() {
   const { t } = useLang();
 
   const benefits = [
-    { icon: '📊', title: 'lmp_benefit1_title', desc: 'lmp_benefit1_desc' },
-    { icon: '🗺️', title: 'lmp_benefit2_title', desc: 'lmp_benefit2_desc' },
-    { icon: '📉', title: 'lmp_benefit3_title', desc: 'lmp_benefit3_desc' },
-    { icon: '🔔', title: 'lmp_benefit4_title', desc: 'lmp_benefit4_desc' },
+    { icon: '📊', title: 'lmp_benefit1_title', desc: 'lmp_benefit1_desc',
+      img: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600' },
+    { icon: '🗺️', title: 'lmp_benefit2_title', desc: 'lmp_benefit2_desc', to: '/prices/compare',
+      img: 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600' },
+    { icon: '📉', title: 'lmp_benefit3_title', desc: 'lmp_benefit3_desc',
+      img: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600' },
+    { icon: '🔔', title: 'lmp_benefit4_title', desc: 'lmp_benefit4_desc',
+      img: '/crops/tomato.jpg' },
   ];
 
   const steps = [
@@ -43,7 +47,7 @@ export default function LiveMarketPrices() {
           {t('lmp_hero_sub')}
         </p>
         <div className="mt-8 flex justify-center gap-3">
-          <Link to="/prices" className="rounded-full bg-m1 px-6 py-3 text-sm font-semibold text-white hover:bg-m1-dark">
+          <Link to="/prices/compare" className="rounded-full bg-m1 px-6 py-3 text-sm font-semibold text-white hover:bg-m1-dark">
             {t('lmp_cta_view')}
           </Link>
           <Link to="/register" className="rounded-full border border-white/40 px-6 py-3 text-sm font-semibold text-white hover:bg-white hover:text-m1">
@@ -59,13 +63,31 @@ export default function LiveMarketPrices() {
             {t('lmp_benefits_title')}
           </h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {benefits.map((b) => (
-              <div key={b.title} className="rounded-xl bg-white p-6 shadow-sm">
-                <div className="mb-3 text-3xl">{b.icon}</div>
-                <h3 className="mb-2 font-bold text-gray-900">{t(b.title)}</h3>
-                <p className="text-sm text-gray-600">{t(b.desc)}</p>
-              </div>
-            ))}
+            {benefits.map((b) => {
+              const inner = (
+                <>
+                  <div className="relative h-32 overflow-hidden">
+                    <img src={b.img} alt="" className="h-full w-full object-cover" />
+                    <div className="absolute left-3 top-3 grid h-9 w-9 place-items-center rounded-lg bg-white/90 text-lg shadow-sm backdrop-blur">
+                      {b.icon}
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="mb-2 font-bold text-gray-900">{t(b.title)}</h3>
+                    <p className="text-sm text-gray-600">{t(b.desc)}</p>
+                    {b.to && (
+                      <span className="mt-3 inline-block text-sm font-semibold text-m1">
+                        {t('feat_learn_more')} →
+                      </span>
+                    )}
+                  </div>
+                </>
+              );
+              const cls = 'block overflow-hidden rounded-xl bg-white shadow-sm transition ' + (b.to ? 'hover:-translate-y-1 hover:shadow-md' : '');
+              return b.to
+                ? <Link key={b.title} to={b.to} className={cls}>{inner}</Link>
+                : <div key={b.title} className={cls}>{inner}</div>;
+            })}
           </div>
         </div>
       </section>
