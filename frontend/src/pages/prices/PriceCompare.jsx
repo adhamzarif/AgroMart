@@ -46,9 +46,6 @@ export default function PriceCompare() {
       {/* Hero band */}
       <div className="border-b border-gray-100 bg-gradient-to-br from-green-50 via-white to-white">
         <div className="mx-auto max-w-6xl px-6 py-14">
-          <div className="inline-block rounded-full bg-white px-4 py-1 text-xs font-semibold text-m1 shadow-sm">
-            📊 {t('pc_badge')}
-          </div>
           <h1 className="mt-4 text-4xl font-bold text-gray-900 sm:text-5xl font-display">
             {t('pc_title')}
           </h1>
