@@ -77,6 +77,16 @@ export default function PriceCompare() {
   const gap = priciest && cheapest ? priciest.retail_price - cheapest.retail_price : 0;
   const gapPct = cheapest ? (gap / cheapest.retail_price) * 100 : 0;
 
+  // Tight y-axis: start near the cheapest, end above the priciest.
+  const yMin =
+    rows.length > 0
+      ? Math.max(0, Math.floor(Math.min(...rows.map((r) => Number(r.wholesale_price))) / 10) * 10 - 10)
+      : 0;
+  const yMax =
+    rows.length > 0
+      ? Math.ceil(Math.max(...rows.map((r) => Number(r.retail_price))) / 10) * 10 + 10
+      : 100;
+
   return (
     <div className="bg-gray-50 pb-20">
       {/* Hero band with background image */}
@@ -182,6 +192,8 @@ export default function PriceCompare() {
                       tickFormatter={dName}
                     />
                     <YAxis
+                      domain={[yMin, yMax]}
+                      allowDataOverflow={false}
                       tick={{ fontSize: 12, fill: '#64748b' }}
                       axisLine={false}
                       tickLine={false}
