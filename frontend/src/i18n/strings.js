@@ -302,6 +302,27 @@ export const strings = {
     pc_highest: 'সর্বোচ্চ',
     pc_source: 'উৎস',
     pc_disclaimer: 'দাম প্রতিদিন হালনাগাদ হয়, স্থানীয় বাজারে সামান্য ভিন্ন হতে পারে।',
+    // Price History page
+    ph_title: 'দামের ঐতিহাসিক প্রবণতা',
+    ph_sub: 'গত ৭ / ৩০ / ৯০ / ৩৬৫ দিনের দাম দেখে বাজারের গতি বুঝুন।',
+    ph_crop: 'ফসল',
+    ph_district: 'জেলা',
+    ph_range: 'সময়সীমা',
+    ph_current: 'বর্তমান দাম',
+    ph_change: 'পরিবর্তন',
+    ph_avg: 'গড়',
+    ph_range_label: 'পরিসর',
+    ph_low: 'সর্বনিম্ন',
+    ph_high: 'সর্বোচ্চ',
+    ph_days: 'দিন',
+    ph_last: 'গত',
+    ph_per: 'প্রতি',
+    ph_chart_title: 'ঐতিহাসিক দাম চার্ট',
+    ph_wholesale: 'পাইকারি',
+    ph_retail: 'খুচরা',
+    ph_source: 'উৎস',
+    ph_disclaimer: 'সিমুলেটেড ডেটা — শুধু ডেমো উদ্দেশ্যে।',
+
 
 
 
@@ -615,6 +636,27 @@ export const strings = {
     pc_highest: 'Highest',
     pc_source: 'Source',
     pc_disclaimer: 'Prices update daily and may vary slightly at local markets.',
+    // Price History page
+    ph_title: 'Historical price trends',
+    ph_sub: 'See how prices moved over the last 7 / 30 / 90 / 365 days.',
+    ph_crop: 'Crop',
+    ph_district: 'District',
+    ph_range: 'Range',
+    ph_current: 'Current price',
+    ph_change: 'Change',
+    ph_avg: 'Average',
+    ph_range_label: 'Range',
+    ph_low: 'Low',
+    ph_high: 'High',
+    ph_days: 'days',
+    ph_last: 'last',
+    ph_per: 'per',
+    ph_chart_title: 'Price history chart',
+    ph_wholesale: 'Wholesale',
+    ph_retail: 'Retail',
+    ph_source: 'Source',
+    ph_disclaimer: 'Simulated data for demo purposes only.',
+
 
 
 

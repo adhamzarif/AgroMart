@@ -5,6 +5,7 @@ import Navbar from './components/layout/Navbar.jsx';
 import Home from './pages/Home.jsx';
 import Contact from './pages/Contact.jsx';
 import PriceCompare from './pages/prices/PriceCompare.jsx';
+import PriceHistory from './pages/prices/PriceHistory.jsx';
 import Register from './pages/auth/Register.jsx';
 import CropForm from './pages/farmer/CropForm.jsx';
 import HowItWorks from './pages/HowItWorks.jsx';
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="/features/secure-payments" element={<SecurePayments />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/prices/compare" element={<PriceCompare />} />
+          <Route path="/prices/history" element={<PriceHistory />} />
         </Routes>
       </BrowserRouter>
     </LangProvider>
