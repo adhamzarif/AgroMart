@@ -1,5 +1,5 @@
+-- market prices for 5 crops × 9 districts on CURRENT_DATE
 INSERT INTO market_prices (crop_name, district_id, wholesale_price, retail_price, unit, price_date, source) VALUES
--- লাউ (Bottle Gourd) — piece
 ('লাউ', 1, 25, 40, 'piece', CURRENT_DATE, 'DAM'),
 ('লাউ', 2, 22, 32, 'piece', CURRENT_DATE, 'DAM'),
 ('লাউ', 3, 17, 24, 'piece', CURRENT_DATE, 'DAM'),
@@ -9,7 +9,6 @@ INSERT INTO market_prices (crop_name, district_id, wholesale_price, retail_price
 ('লাউ', 7, 16, 23, 'piece', CURRENT_DATE, 'DAM'),
 ('লাউ', 8, 21, 30, 'piece', CURRENT_DATE, 'DAM'),
 ('লাউ', 9, 18, 25, 'piece', CURRENT_DATE, 'DAM'),
-
 ('কাঁচামরিচ', 1, 90, 130, 'kg', CURRENT_DATE, 'DAM'),
 ('কাঁচামরিচ', 2, 75, 110, 'kg', CURRENT_DATE, 'DAM'),
 ('কাঁচামরিচ', 3, 65, 95, 'kg', CURRENT_DATE, 'DAM'),
@@ -19,7 +18,6 @@ INSERT INTO market_prices (crop_name, district_id, wholesale_price, retail_price
 ('কাঁচামরিচ', 7, 60, 88, 'kg', CURRENT_DATE, 'DAM'),
 ('কাঁচামরিচ', 8, 78, 115, 'kg', CURRENT_DATE, 'DAM'),
 ('কাঁচামরিচ', 9, 60, 85, 'kg', CURRENT_DATE, 'DAM'),
-
 ('বেগুন', 1, 55, 80, 'kg', CURRENT_DATE, 'DAM'),
 ('বেগুন', 2, 48, 70, 'kg', CURRENT_DATE, 'DAM'),
 ('বেগুন', 3, 38, 55, 'kg', CURRENT_DATE, 'DAM'),
@@ -29,7 +27,6 @@ INSERT INTO market_prices (crop_name, district_id, wholesale_price, retail_price
 ('বেগুন', 7, 35, 50, 'kg', CURRENT_DATE, 'DAM'),
 ('বেগুন', 8, 50, 72, 'kg', CURRENT_DATE, 'DAM'),
 ('বেগুন', 9, 40, 55, 'kg', CURRENT_DATE, 'DAM'),
-
 ('আলু', 1, 32, 48, 'kg', CURRENT_DATE, 'DAM'),
 ('আলু', 2, 28, 42, 'kg', CURRENT_DATE, 'DAM'),
 ('আলু', 3, 22, 32, 'kg', CURRENT_DATE, 'DAM'),
@@ -39,7 +36,6 @@ INSERT INTO market_prices (crop_name, district_id, wholesale_price, retail_price
 ('আলু', 7, 20, 30, 'kg', CURRENT_DATE, 'DAM'),
 ('আলু', 8, 30, 44, 'kg', CURRENT_DATE, 'DAM'),
 ('আলু', 9, 25, 35, 'kg', CURRENT_DATE, 'DAM'),
-
 ('টমেটো', 1, 60, 88, 'kg', CURRENT_DATE, 'DAM'),
 ('টমেটো', 2, 52, 75, 'kg', CURRENT_DATE, 'DAM'),
 ('টমেটো', 3, 42, 60, 'kg', CURRENT_DATE, 'DAM'),
