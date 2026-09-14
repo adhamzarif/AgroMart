@@ -8,10 +8,14 @@ export default function LiveMarketPrices() {
   const { t } = useLang();
 
   const benefits = [
-    { icon: '📊', title: 'lmp_benefit1_title', desc: 'lmp_benefit1_desc' },
-    { icon: '🗺️', title: 'lmp_benefit2_title', desc: 'lmp_benefit2_desc' },
-    { icon: '📉', title: 'lmp_benefit3_title', desc: 'lmp_benefit3_desc' },
-    { icon: '🔔', title: 'lmp_benefit4_title', desc: 'lmp_benefit4_desc' },
+    { icon: '📊', title: 'lmp_benefit1_title', desc: 'lmp_benefit1_desc',
+      img: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600' },
+    { icon: '🗺️', title: 'lmp_benefit2_title', desc: 'lmp_benefit2_desc',
+      img: 'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=600' },
+    { icon: '📉', title: 'lmp_benefit3_title', desc: 'lmp_benefit3_desc',
+      img: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=600' },
+    { icon: '🔔', title: 'lmp_benefit4_title', desc: 'lmp_benefit4_desc',
+      img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600' },
   ];
 
   const steps = [
@@ -60,10 +64,17 @@ export default function LiveMarketPrices() {
           </h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {benefits.map((b) => (
-              <div key={b.title} className="rounded-xl bg-white p-6 shadow-sm">
-                <div className="mb-3 text-3xl">{b.icon}</div>
-                <h3 className="mb-2 font-bold text-gray-900">{t(b.title)}</h3>
-                <p className="text-sm text-gray-600">{t(b.desc)}</p>
+              <div key={b.title} className="overflow-hidden rounded-xl bg-white shadow-sm">
+                <div className="relative h-32 overflow-hidden">
+                  <img src={b.img} alt="" className="h-full w-full object-cover" />
+                  <div className="absolute left-3 top-3 grid h-9 w-9 place-items-center rounded-lg bg-white/90 text-lg shadow-sm backdrop-blur">
+                    {b.icon}
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="mb-2 font-bold text-gray-900">{t(b.title)}</h3>
+                  <p className="text-sm text-gray-600">{t(b.desc)}</p>
+                </div>
               </div>
             ))}
           </div>
