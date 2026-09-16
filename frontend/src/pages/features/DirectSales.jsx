@@ -65,13 +65,24 @@ export default function DirectSales() {
             {t('ds_benefits_title')}
           </h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {benefits.map((b) => (
-              <div key={b.title} className="rounded-xl bg-white p-6 shadow-sm">
-                <div className="mb-3 text-3xl">{b.icon}</div>
-                <h3 className="mb-2 font-bold text-gray-900">{t(b.title)}</h3>
-                <p className="text-sm text-gray-600">{t(b.desc)}</p>
-              </div>
-            ))}
+            {benefits.map((b) => {
+              const inner = (
+                <>
+                  <div className="mb-3 text-3xl">{b.icon}</div>
+                  <h3 className="mb-2 font-bold text-gray-900">{t(b.title)}</h3>
+                  <p className="text-sm text-gray-600">{t(b.desc)}</p>
+                  {b.to && (
+                    <span className="mt-3 inline-block text-sm font-semibold text-m1">
+                      {t('feat_learn_more')} →
+                    </span>
+                  )}
+                </>
+              );
+              const cls = 'block rounded-xl bg-white p-6 shadow-sm transition ' + (b.to ? 'hover:-translate-y-1 hover:shadow-md' : '');
+              return b.to
+                ? <Link key={b.title} to={b.to} className={cls}>{inner}</Link>
+                : <div key={b.title} className={cls}>{inner}</div>;
+            })}
           </div>
         </div>
       </section>
