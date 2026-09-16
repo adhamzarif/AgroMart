@@ -6,6 +6,10 @@ import Home from './pages/Home.jsx';
 import Contact from './pages/Contact.jsx';
 import PriceCompare from './pages/prices/PriceCompare.jsx';
 import PriceHistory from './pages/prices/PriceHistory.jsx';
+import PriceAlerts from './pages/prices/PriceAlerts.jsx';
+import HigherMargins from './pages/features/HigherMargins.jsx';
+import TrustRatings from './pages/features/TrustRatings.jsx';
+import FarmerProfile from './pages/farmers/FarmerProfile.jsx';
 import Register from './pages/auth/Register.jsx';
 import CropForm from './pages/farmer/CropForm.jsx';
 import HowItWorks from './pages/HowItWorks.jsx';
@@ -41,6 +45,10 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/prices/compare" element={<PriceCompare />} />
           <Route path="/prices/history" element={<PriceHistory />} />
+          <Route path="/prices/alerts" element={<PriceAlerts />} />
+          <Route path="/features/higher-margins" element={<HigherMargins />} />
+          <Route path="/features/trust-ratings" element={<TrustRatings />} />
+          <Route path="/farmers/:id" element={<FarmerProfile />} />
         </Routes>
       </BrowserRouter>
     </LangProvider>

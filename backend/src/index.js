@@ -10,6 +10,9 @@ import authRoutes from './routes/auth.routes.js';        // ← CHANGE 1
 import cropRoutes from './routes/crops.routes.js';
 import priceRoutes from './routes/prices.routes.js';
 import priceCompareRoutes from './routes/priceCompare.routes.js';
+import marginRoutes from './routes/margins.routes.js';
+import farmerRoutes from './routes/farmers.routes.js';
+import alertRoutes from './routes/alerts.routes.js';
 import statsRoutes from './routes/stats.routes.js';
 import categoryRoutes from './routes/categories.routes.js';     // ← ADD THIS
 
@@ -32,6 +35,9 @@ app.use('/api/auth', authRoutes);                        // ← CHANGE 2
 app.use('/api/crops', cropRoutes);
 app.use('/api/prices', priceRoutes);
 app.use('/api/prices', priceCompareRoutes);
+app.use('/api/margins', marginRoutes);
+app.use('/api/farmers', farmerRoutes);
+app.use('/api/alerts', alertRoutes);
 app.use('/api/stats', statsRoutes);
 const __b2dir = path.dirname(fileURLToPath(import.meta.url));
 app.use('/uploads', express.static(path.resolve(__b2dir, '../storage/uploads')));
