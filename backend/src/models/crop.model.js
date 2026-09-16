@@ -33,6 +33,14 @@ export async function listAvailableCrops({ categoryId, districtId, search, limit
     JOIN users u            ON c.farmer_id = u.user_id
     JOIN crop_categories cc ON c.category_id = cc.category_id
     LEFT JOIN districts d    ON u.district_id = d.district_id
+    LEFT JOIN (
+      SELECT farmer_id,
+             ROUND(AVG(overall_rating)::numeric, 1) AS avg_rating,
+             COUNT(*)::int AS review_count
+      FROM farmer_ratings
+      WHERE is_flagged = false
+      GROUP BY farmer_id
+    ) fr ON u.user_id = fr.farmer_id
     WHERE ${where.join(' AND ')}
     ORDER BY ${distinct ? 'c.crop_name, ' : ''}c.created_at DESC
     LIMIT $${limitIdx} OFFSET $${offsetIdx}`;

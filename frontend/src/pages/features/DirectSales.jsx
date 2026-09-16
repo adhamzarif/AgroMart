@@ -9,7 +9,7 @@ export default function DirectSales() {
 
   const benefits = [
     { icon: '💰', title: 'ds_benefit1_title', desc: 'ds_benefit1_desc', to: '/features/higher-margins' },
-    { icon: '🤝', title: 'ds_benefit2_title', desc: 'ds_benefit2_desc' },
+    { icon: '🤝', title: 'ds_benefit2_title', desc: 'ds_benefit2_desc', to: '/features/trust-ratings' },
     { icon: '🚚', title: 'ds_benefit3_title', desc: 'ds_benefit3_desc' },
     { icon: '⭐', title: 'ds_benefit4_title', desc: 'ds_benefit4_desc' },
   ];
