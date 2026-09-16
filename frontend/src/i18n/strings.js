@@ -322,6 +322,24 @@ export const strings = {
     ph_retail: 'খুচরা',
     ph_source: 'উৎস',
     ph_disclaimer: 'সিমুলেটেড ডেটা — শুধু ডেমো উদ্দেশ্যে।',
+    // Higher margins feature page
+    hm_title: 'উচ্চ লাভের ক্যালকুলেটর',
+    hm_sub: 'AgroMart-এ সরাসরি বিক্রি করলে কতটা বেশি আয় হবে — নিজে হিসাব করে দেখুন।',
+    hm_crop: 'ফসল',
+    hm_quantity: 'পরিমাণ',
+    hm_headline: 'আপনার অতিরিক্ত আয়',
+    hm_more_per_sale: 'প্রতিটি বিক্রিতে বেশি',
+    hm_gain_pct: 'অতিরিক্ত',
+    hm_total_retail: 'মোট খুচরা মূল্য',
+    hm_traditional: 'সাধারণ পদ্ধতি',
+    hm_traditional_sub: 'দালাল → আড়ত → খুচরা — ৪ ধাপ',
+    hm_agromart: 'AgroMart-এ',
+    hm_agromart_sub: 'কৃষক → ক্রেতা — সরাসরি',
+    hm_chart_title: 'কে কতটা পাচ্ছেন',
+    hm_chart_sub: 'একই মোট বিক্রি — কিন্তু কৃষকের অংশ AgroMart-এ অনেক বড়।',
+    hm_breakdown_title: 'বিস্তারিত হিসাব',
+    hm_disclaimer: 'হিসাব DAM-এর গড় খুচরা দাম ও প্রচলিত মার্জিন কাঠামোর উপর ভিত্তি করে। বাজারভেদে সামান্য ভিন্ন হতে পারে।',
+
 
 
 
@@ -656,6 +674,24 @@ export const strings = {
     ph_retail: 'Retail',
     ph_source: 'Source',
     ph_disclaimer: 'Simulated data for demo purposes only.',
+    // Higher margins feature page
+    hm_title: 'Higher margins calculator',
+    hm_sub: 'See how much more you earn by selling directly on AgroMart.',
+    hm_crop: 'Crop',
+    hm_quantity: 'Quantity',
+    hm_headline: 'Your extra earnings',
+    hm_more_per_sale: 'more per sale',
+    hm_gain_pct: 'higher earnings',
+    hm_total_retail: 'total retail value',
+    hm_traditional: 'Traditional',
+    hm_traditional_sub: 'Dealer → wholesaler → retailer — 4 hops',
+    hm_agromart: 'AgroMart',
+    hm_agromart_sub: 'Farmer → buyer — direct',
+    hm_chart_title: 'Who gets what',
+    hm_chart_sub: 'Same total sale — but the farmer\'s slice is much bigger on AgroMart.',
+    hm_breakdown_title: 'Detailed breakdown',
+    hm_disclaimer: 'Based on DAM average retail prices and standard supply-chain margins. Actual splits vary by market.',
+
 
 
 
