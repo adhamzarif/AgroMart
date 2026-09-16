@@ -339,6 +339,9 @@ export const strings = {
     hm_chart_sub: 'একই মোট বিক্রি — কিন্তু কৃষকের অংশ AgroMart-এ অনেক বড়।',
     hm_breakdown_title: 'বিস্তারিত হিসাব',
     hm_disclaimer: 'হিসাব DAM-এর গড় খুচরা দাম ও প্রচলিত মার্জিন কাঠামোর উপর ভিত্তি করে। বাজারভেদে সামান্য ভিন্ন হতে পারে।',
+    hm_best: 'সেরা',
+    hm_farmer_gets: 'কৃষক পান',
+    hm_of_total: 'মোট বিক্রির',
 
 
 
@@ -691,6 +694,9 @@ export const strings = {
     hm_chart_sub: 'Same total sale — but the farmer\'s slice is much bigger on AgroMart.',
     hm_breakdown_title: 'Detailed breakdown',
     hm_disclaimer: 'Based on DAM average retail prices and standard supply-chain margins. Actual splits vary by market.',
+    hm_best: 'Best',
+    hm_farmer_gets: 'Farmer gets',
+    hm_of_total: 'of total sale',
 
 
 
