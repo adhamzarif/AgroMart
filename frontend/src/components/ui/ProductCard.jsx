@@ -25,7 +25,7 @@ export default function ProductCard({ crop }) {
     farmer_review_count,
   } = crop;
 
-  const displayName     = lang === 'en' && crop_name_en     ? crop_name_en     : crop_name;
+  const displayName = lang === 'en' && crop_name_en ? crop_name_en : crop_name;
   const displayCategory = lang === 'en' && category_name_en ? category_name_en : category_name;
   const displayDistrict = lang === 'en' && district_name_en ? district_name_en : district_name;
 
@@ -49,9 +49,7 @@ export default function ProductCard({ crop }) {
 
       <div className="p-5">
         {displayCategory && (
-          <Badge tone="category" className="mb-3">
-            {displayCategory}
-          </Badge>
+          <Badge tone="category" className="mb-3">{displayCategory}</Badge>
         )}
         <h3 className="text-xl font-bold text-gray-900">{displayName}</h3>
 
@@ -79,9 +77,7 @@ export default function ProductCard({ crop }) {
         <div className="flex items-end justify-between">
           <div>
             <div className="text-2xl font-bold text-m1 font-display">৳ {price}</div>
-            <div className="text-xs text-gray-400">
-              {t('per')} {unit}
-            </div>
+            <div className="text-xs text-gray-400">{t('per')} {unit}</div>
           </div>
           <Link
             to={`/marketplace/${crop_id}`}
