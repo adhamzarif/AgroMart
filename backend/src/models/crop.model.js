@@ -22,8 +22,8 @@ export async function listAvailableCrops({ categoryId, districtId, search, limit
   params.push(limit, offset);
 
   const sql = `
-    SELECT c.crop_id, c.crop_name, c.quantity, c.unit, c.price_per_unit,
-           c.is_organic, c.images, c.created_at,
+    SELECT c.crop_id, c.category_id, c.crop_name, c.quantity, c.unit, c.price_per_unit,
+           c.is_organic, c.images, c.created_at, c.description,
            cc.category_name,
            u.full_name  AS farmer_name,
            d.district_name,
