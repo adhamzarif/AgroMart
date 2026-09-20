@@ -12,7 +12,13 @@ import Card from './Card.jsx';
 import Badge from './Badge.jsx';
 import { getStockStatus } from '../../utils/stock.js';
 
-export default function ProductCard({ crop, onQuickView, isFavorite = false, onToggleFavorite }) {
+export default function ProductCard({
+  crop,
+  onQuickView,
+  isFavorite = false,
+  onToggleFavorite,
+  onAddToCart,
+}) {
   const { t } = useLang();
   const {
     crop_id,
@@ -105,6 +111,18 @@ export default function ProductCard({ crop, onQuickView, isFavorite = false, onT
             </div>
           </div>
         </div>
+
+        {/* add to cart — disabled once out of stock */}
+        {onAddToCart && (
+          <button
+            type="button"
+            onClick={() => onAddToCart(crop)}
+            disabled={stockStatus === 'out'}
+            className="mb-2 w-full rounded-lg bg-m1-dark px-4 py-2.5 text-sm font-semibold text-white hover:bg-m1 disabled:cursor-not-allowed disabled:bg-gray-300"
+          >
+            🛒 {stockStatus === 'out' ? t('stock_out') : t('cart_add')}
+          </button>
+        )}
 
         {/* actions: quick view + view details */}
         <div className="flex items-center gap-2">

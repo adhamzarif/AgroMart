@@ -8,22 +8,28 @@
 // pulled from GET /api/categories (already existed, just wasn't used here)
 // so the dropdown lists every category, not only ones with current listings.
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useLang } from '../context/LangContext.jsx';
 import { getCrops, getCategories } from '../api/crops.api.js';
 import ProductCard from '../components/ui/ProductCard.jsx';
 import MarketplaceFilters from '../components/marketplace/MarketplaceFilters.jsx';
 import QuickViewModal from '../components/marketplace/QuickViewModal.jsx';
 import { useFavorites } from '../hooks/useFavorites.js';
+import { useCart } from '../hooks/useCart.js';
 import { expandSearchTerms } from '../i18n/cropSynonyms.js';
 import { getStockStatus } from '../utils/stock.js';
 import { DEMO_CROPS } from '../data/demoCrops.js';
 
 const PAGE_SIZE = 12;
+// Pool size fetched from the API once; all filtering/sorting/pagination below
+// happens client-side against this pool (see backend crops.controller.js —
+// the max `limit` it accepts was raised to match).
 const FETCH_POOL_SIZE = 300;
 
 export default function Marketplace() {
   const { t, lang } = useLang();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { addItem: addToCart, totalCount: cartCount } = useCart();
 
   const [crops, setCrops] = useState([]);
   const [state, setState] = useState('loading'); // loading | ready | empty | error
@@ -32,6 +38,7 @@ export default function Marketplace() {
 
   const [categoryOptions, setCategoryOptions] = useState([]); // [{id, label}]
 
+  // Filter state
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('all');
   const [district, setDistrict] = useState('all');
@@ -44,6 +51,7 @@ export default function Marketplace() {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [quickViewCrop, setQuickViewCrop] = useState(null);
 
+  // Load crops (with a dev-only demo fallback if the API call fails).
   useEffect(() => {
     let alive = true;
 
@@ -58,6 +66,10 @@ export default function Marketplace() {
       .catch((err) => {
         if (!alive) return;
 
+        // Development-only fallback so the UI can still be demonstrated
+        // while the backend is down. Never used in production builds, and
+        // every demo item is flagged (is_demo: true) so it's never mistaken
+        // for a real listing — see data/demoCrops.js and ProductCard.jsx.
         if (import.meta.env.DEV) {
           setCrops(DEMO_CROPS);
           setUsingDemoData(true);
@@ -74,6 +86,8 @@ export default function Marketplace() {
     };
   }, []);
 
+  // Load categories from the backend (GET /api/categories), independent of
+  // which categories currently have active listings.
   useEffect(() => {
     let alive = true;
     getCategories()
@@ -85,12 +99,15 @@ export default function Marketplace() {
         }));
         setCategoryOptions(list);
       })
-      .catch(() => {});
+      .catch(() => {
+        // Non-fatal — the category filter just falls back to "All Categories" only.
+      });
     return () => {
       alive = false;
     };
   }, [lang]);
 
+  // Reset pagination whenever a filter changes.
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
   }, [search, category, district, minPrice, maxPrice, organicOnly, inStockOnly, sortBy]);
@@ -98,6 +115,7 @@ export default function Marketplace() {
   const filteredCrops = useMemo(() => {
     let result = [...crops];
 
+    // Search — matches Bangla or English crop names via the synonym table.
     if (search.trim()) {
       const terms = expandSearchTerms(search);
       result = result.filter((crop) => {
@@ -106,16 +124,19 @@ export default function Marketplace() {
       });
     }
 
+    // Category filter
     if (category !== 'all') {
       result = result.filter((crop) => String(crop.category_id) === String(category));
     }
 
+    // District filter
     if (district !== 'all') {
       result = result.filter(
         (crop) => String(crop.district_name || '').toLowerCase() === district.toLowerCase()
       );
     }
 
+    // Minimum price
     if (minPrice !== '') {
       const min = Number(minPrice);
       if (!Number.isNaN(min)) {
@@ -123,6 +144,7 @@ export default function Marketplace() {
       }
     }
 
+    // Maximum price
     if (maxPrice !== '') {
       const max = Number(maxPrice);
       if (!Number.isNaN(max)) {
@@ -130,16 +152,19 @@ export default function Marketplace() {
       }
     }
 
+    // Organic only
     if (organicOnly) {
       result = result.filter(
         (crop) => crop.is_organic === true || crop.is_organic === 1 || crop.is_organic === 'true'
       );
     }
 
+    // In stock only
     if (inStockOnly) {
       result = result.filter((crop) => getStockStatus(crop.quantity) !== 'out');
     }
 
+    // Sorting
     if (sortBy === 'price-low') {
       result.sort((a, b) => Number(a.price_per_unit ?? 0) - Number(b.price_per_unit ?? 0));
     } else if (sortBy === 'price-high') {
@@ -177,17 +202,34 @@ export default function Marketplace() {
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-10">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 font-display">{t('nav_marketplace')}</h1>
-        <p className="mt-1 text-sm text-gray-500">{t('market_subtitle')}</p>
+      {/* Heading */}
+      <div className="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 font-display">{t('nav_marketplace')}</h1>
+          <p className="mt-1 text-sm text-gray-500">{t('market_subtitle')}</p>
+        </div>
+
+        <Link
+          to="/marketplace/cart"
+          className="relative flex shrink-0 items-center gap-2 rounded-full border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+        >
+          🛒 {t('cart_title')}
+          {cartCount > 0 && (
+            <span className="absolute -right-2 -top-2 grid h-5 min-w-5 place-items-center rounded-full bg-m1 px-1 text-xs font-bold text-white">
+              {cartCount}
+            </span>
+          )}
+        </Link>
       </div>
 
+      {/* Demo data notice */}
       {usingDemoData && (
         <div className="mb-6 rounded-xl2 border border-warning-dark/20 bg-warning-bg px-4 py-3 text-sm text-warning-dark">
           ⚠️ {t('market_demo_notice')}
         </div>
       )}
 
+      {/* Filters */}
       <MarketplaceFilters
         search={search}
         onSearchChange={setSearch}
@@ -209,6 +251,7 @@ export default function Marketplace() {
         onClearAll={clearFilters}
       />
 
+      {/* Loading */}
       {state === 'loading' && (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
@@ -217,6 +260,7 @@ export default function Marketplace() {
         </div>
       )}
 
+      {/* Error (production only — dev falls back to demo data above) */}
       {state === 'error' && (
         <div className="rounded-xl2 bg-danger-bg p-6 text-danger-dark">
           {t('market_error')}
@@ -224,10 +268,12 @@ export default function Marketplace() {
         </div>
       )}
 
+      {/* Empty marketplace (no crops in DB at all) */}
       {state === 'empty' && (
         <div className="rounded-xl2 bg-gray-50 p-10 text-center text-gray-500">{t('market_empty')}</div>
       )}
 
+      {/* Ready */}
       {state === 'ready' && (
         <>
           <div className="mb-4 flex items-center justify-between">
@@ -243,6 +289,7 @@ export default function Marketplace() {
             )}
           </div>
 
+          {/* Products */}
           {visibleCrops.length > 0 ? (
             <>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -253,6 +300,7 @@ export default function Marketplace() {
                     onQuickView={setQuickViewCrop}
                     isFavorite={isFavorite(crop.crop_id)}
                     onToggleFavorite={toggleFavorite}
+                    onAddToCart={addToCart}
                   />
                 ))}
               </div>
@@ -290,8 +338,13 @@ export default function Marketplace() {
         </>
       )}
 
+      {/* Quick View modal */}
       {quickViewCrop && (
-        <QuickViewModal crop={quickViewCrop} onClose={() => setQuickViewCrop(null)} />
+        <QuickViewModal
+          crop={quickViewCrop}
+          onClose={() => setQuickViewCrop(null)}
+          onAddToCart={addToCart}
+        />
       )}
     </section>
   );

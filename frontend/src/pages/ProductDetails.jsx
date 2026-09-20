@@ -10,15 +10,18 @@ import { getCrop } from '../api/crops.api.js';
 import Card from '../components/ui/Card.jsx';
 import Badge from '../components/ui/Badge.jsx';
 import { useFavorites } from '../hooks/useFavorites.js';
+import { useCart } from '../hooks/useCart.js';
 import { getStockStatus } from '../utils/stock.js';
 
 export default function ProductDetails() {
   const { cropId } = useParams();
   const { t } = useLang();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { addItem: addToCart } = useCart();
 
   const [crop, setCrop] = useState(null);
   const [state, setState] = useState('loading'); // loading | ready | error
+  const [addQty, setAddQty] = useState(1);
 
   useEffect(() => {
     let alive = true;
@@ -188,7 +191,36 @@ export default function ProductDetails() {
                 {t('per')} {unit}
               </div>
             </div>
+
+            {stockStatus !== 'out' && (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setAddQty((q) => Math.max(1, q - 1))}
+                  className="grid h-9 w-9 place-items-center rounded-lg border border-gray-300 font-bold text-gray-700"
+                >
+                  −
+                </button>
+                <span className="w-6 text-center font-semibold">{addQty}</span>
+                <button
+                  type="button"
+                  onClick={() => setAddQty((q) => Math.min(q + 1, Number(quantity ?? 1)))}
+                  className="grid h-9 w-9 place-items-center rounded-lg border border-gray-300 font-bold text-gray-700"
+                >
+                  +
+                </button>
+              </div>
+            )}
           </div>
+
+          <button
+            type="button"
+            onClick={() => addToCart(crop, addQty)}
+            disabled={stockStatus === 'out'}
+            className="mt-4 w-full rounded-full bg-m1 px-6 py-3 text-sm font-semibold text-white hover:bg-m1-dark disabled:cursor-not-allowed disabled:bg-gray-300"
+          >
+            🛒 {stockStatus === 'out' ? t('stock_out') : t('cart_add')}
+          </button>
         </div>
       </div>
     </section>

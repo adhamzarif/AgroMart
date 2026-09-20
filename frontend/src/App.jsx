@@ -8,6 +8,7 @@ import Register from './pages/auth/Register.jsx';
 import LivePrice from './pages/LivePrice.jsx';
 import Marketplace from './pages/Marketplace.jsx';
 import ProductDetails from './pages/ProductDetails.jsx';
+import Cart from './pages/Cart.jsx';
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
           <Route path="/how-it-works" element={<HowItWorks/>} />
           <Route path="/prices" element={<LivePrice />} />
           <Route path="/marketplace" element={<Marketplace />} />
+          <Route path="/marketplace/cart" element={<Cart />} />
           <Route path="/marketplace/:cropId" element={<ProductDetails />} />
         </Routes>
       </BrowserRouter>

@@ -7,9 +7,10 @@ import { useLang } from '../../context/LangContext.jsx';
 import Badge from '../ui/Badge.jsx';
 import { getStockStatus } from '../../utils/stock.js';
 
-export default function QuickViewModal({ crop, onClose }) {
+export default function QuickViewModal({ crop, onClose, onAddToCart }) {
   const { t } = useLang();
 
+  // Close on Escape.
   useEffect(() => {
     function onKeyDown(e) {
       if (e.key === 'Escape') onClose();
@@ -53,6 +54,7 @@ export default function QuickViewModal({ crop, onClose }) {
         className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white shadow-5"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* image + close button */}
         <div className="relative h-64 bg-gray-100 sm:h-80">
           {img ? (
             <img src={img} alt={crop_name} className="h-full w-full object-cover" />
@@ -76,6 +78,7 @@ export default function QuickViewModal({ crop, onClose }) {
           )}
         </div>
 
+        {/* body */}
         <div className="p-6">
           <div className="mb-3 flex flex-wrap items-center gap-2">
             {category_name && <Badge tone="category">{category_name}</Badge>}
@@ -125,13 +128,26 @@ export default function QuickViewModal({ crop, onClose }) {
               </div>
             </div>
 
-            <Link
-              to={`/marketplace/${crop_id}`}
-              onClick={onClose}
-              className="rounded-full bg-m1 px-6 py-3 text-sm font-semibold text-white hover:bg-m1-dark"
-            >
-              {t('view_full_details')}
-            </Link>
+            <div className="flex items-center gap-2">
+              {onAddToCart && (
+                <button
+                  type="button"
+                  onClick={() => onAddToCart(crop)}
+                  disabled={stockStatus === 'out'}
+                  className="rounded-full border border-m1 px-5 py-3 text-sm font-semibold text-m1 hover:bg-success-bg disabled:cursor-not-allowed disabled:border-gray-300 disabled:text-gray-400"
+                >
+                  🛒 {t('cart_add')}
+                </button>
+              )}
+
+              <Link
+                to={`/marketplace/${crop_id}`}
+                onClick={onClose}
+                className="rounded-full bg-m1 px-6 py-3 text-sm font-semibold text-white hover:bg-m1-dark"
+              >
+                {t('view_full_details')}
+              </Link>
+            </div>
           </div>
         </div>
       </div>
