@@ -162,21 +162,20 @@ export default function EasyDelivery() {
               </div>
             </div>
 
-            {/* Overweight — no auto-quote */}
+            {/* Overweight */}
             {data.overweight && (
               <div className="mb-6 rounded-2xl border-2 border-amber-300 bg-amber-50 p-6 text-center">
-                <div className="text-4xl">📞</div>
                 <div className="mt-2 text-lg font-bold text-amber-900">
                   {t('de_overweight_title')}
                 </div>
                 <p className="mt-1 text-sm text-amber-800">
                   {t('de_overweight_desc')}
                 </p>
-                
-                  href="tel:+8801XXX-XXXXXX"
+                <a
+                  href="tel:+8801700000000"
                   className="mt-4 inline-block rounded-full bg-amber-600 px-6 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-amber-700"
                 >
-                  📞 +880 1XXX-XXXXXX
+                  +880 1700-000000
                 </a>
               </div>
             )}
