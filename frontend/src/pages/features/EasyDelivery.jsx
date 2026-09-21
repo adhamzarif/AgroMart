@@ -105,7 +105,7 @@ export default function EasyDelivery() {
             </div>
             <div>
               <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-gray-500">
-                ⚖ {t('de_weight')} (kg)
+                ⚖ {t('de_weight')} ({t('de_unit_kg')})
               </label>
               <input
                 type="number"
@@ -153,11 +153,11 @@ export default function EasyDelivery() {
                   </span>
                 </div>
                 <div className="rounded-full bg-white px-4 py-2 text-sm font-bold text-blue-800 shadow-sm">
-                  📏 {fmt(data.distance_km)} km
+                  📏 {fmt(data.distance_km)} {t('de_unit_km')}
                 </div>
               </div>
               <div className="mt-3 text-sm text-gray-500">
-                {fmt(data.weight_kg)} kg
+                {fmt(data.weight_kg)} {t('de_unit_kg')}
                 {data.same_district && ` • ${t('de_same_district_hint')}`}
               </div>
             </div>

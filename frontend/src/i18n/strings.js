@@ -530,6 +530,8 @@ export const strings = {
 
 
 
+    de_unit_kg: 'কেজি',
+    de_unit_km: 'কিমি',
 },
   en: {
     brand: 'AgroMart',
@@ -1061,5 +1063,7 @@ export const strings = {
 
 
 
+    de_unit_kg: 'kg',
+    de_unit_km: 'km',
 },
 };
