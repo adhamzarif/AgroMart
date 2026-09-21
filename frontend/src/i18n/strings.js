@@ -532,6 +532,21 @@ export const strings = {
 
     de_unit_kg: 'কেজি',
     de_unit_km: 'কিমি',
+
+    login_title: 'লগইন করুন',
+    login_sub: 'ফোন নম্বর এবং পাসওয়ার্ড দিয়ে সাইন ইন করুন।',
+    login_phone: 'ফোন নম্বর',
+    login_password: 'পাসওয়ার্ড',
+    login_button: 'লগইন',
+    login_no_account: 'অ্যাকাউন্ট নেই?',
+    login_demo_title: 'ডেমো অ্যাকাউন্ট',
+    login_demo_hint: 'যেকোনো ডেমো অ্যাকাউন্টে ক্লিক করলে ফিল্ড অটো-ফিল হয়ে যাবে। পাসওয়ার্ড:',
+    login_signed_in_as: 'সাইন ইন করা হয়েছে',
+    logout: 'লগ আউট',
+    nav_dashboard: 'ড্যাশবোর্ড',
+    nav_admin: 'অ্যাডমিন প্যানেল',
+    nav_orders: 'মার্কেটপ্লেস',
+    role_admin: 'অ্যাডমিন',
 },
   en: {
     brand: 'AgroMart',
@@ -1065,5 +1080,20 @@ export const strings = {
 
     de_unit_kg: 'kg',
     de_unit_km: 'km',
+
+    login_title: 'Sign in',
+    login_sub: 'Sign in with your phone number and password.',
+    login_phone: 'Phone number',
+    login_password: 'Password',
+    login_button: 'Sign in',
+    login_no_account: 'Don\'t have an account?',
+    login_demo_title: 'Demo accounts',
+    login_demo_hint: 'Click any demo account to auto-fill the fields. Password:',
+    login_signed_in_as: 'Signed in as',
+    logout: 'Log out',
+    nav_dashboard: 'Dashboard',
+    nav_admin: 'Admin panel',
+    nav_orders: 'Marketplace',
+    role_admin: 'Admin',
 },
 };

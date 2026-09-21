@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext.jsx';
+import Login from './pages/auth/Login.jsx';
 import { LangProvider } from './context/LangContext.jsx';
 import Navbar from './components/layout/Navbar.jsx';
 
@@ -28,7 +30,7 @@ import SecurePayments from './pages/features/SecurePayments.jsx';
 
 export default function App() {
   return (
-    <LangProvider>
+    <AuthProvider><LangProvider>
       <BrowserRouter>
         <Navbar />
         <Routes>
@@ -55,8 +57,9 @@ export default function App() {
           <Route path="/features/easy-delivery" element={<EasyDelivery />} />
           <Route path="/features/trust-ratings" element={<TrustRatings />} />
           <Route path="/farmers/:id" element={<FarmerProfile />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>
-    </LangProvider>
+    </LangProvider></AuthProvider>
   );
 }
