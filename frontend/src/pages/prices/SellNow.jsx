@@ -69,16 +69,33 @@ export default function SellNow() {
       setCrops(list);
       if (list.length && !selectedCrop) setSelectedCrop(list[0]);
     });
-    api.get('/api/prices/compare?crop=লাউ').then((r) => {
-      if (r.districts) setDistricts(r.districts);
-    });
+    // Load district list from compare endpoint (returns a `districts` array).
+    api.get('/api/prices/compare?crop=%E0%A6%B2%E0%A6%BE%E0%A6%89').then((r) => {
+      if (r.districts && r.districts.length) {
+        setDistricts(r.districts);
+      }
+    }).catch(() => {});
   }, []);
 
   useEffect(() => {
     if (!selectedCrop || !localDistrict) return;
     setLoading(true);
     api.get(`/api/prices/recommend?crop=${encodeURIComponent(selectedCrop)}&local_district_id=${localDistrict}`)
-      .then(setData)
+      .then((r) => {
+        setData(r);
+        // fallback: if districts list came back empty from earlier fetch,
+        // build one from top_markets so the dropdown at least has some options.
+        setDistricts((prev) => {
+          if (prev && prev.length > 0) return prev;
+          if (r && r.top_markets) {
+            return r.top_markets.map((m) => ({
+              district_id: m.district_id,
+              district_name: m.district_name,
+            }));
+          }
+          return prev;
+        });
+      })
       .finally(() => setLoading(false));
   }, [selectedCrop, localDistrict]);
 
@@ -124,12 +141,17 @@ export default function SellNow() {
                 📍 {t('sr_your_district')}
               </label>
               <select
-                value={localDistrict}
+                value={String(localDistrict)}
                 onChange={(e) => setLocalDistrict(Number(e.target.value))}
                 className="w-full rounded-xl border-2 border-gray-100 bg-white px-4 py-3 text-base font-semibold text-gray-900 transition focus:border-m1 focus:outline-none focus:ring-2 focus:ring-m1/20"
               >
+                {districts.length === 0 && (
+                  <option value="9">রাঙ্গামাটি / Rangamati</option>
+                )}
                 {districts.map((d) => (
-                  <option key={d.district_id} value={d.district_id}>{dName(d.district_name)}</option>
+                  <option key={d.district_id} value={String(d.district_id)}>
+                    {dName(d.district_name)}
+                  </option>
                 ))}
               </select>
             </div>
@@ -294,48 +316,64 @@ export default function SellNow() {
               </div>
             </div>
 
-            {/* PODIUM-STYLE Top 3 markets */}
-            <div className="mb-8 rounded-3xl border border-gray-100 bg-white p-6 shadow-sm sm:p-8">
-              <div className="mb-6 flex items-baseline justify-between">
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900 font-display">
-                    🏆 {t('sr_top_markets')}
-                  </h2>
-                  <p className="mt-0.5 text-sm text-gray-500">{t('sr_top_sub')}</p>
-                </div>
+            {/* Top 3 markets — clean table */}
+            <div className="mb-8 overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm">
+              <div className="border-b border-gray-100 px-6 py-5 sm:px-8">
+                <h2 className="text-xl font-bold text-gray-900 font-display">
+                  🏆 {t('sr_top_markets')}
+                </h2>
+                <p className="mt-1 text-sm text-gray-500">{t('sr_top_sub')}</p>
               </div>
-
-              {/* Podium — desktop */}
-              <div className="hidden gap-4 sm:grid sm:grid-cols-3 sm:items-end">
-                {data.top_markets.length >= 2 && (
-                  <PodiumSpot rank={2} m={data.top_markets[1]} dName={dName} fmt={fmt} unit={data.unit} height="h-40" t={t} />
-                )}
-                {data.top_markets.length >= 1 && (
-                  <PodiumSpot rank={1} m={data.top_markets[0]} dName={dName} fmt={fmt} unit={data.unit} height="h-52" t={t} isWinner />
-                )}
-                {data.top_markets.length >= 3 && (
-                  <PodiumSpot rank={3} m={data.top_markets[2]} dName={dName} fmt={fmt} unit={data.unit} height="h-32" t={t} />
-                )}
-              </div>
-
-              {/* Simple stacked list — mobile */}
-              <div className="space-y-3 sm:hidden">
-                {data.top_markets.map((m, i) => (
-                  <div key={m.district_id} className="flex items-center gap-3 rounded-xl border border-gray-100 bg-white p-4">
-                    <div className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-full bg-gray-100 text-lg">
-                      {['🥇','🥈','🥉'][i]}
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-bold text-gray-900">{dName(m.district_name)}</div>
-                      <div className="text-xs text-gray-500">৳{fmt(m.retail_price)} / {data.unit}</div>
-                    </div>
-                    {m.gain_pct > 0 ? (
-                      <div className="rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-800">+{fmt(m.gain_pct)}%</div>
-                    ) : (
-                      <div className="text-xs text-gray-400">{t('sr_local')}</div>
-                    )}
-                  </div>
-                ))}
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-50 text-xs uppercase tracking-wider text-gray-500">
+                    <tr>
+                      <th className="px-6 py-3 text-left">#</th>
+                      <th className="px-6 py-3 text-left">{t('sr_district_col')}</th>
+                      <th className="px-6 py-3 text-right">{t('sr_price_col')}</th>
+                      <th className="px-6 py-3 text-right">{t('sr_gain_col')}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {data.top_markets.map((m, i) => {
+                      const isWinner = i === 0 && m.gain_pct > 0;
+                      const isLocal = m.gain_pct <= 0;
+                      return (
+                        <tr key={m.district_id} className={isWinner ? 'bg-green-50/60 hover:bg-green-50' : 'hover:bg-gray-50'}>
+                          <td className="px-6 py-4 text-gray-400 font-bold">{fmt(i + 1)}</td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-2 font-bold text-gray-900">
+                              {dName(m.district_name)}
+                              {isWinner && (
+                                <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-800">
+                                  ✓ {t('sr_best')}
+                                </span>
+                              )}
+                              {isLocal && (
+                                <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-bold text-blue-700">
+                                  🏠 {t('sr_local')}
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <div className="font-bold text-gray-900">৳{fmt(m.retail_price)}</div>
+                            <div className="text-xs text-gray-400">/ {data.unit}</div>
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            {m.gain_pct > 0 ? (
+                              <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-800">
+                                ↑ +{fmt(m.gain_pct)}%
+                              </span>
+                            ) : (
+                              <span className="text-xs text-gray-300">—</span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             </div>
 
@@ -433,44 +471,6 @@ export default function SellNow() {
             </p>
           </>
         )}
-      </div>
-    </div>
-  );
-}
-
-function PodiumSpot({ rank, m, dName, fmt, unit, height, t, isWinner }) {
-  const rankColors = {
-    1: 'from-yellow-400 to-amber-500',
-    2: 'from-gray-300 to-gray-400',
-    3: 'from-orange-300 to-orange-500',
-  };
-  const rankEmoji = { 1: '🥇', 2: '🥈', 3: '🥉' };
-
-  return (
-    <div className="flex flex-col items-center">
-      {/* Card on top */}
-      <div className={`w-full rounded-2xl border p-4 text-center shadow-sm ${
-        isWinner ? 'border-amber-300 bg-gradient-to-br from-amber-50 to-white shadow-lg ring-2 ring-amber-200' : 'border-gray-100 bg-white'
-      }`}>
-        <div className="text-4xl">{rankEmoji[rank]}</div>
-        <div className="mt-2 font-bold text-gray-900 font-display">{dName(m.district_name)}</div>
-        <div className="mt-1 text-lg font-bold text-gray-900">
-          ৳{fmt(m.retail_price)}
-        </div>
-        <div className="text-xs text-gray-500">/ {unit}</div>
-        {m.gain_pct > 0 ? (
-          <div className={`mt-2 rounded-full px-2 py-1 text-xs font-bold ${isWinner ? 'bg-green-600 text-white' : 'bg-green-100 text-green-800'}`}>
-            +{fmt(m.gain_pct)}%
-          </div>
-        ) : (
-          <div className="mt-2 rounded-full bg-gray-100 px-2 py-1 text-xs font-bold text-gray-500">
-            {t('sr_local')}
-          </div>
-        )}
-      </div>
-      {/* Podium bar */}
-      <div className={`mt-2 w-full rounded-t-lg bg-gradient-to-b ${rankColors[rank]} ${height} grid place-items-center text-3xl font-bold text-white/80`}>
-        {rank}
       </div>
     </div>
   );
