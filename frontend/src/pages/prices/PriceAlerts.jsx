@@ -13,7 +13,7 @@ const DISTRICT_BN = {
   'Sylhet':'সিলেট','Barishal':'বরিশাল','Rangpur':'রংপুর','Mymensingh':'ময়মনসিংহ','Rangamati':'রাঙ্গামাটি',
 };
 const BN_DIGITS = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
-const HERO_IMG = 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1600';
+const HERO_IMG = 'https://images.unsplash.com/photo-1592982537447-6f2a6a0c60d0?w=1600';
 
 export default function PriceAlerts() {
   const { t, lang } = useLang();
