@@ -15,13 +15,14 @@ const FEATURE_ICONS = {
   insured:     '🛡️',
   tracking:    '📍',
   cold_storage:'❄️',
+  priority:    '⚡',
 };
 
 export default function EasyDelivery() {
   const { t, lang } = useLang();
   const [districts, setDistricts] = useState([]);
-  const [from, setFrom] = useState(9);   // default Rangamati
-  const [to, setTo] = useState(1);       // default Dhaka
+  const [from, setFrom] = useState(9);
+  const [to, setTo] = useState(1);
   const [weight, setWeight] = useState(50);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -47,8 +48,6 @@ export default function EasyDelivery() {
       })
       .finally(() => setLoading(false));
   }, [from, to, weight]);
-
-  const isSameDistrict = from === to;
 
   return (
     <div className="bg-gray-50 pb-24">
@@ -90,7 +89,6 @@ export default function EasyDelivery() {
                 ))}
               </select>
             </div>
-
             <div>
               <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-gray-500">
                 🏁 {t('de_to')}
@@ -105,7 +103,6 @@ export default function EasyDelivery() {
                 ))}
               </select>
             </div>
-
             <div>
               <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-gray-500">
                 ⚖ {t('de_weight')} (kg)
@@ -117,7 +114,6 @@ export default function EasyDelivery() {
                 onChange={(e) => setWeight(Math.max(1, Number(e.target.value) || 1))}
                 className="w-full rounded-xl border-2 border-gray-100 bg-white px-4 py-3 text-base font-semibold text-gray-900 focus:border-m1 focus:outline-none focus:ring-2 focus:ring-m1/20"
               />
-              {/* Quick-pick chips */}
               <div className="mt-2 flex gap-2">
                 {[10, 50, 100, 500].map((q) => (
                   <button
@@ -144,15 +140,8 @@ export default function EasyDelivery() {
 
         {!loading && data && (
           <>
-            {/* Same-district hint */}
-            {isSameDistrict && (
-              <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-                💡 {t('de_same_district')}
-              </div>
-            )}
-
             {/* Route summary */}
-            <div className="mb-8 rounded-3xl border border-blue-100 bg-gradient-to-br from-blue-50 via-sky-50 to-white p-6 shadow-sm sm:p-8">
+            <div className="mb-6 rounded-3xl border border-blue-100 bg-gradient-to-br from-blue-50 via-sky-50 to-white p-6 shadow-sm sm:p-8">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-baseline gap-3">
                   <span className="text-3xl font-bold text-gray-900 font-display">
@@ -168,28 +157,43 @@ export default function EasyDelivery() {
                 </div>
               </div>
               <div className="mt-3 text-sm text-gray-500">
-                {fmt(data.weight_kg)} kg • {t('de_route_hint')}
+                {fmt(data.weight_kg)} kg
+                {data.same_district && ` • ${t('de_same_district_hint')}`}
               </div>
             </div>
 
-            {/* Carrier cards */}
-            <div className="mb-8">
-              <h2 className="mb-4 text-lg font-bold text-gray-900 font-display">
-                🚚 {t('de_options')}
-              </h2>
-              <div className="grid gap-4">
-                {data.carriers.map((c) => (
-                  <CarrierCard
-                    key={c.code}
-                    carrier={c}
-                    fmt={fmt}
-                    t={t}
-                    lang={lang}
-                    etaDate={data.eta_date}
-                  />
-                ))}
+            {/* Overweight — no auto-quote */}
+            {data.overweight && (
+              <div className="mb-6 rounded-2xl border-2 border-amber-300 bg-amber-50 p-6 text-center">
+                <div className="text-4xl">📞</div>
+                <div className="mt-2 text-lg font-bold text-amber-900">
+                  {t('de_overweight_title')}
+                </div>
+                <p className="mt-1 text-sm text-amber-800">
+                  {t('de_overweight_desc')}
+                </p>
+                
+                  href="tel:+8801XXX-XXXXXX"
+                  className="mt-4 inline-block rounded-full bg-amber-600 px-6 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-amber-700"
+                >
+                  📞 +880 1XXX-XXXXXX
+                </a>
               </div>
-            </div>
+            )}
+
+            {/* Carrier options */}
+            {data.carriers.length > 0 && (
+              <div className="mb-8">
+                <h2 className="mb-4 text-lg font-bold text-gray-900 font-display">
+                  🚚 {t('de_options')}
+                </h2>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {data.carriers.map((c) => (
+                    <CarrierCard key={c.code} carrier={c} fmt={fmt} t={t} />
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* CTA */}
             <div className="mb-8 rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-sm sm:p-8">
@@ -225,56 +229,78 @@ export default function EasyDelivery() {
   );
 }
 
-function CarrierCard({ carrier, fmt, t, lang, etaDate }) {
-  const eta = new Date(etaDate);
-  const etaDisplay = eta.toLocaleDateString(lang === 'bn' ? 'bn-BD' : 'en-GB', {
-    day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
-  });
+function CarrierCard({ carrier, fmt, t }) {
+  const isExpress = carrier.tier === 'express';
+  const isSameDay = carrier.tier === 'same_district';
+
+  const tierLabel = isSameDay
+    ? t('de_tier_same')
+    : isExpress
+      ? t('de_tier_express')
+      : t('de_tier_standard');
+
+  const tierColor = isExpress
+    ? 'from-purple-500 to-pink-500'
+    : isSameDay
+      ? 'from-green-500 to-emerald-600'
+      : 'from-blue-500 to-cyan-500';
+
+  const daysText = carrier.days_min === carrier.days_max
+    ? `${fmt(carrier.days_min)} ${t('de_days')}`
+    : `${fmt(carrier.days_min)}–${fmt(carrier.days_max)} ${t('de_days')}`;
 
   const FEATURE_LABEL = {
     insured:     t('de_feat_insured'),
     tracking:    t('de_feat_tracking'),
     cold_storage:t('de_feat_cold_storage'),
+    priority:    t('de_feat_priority'),
   };
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border-2 border-green-100 bg-gradient-to-br from-green-50/50 to-white p-6 shadow-md">
+    <div className={`relative overflow-hidden rounded-2xl border-2 bg-white p-6 shadow-md ${isExpress ? 'border-purple-200 ring-2 ring-purple-100' : 'border-green-100'}`}>
       <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-green-100/40 blur-2xl" />
-      <div className="relative flex flex-wrap items-start justify-between gap-4">
-        <div>
+      <div className="relative">
+        <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 text-3xl shadow-md">
+            <div className={`grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br ${tierColor} text-3xl shadow-md`}>
               {carrier.icon}
             </div>
             <div>
-              <div className="text-xl font-bold text-gray-900 font-display">{carrier.name}</div>
-              <div className="text-sm text-gray-500">{t(carrier.tagline_key)}</div>
+              <div className="text-lg font-bold text-gray-900 font-display">{carrier.name}</div>
+              <div className="text-xs text-gray-500">{t(carrier.tagline_key)}</div>
             </div>
           </div>
+          {isExpress && (
+            <span className="rounded-full bg-purple-100 px-2.5 py-1 text-xs font-bold text-purple-800">
+              ⚡ {t('de_express_badge')}
+            </span>
+          )}
+        </div>
 
-          {/* Feature badges */}
-          <div className="mt-4 flex flex-wrap gap-2">
-            {carrier.features.map((f) => (
-              <span
-                key={f}
-                className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-xs font-semibold text-gray-700 shadow-sm ring-1 ring-gray-100"
-              >
-                <span>{FEATURE_ICONS[f]}</span> {FEATURE_LABEL[f]}
-              </span>
-            ))}
+        {/* Price + ETA */}
+        <div className="mt-5 flex items-baseline justify-between gap-3">
+          <div>
+            <div className="text-3xl font-bold text-gray-900 font-display">৳{fmt(carrier.cost)}</div>
+            <div className="text-xs text-gray-500">{t('de_total_cost')}</div>
+          </div>
+          <div className="text-right">
+            <div className="rounded-full bg-gray-100 px-3 py-1.5 text-xs font-bold text-gray-800">
+              ⏱ {daysText}
+            </div>
+            <div className="mt-1 text-xs text-gray-500">{tierLabel}</div>
           </div>
         </div>
 
-        {/* Cost + ETA */}
-        <div className="text-right">
-          <div className="text-3xl font-bold text-gray-900 font-display">
-            ৳{fmt(carrier.cost)}
-          </div>
-          <div className="text-xs text-gray-500">{t('de_total_cost')}</div>
-          <div className="mt-3 rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-800 inline-block">
-            ⏱ {t('de_eta')}: {fmt(carrier.eta_hours)}h
-          </div>
-          <div className="mt-1 text-xs text-gray-500">{etaDisplay}</div>
+        {/* Features */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          {carrier.features.map((f) => (
+            <span
+              key={f}
+              className="inline-flex items-center gap-1.5 rounded-full bg-gray-50 px-2.5 py-1 text-xs font-semibold text-gray-700 ring-1 ring-gray-100"
+            >
+              <span>{FEATURE_ICONS[f]}</span> {FEATURE_LABEL[f]}
+            </span>
+          ))}
         </div>
       </div>
     </div>
