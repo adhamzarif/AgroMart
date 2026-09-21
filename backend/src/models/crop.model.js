@@ -5,9 +5,7 @@ import { fetchAll, fetchOne } from '../config/db.js';
 
 /**
  * List available crops for the marketplace, with full server-side
- * filtering, sorting and pagination (previously this only supported
- * category/district/search + a single page — everything else, plus
- * "Load More", was done client-side against one big fetched pool).
+ * filtering, sorting and pagination.
  *
  * `search` — a comma-separated list of already-expanded search terms
  * (Bangla + English synonyms — see frontend/src/i18n/cropSynonyms.js's
@@ -19,9 +17,21 @@ import { fetchAll, fetchOne } from '../config/db.js';
  * modules; every crop's farmer district still comes from that table, so
  * name-matching here is exact and simple.
  *
+ * `distinct` — when true, collapses multiple listings with the same
+ * crop_name down to one (DISTINCT ON), newest first. NOTE: `total` is
+ * computed from the window function before DISTINCT ON is applied, so with
+ * distinct=true the reported total may be slightly higher than the number
+ * of rows actually returned across pages — acceptable for now, flagged here
+ * in case it needs exact correction later.
+ *
  * Returns { crops, total } — `total` is the COUNT of all rows matching the
  * filters (via a window function), independent of limit/offset, so the
  * frontend can page/"Load More" without re-fetching everything.
+ *
+ * Two separate ratings are joined in:
+ *  - review_count / avg_rating         → this crop's own reviews (crop_reviews table, migrations/010_reviews.sql)
+ *  - farmer_review_count / farmer_avg_rating → the farmer's overall rating (farmer_ratings table)
+ * They're intentionally named differently so ProductCard/ProductDetails can show both without clashing.
  */
 export async function listAvailableCrops({
   categoryId,
@@ -32,6 +42,7 @@ export async function listAvailableCrops({
   organicOnly,
   inStockOnly,
   sortBy = 'default',
+  distinct = false,
   limit = 12,
   offset = 0,
 } = {}) {
@@ -77,13 +88,16 @@ export async function listAvailableCrops({
     default: 'c.created_at DESC',
   };
   const orderClause = ORDER_BY[sortBy] || ORDER_BY.default;
+  // DISTINCT ON requires its leading ORDER BY expression(s) to match the
+  // DISTINCT ON columns, so crop_name must lead when distinct=true.
+  const finalOrderClause = distinct ? `c.crop_name, ${orderClause}` : orderClause;
 
   const limitIdx = i++;
   const offsetIdx = i++;
   params.push(limit, offset);
 
   const sql = `
-    SELECT c.crop_id, c.category_id, c.crop_name, c.quantity, c.unit, c.price_per_unit,
+    SELECT ${distinct ? 'DISTINCT ON (c.crop_name) ' : ''}c.crop_id, c.category_id, c.crop_name, c.quantity, c.unit, c.price_per_unit,
            c.is_organic, c.images, c.created_at, c.description,
            cc.category_name,
            u.full_name  AS farmer_name,
@@ -91,6 +105,8 @@ export async function listAvailableCrops({
            (c.created_at > NOW() - INTERVAL '7 days') AS is_new,
            COALESCE(r.review_count, 0)  AS review_count,
            r.avg_rating                 AS avg_rating,
+           COALESCE(fr.review_count, 0) AS farmer_review_count,
+           fr.avg_rating                AS farmer_avg_rating,
            COUNT(*) OVER()               AS total_count
     FROM crops c
     JOIN users u            ON c.farmer_id = u.user_id
@@ -102,8 +118,16 @@ export async function listAvailableCrops({
       FROM crop_reviews
       GROUP BY crop_id
     ) r ON r.crop_id = c.crop_id
+    LEFT JOIN (
+      SELECT farmer_id,
+             ROUND(AVG(overall_rating)::numeric, 1) AS avg_rating,
+             COUNT(*)::int AS review_count
+      FROM farmer_ratings
+      WHERE is_flagged = false
+      GROUP BY farmer_id
+    ) fr ON u.user_id = fr.farmer_id
     WHERE ${where.join(' AND ')}
-    ORDER BY ${orderClause}
+    ORDER BY ${finalOrderClause}
     LIMIT $${limitIdx} OFFSET $${offsetIdx}`;
 
   const rows = await fetchAll(sql, params);

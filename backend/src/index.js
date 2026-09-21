@@ -2,6 +2,7 @@
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
+import session from 'express-session';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { env, isDev } from './config/env.js';
@@ -9,6 +10,11 @@ import { ping } from './config/db.js';
 import authRoutes from './routes/auth.routes.js';        // ← CHANGE 1
 import cropRoutes from './routes/crops.routes.js';
 import priceRoutes from './routes/prices.routes.js';
+import priceCompareRoutes from './routes/priceCompare.routes.js';
+import marginRoutes from './routes/margins.routes.js';
+import farmerRoutes from './routes/farmers.routes.js';
+import alertRoutes from './routes/alerts.routes.js';
+import deliveryRoutes from './routes/delivery.routes.js';
 import statsRoutes from './routes/stats.routes.js';
 import categoryRoutes from './routes/categories.routes.js';     // ← ADD THIS
 
@@ -27,9 +33,29 @@ app.get('/api/health', async (_req, res) => {
 });
 
 // ── Routes ──
+
+// Sessions (in-memory store — fine for demo; use connect-pg-simple in production).
+app.use(session({
+  name: 'agromart.sid',
+  secret: process.env.SESSION_SECRET || 'agromart-dev-change-me',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: false, // set true when running behind HTTPS
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+  },
+}));
+
 app.use('/api/auth', authRoutes);                        // ← CHANGE 2
 app.use('/api/crops', cropRoutes);
 app.use('/api/prices', priceRoutes);
+app.use('/api/prices', priceCompareRoutes);
+app.use('/api/margins', marginRoutes);
+app.use('/api/farmers', farmerRoutes);
+app.use('/api/alerts', alertRoutes);
+app.use('/api/delivery', deliveryRoutes);
 app.use('/api/stats', statsRoutes);
 const __b2dir = path.dirname(fileURLToPath(import.meta.url));
 app.use('/uploads', express.static(path.resolve(__b2dir, '../storage/uploads')));

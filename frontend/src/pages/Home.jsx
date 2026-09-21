@@ -1,3 +1,4 @@
+// HERO_CTA_PATCHED
 // Home.jsx — landing page: hero (green gradient) + stat card row.
 // Matches the reference screenshot; text is bilingual via useLang.
 import { Link } from 'react-router-dom';
@@ -37,7 +38,7 @@ export default function Home() {
         {/* CTAs */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <Link to="/register">
-            <Button variant="solid" className="bg-white text-m1 hover:bg-white/90">
+            <Button variant="solid" className="bg-white hover:bg-white/90" style={{ color: '#2e7d32', fontWeight: 700 }}>
               {t('hero_cta_start')} →
             </Button>
           </Link>

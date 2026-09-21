@@ -2,258 +2,644 @@
 
 **Smart Farmer Marketplace & Financial Intelligence System**
 
-A unified agricultural platform built for Bangladeshi farmers — combining a direct marketplace, microloans, real-time market prices, weather intelligence, and an AI assistant — all in Bangla.
+AgroMart is an agricultural platform designed for Bangladeshi farmers, buyers, and other marketplace participants. The project combines a web frontend, REST-style backend APIs, agricultural crop and market-price features, financial/database components, and Bangla-first interface support.
 
-Built by **Team UIU_Return0** 
+Built by **Team UIU_Return0**  
+**SWE Lab Project**
 
 ---
 
 ## ✨ Features
 
-## 📸 Screenshots
+### 👨‍🌾 For Farmers
 
-### Home Page
-![Home Page](screenshots/home.png)
+- Register and manage farmer information
+- Add and manage crop listings
+- Upload crop images
+- View marketplace crop information
+- Access market-price information
+- Use a Bangla-first interface
 
-### Marketplace
-![Dashboard](screenshots/market_place.png)
+### 🛒 Marketplace
 
----
-### For Farmers
-- List crops with photos, set prices, manage inventory
-- Smart wallet with trigger-based double-entry accounting
-- Apply for microloans with automatic eligibility scoring
-- Live market price comparison (your crop vs. external market)
-- District-specific 5-day weather forecasts and severe-weather alerts
-- Expense tracking with auto-computed profit/loss
-- Direct messaging with buyers
+- Browse available crops
+- View crop information and prices
+- Organize crops through categories
+- Support crop-related API operations
 
-### For Buyers
-- Browse crops by category, district, or price
-- Save favorites and recurring subscriptions
-- Order with mock or live payment gateway
-- Rate farmers after delivery
-- Track orders in real-time
+### 📈 Market Prices
 
-### For Agents
-- Register farmers in the field (with OTP verification)
-- Manage assigned farmers, log activities
-- Commission tracking on every farmer sale
-- File support tickets on behalf of farmers
+- Market-price API integration
+- Price data management
+- Price-history database support
+- Dedicated Live Price frontend page
 
-### For Admins
-- Real-time platform-wide dashboard
-- Loan application approval workflow
-- Market price management with full price history
-- Issue manual weather alerts per district
-- Full audit log of every admin action
+### 🌐 Bangla / Internationalization
 
-### Cross-cutting
-- **AI Assistant** — Bangla chatbot for weather, prices, orders, loans
-- **Bangla-first UI** — Native Bangla throughout, with 64 Bangladesh districts preloaded
-  
----
+- Dedicated internationalization files
+- Language context through `LangContext.jsx`
+- Shared translation strings
+- Frontend installation script for i18n setup
 
-## Tech Stack
+### 🔐 Authentication & Security
 
-- **Backend:** PHP 8 (custom MVC framework, no external dependencies)
-- **Database:** MariaDB / MySQL 8
-- **Frontend:** Vanilla JS, custom CSS, Bootstrap Icons
-- **External APIs:** OpenWeatherMap (weather), SSLCommerz (payment, optional)
-- **Cron-driven:** Automated background tasks for weather, market prices, analytics
+- Authentication API and routes
+- Authentication middleware
+- CSRF middleware
+- Rate limiting
+- Request validation
+- Centralized error handling
+- File-upload middleware
 
 ---
 
-## Database Highlights
+## 🏗️ Architecture
 
-| Metric | Count |
-|---|---|
-| Tables | **39** (normalized to BCNF) |
-| Foreign Keys | **71** |
-| Triggers | **3** (order numbering, inventory logs, wallet double-entry) |
-| Views | **2** (`vw_active_crops_with_details`, `vw_farmer_performance`) |
-| Composite Indexes | **20+** |
+AgroMart is organized as a **separate frontend + backend application**:
 
-Database documentation available in the `docs/` folder.
+```text
+                    ┌──────────────────────────┐
+                    │       React Frontend     │
+                    │   Vite + Tailwind CSS    │
+                    └────────────┬─────────────┘
+                                 │
+                           API Requests
+                                 │
+                                 ▼
+                    ┌──────────────────────────┐
+                    │     Node.js Backend      │
+                    │         Express          │
+                    └────────────┬─────────────┘
+                                 │
+                    ┌────────────┴────────────┐
+                    │                         │
+                    ▼                         ▼
+             Application APIs          Database Layer
+             Controllers/Routes        SQL Migrations
+             Models/Services           Seed Data
+```
+
+The repository contains dedicated `backend/`, `frontend/`, `migrations/`, `docs/`, and seed-data components. The supplied project tree contains **1,816 directories and 11,487 files**; dependency directories such as `node_modules` account for a large portion of that tree.
+
+---
+
+## 🛠️ Tech Stack
+
+### Backend
+
+- **Node.js**
+- **Express**
+- JavaScript
+- REST-style API structure
+- Middleware-based request processing
+- Authentication, CSRF, rate limiting, validation, and upload handling
+
+The backend is organized around controllers, routes, models, middleware, services, utilities, configuration, jobs, storage, and tests.
+
+### Frontend
+
+- **React**
+- **Vite**
+- **Tailwind CSS**
+- JavaScript / JSX
+- React Router
+- Custom UI components
+- API client modules
+
+The frontend contains API modules, reusable layout/UI components, language context, i18n strings, pages, assets, and Vite/Tailwind configuration.
+
+### Database
+
+- SQL-based relational database
+- Versioned SQL migrations
+- Reference/marketplace/transaction/payment/financial/agent/smart database modules
+- Database views
+- Seed data
+
+The migration directory currently contains migrations from `000_prelude.sql` through `009_views.sql`, together with database application, verification, and seed scripts.
 
 ---
 
 ## 📂 Project Structure
 
+> `node_modules/` contents are intentionally not expanded below because they contain third-party dependencies. The actual project tree includes both backend and frontend dependency directories.
+
 ```text
 AgroMart/
-├── Controllers/     # 13 MVC controllers (Auth, Farmer, Buyer, Agent, Admin, etc.)
-├── Models/          # 24 data models
-├── views/           # 71 view files organized by role
-│   ├── admin/       # Admin panel views
-│   ├── agent/       # Agent dashboard views
-│   ├── farmer/      # Farmer dashboard views
-│   ├── buyer/       # Buyer dashboard views
-│   ├── liveprice/   # Live market price page
-│   ├── marketplace/ # Public marketplace
-│   └── ...
-├── core/            # 18 framework files
-│   ├── Router.php           # URL routing
-│   ├── Controller.php       # Base controller
-│   ├── Model.php            # Base model
-│   ├── Csrf.php             # CSRF protection
-│   ├── SessionGuard.php     # Session security
-│   ├── WeatherProvider.php  # Weather API integration
-│   ├── PaymentProvider.php  # Payment gateway abstraction
-│   ├── SmsProvider.php      # SMS abstraction
-│   ├── LlmProvider.php      # AI integration
-│   └── ...
-├── cron/            # Background tasks
-│   └── tasks/       # 10 cron tasks
-│       ├── WeatherFetchTask.php
-│       ├── MarketPriceFetchTask.php
-│       ├── DemandAnalyticsTask.php
-│       ├── LoanReminderTask.php
-│       ├── SubscriptionSchedulerTask.php
-│       ├── CropExpiryTask.php
-│       ├── WeatherAlertExpiryTask.php
-│       ├── OtpCleanupTask.php
-│       ├── CacheCleanupTask.php
-│       └── LogRotateTask.php
-├── migrations/      # 6 SQL migrations
-├── includes/        # Shared header, navbar, sidebar, footer
-├── assets/          # CSS, JS, fonts
-├── config/          # Routes and configuration
-├── tests/           # Unit + integration tests
-├── docs/            # Project documentation
-├── uploads/         # User-uploaded files (crops/profiles/receipts)
-├── storage/         # Cache and logs
-├── database.sql     # Complete schema + seed data
-└── index.php        # Front controller
+│
+├── backend/
+│   ├── install_crops_api.sh
+│   ├── package.json
+│   ├── package-lock.json
+│   │
+│   ├── src/
+│   │   ├── config/
+│   │   │   ├── db.js
+│   │   │   └── env.js
+│   │   │
+│   │   ├── controllers/
+│   │   │   ├── auth.controller.js
+│   │   │   ├── crops.controller.js
+│   │   │   └── prices.controller.js
+│   │   │
+│   │   ├── index.js
+│   │   │
+│   │   ├── jobs/
+│   │   │
+│   │   ├── middleware/
+│   │   │   ├── auth.js
+│   │   │   ├── csrf.js
+│   │   │   ├── errorHandler.js
+│   │   │   ├── rateLimit.js
+│   │   │   └── upload.js
+│   │   │
+│   │   ├── models/
+│   │   │   ├── crop.model.js
+│   │   │   ├── price.model.js
+│   │   │   └── user.model.js
+│   │   │
+│   │   ├── routes/
+│   │   │   ├── auth.routes.js
+│   │   │   ├── categories.routes.js
+│   │   │   ├── crops.routes.js
+│   │   │   ├── prices.routes.js
+│   │   │   └── stats.routes.js
+│   │   │
+│   │   ├── services/
+│   │   └── utils/
+│   │       └── validate.js
+│   │
+│   ├── storage/
+│   │   └── uploads/
+│   │       └── crops/
+│   │
+│   ├── tests/
+│   └── node_modules/
+│
+├── docs/
+│   ├── AgroMart_Normalization_Analysis.md
+│   ├── AgroMart_Relational_Schema.md
+│   ├── AgroMart_SQL_Query_Demonstration.md
+│   ├── api.md
+│   ├── mysql_schema_reference.sql
+│   ├── normalization.md
+│   └── schema.md
+│
+├── frontend/
+│   ├── index.html
+│   ├── install_i18n.sh
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── postcss.config.js
+│   ├── SETUP_FRONTEND.md
+│   │
+│   ├── public/
+│   │   └── crops/
+│   │       ├── alu.jpg
+│   │       ├── begun.jpg
+│   │       ├── kachamorich.jpg
+│   │       ├── lau.jpg
+│   │       ├── mosurdal.jpg
+│   │       ├── mugdal.jpg
+│   │       ├── peyaj.jpg
+│   │       ├── shorisha.jpg
+│   │       └── tomato.jpg
+│   │
+│   ├── src/
+│   │   ├── api/
+│   │   │   ├── auth.api.js
+│   │   │   ├── client.js
+│   │   │   ├── crops.api.js
+│   │   │   ├── prices.api.js
+│   │   │   └── stats.api.js
+│   │   │
+│   │   ├── App.jsx
+│   │   ├── assets/
+│   │   │   └── logo.svg
+│   │   │
+│   │   ├── components/
+│   │   │   ├── layout/
+│   │   │   │   ├── Footer.jsx
+│   │   │   │   ├── Layout.jsx
+│   │   │   │   └── Navbar.jsx
+│   │   │   ├── sections/
+│   │   │   │   └── FeaturedCrops.jsx
+│   │   │   └── ui/
+│   │   │       ├── Badge.jsx
+│   │   │       ├── Button.jsx
+│   │   │       ├── Card.jsx
+│   │   │       ├── ProductCard.jsx
+│   │   │       └── StatCard.jsx
+│   │   │
+│   │   ├── context/
+│   │   │   └── LangContext.jsx
+│   │   │
+│   │   ├── hooks/
+│   │   │
+│   │   ├── i18n/
+│   │   │   ├── strings_final.js
+│   │   │   └── strings.js
+│   │   │
+│   │   ├── index.css
+│   │   ├── main.jsx
+│   │   │
+│   │   └── pages/
+│   │       ├── auth/
+│   │       │   └── Register.jsx
+│   │       ├── farmer/
+│   │       │   └── CropForm.jsx
+│   │       ├── Home.jsx
+│   │       ├── HowItWorks.jsx
+│   │       ├── LivePrice.jsx
+│   │       └── Marketplace.jsx
+│   │
+│   ├── tailwind.config.js
+│   ├── vite.config.js
+│   └── node_modules/
+│
+├── migrations/
+│   ├── 000_prelude.sql
+│   ├── 001_init.sql
+│   ├── 002_reference.sql
+│   ├── 003_marketplace.sql
+│   ├── 004_transactions.sql
+│   ├── 005_payments.sql
+│   ├── 006_financial.sql
+│   ├── 007_agent.sql
+│   ├── 008_smart.sql
+│   ├── 009_views.sql
+│   ├── apply_all.sh
+│   ├── seed.sql
+│   └── verify_db.sh
+│
+├── seed/
+│   ├── download_demo_images.sh
+│   ├── refresh_demo.sh
+│   └── seed_price_history.sql
+│
+├── seed_crops.sql
+├── project-structure.txt
+└── README.md
 ```
+
+The backend/frontend split and the database/documentation directories are directly reflected in the supplied project tree.
 
 ---
 
-## 🚀 Local Setup
+## 📁 Backend Structure
+
+### `backend/src/config/`
+
+Application configuration and database/environment setup.
+
+### `backend/src/controllers/`
+
+Handles application-level request processing:
+
+- `auth.controller.js`
+- `crops.controller.js`
+- `prices.controller.js`
+
+### `backend/src/routes/`
+
+Defines the backend API route groups:
+
+- Authentication
+- Categories
+- Crops
+- Prices
+- Statistics
+
+### `backend/src/models/`
+
+Database-facing application models:
+
+- Users
+- Crops
+- Prices
+
+### `backend/src/middleware/`
+
+Cross-cutting request processing and security:
+
+- Authentication
+- CSRF protection
+- Error handling
+- Rate limiting
+- File uploads
+
+### `backend/src/services/`
+
+Service-layer functionality.
+
+### `backend/src/jobs/`
+
+Background/job-related backend functionality.
+
+### `backend/storage/uploads/`
+
+Uploaded crop files.
+
+The backend tree explicitly contains these configuration, controller, middleware, model, route, service, utility, storage, and test areas.
+
+---
+
+## 🎨 Frontend Structure
+
+The frontend is a React application built with Vite and Tailwind CSS.
+
+### `frontend/src/api/`
+
+Centralized API modules:
+
+- `auth.api.js`
+- `crops.api.js`
+- `prices.api.js`
+- `stats.api.js`
+- `client.js`
+
+### `frontend/src/components/`
+
+Reusable UI components.
+
+#### Layout
+
+- `Navbar.jsx`
+- `Layout.jsx`
+- `Footer.jsx`
+
+#### Sections
+
+- `FeaturedCrops.jsx`
+
+#### UI
+
+- `Badge.jsx`
+- `Button.jsx`
+- `Card.jsx`
+- `ProductCard.jsx`
+- `StatCard.jsx`
+
+### `frontend/src/pages/`
+
+Application pages:
+
+- Home
+- Marketplace
+- Live Price
+- How It Works
+- Registration
+- Farmer Crop Form
+
+### `frontend/src/context/`
+
+Global React context, including language management.
+
+### `frontend/src/i18n/`
+
+Translation/string resources.
+
+## The tree confirms the API, reusable components, language context, i18n files, and application pages listed above.
+
+## 🗄️ Database & Migrations
+
+Database changes are maintained as ordered SQL migrations:
+
+| Migration              | Purpose                          |
+| ---------------------- | -------------------------------- |
+| `000_prelude.sql`      | Initial database preparation     |
+| `001_init.sql`         | Initial schema                   |
+| `002_reference.sql`    | Reference data                   |
+| `003_marketplace.sql`  | Marketplace functionality        |
+| `004_transactions.sql` | Transaction functionality        |
+| `005_payments.sql`     | Payment functionality            |
+| `006_financial.sql`    | Financial functionality          |
+| `007_agent.sql`        | Agent functionality              |
+| `008_smart.sql`        | Smart/intelligence functionality |
+| `009_views.sql`        | Database views                   |
+
+Supporting scripts:
+
+- `apply_all.sh` — apply migrations
+- `verify_db.sh` — verify database state
+- `seed.sql` — database seed data
+
+Additional seed resources are available under `seed/`, including price-history data and demo-image scripts.
+
+---
+
+## 📚 Documentation
+
+The `docs/` directory contains:
+
+- **`AgroMart_Relational_Schema.md`** — relational schema documentation
+- **`AgroMart_Normalization_Analysis.md`** — database normalization analysis
+- **`AgroMart_SQL_Query_Demonstration.md`** — SQL demonstrations
+- **`api.md`** — API documentation
+- **`mysql_schema_reference.sql`** — SQL schema reference
+- **`normalization.md`** — normalization documentation
+- **`schema.md`** — schema documentation
+
+These documentation files are present in the project tree.
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
-- **XAMPP** (PHP 8+ and MariaDB / MySQL 8)
-- A modern web browser
 
-### Steps
+Install:
 
-**1. Clone the repository**
-```bash
-git clone https://github.com/adhamzarif/AgroMart
-```
-
-**2. Move to XAMPP htdocs**
-Copy the `AgroMart` folder to `C:\xampp\htdocs\`.
-
-**3. Start XAMPP**
-Start **Apache** and **MySQL** from the XAMPP Control Panel.
-
-**4. Create the database**
-- Open phpMyAdmin: `http://localhost/phpmyadmin`
-- Click "New" → name the database `agromart` → Create
-- Select the `agromart` database → Import tab → choose `database.sql` → Go
-
-**5. Configure environment**
-```bash
-copy .env.example .env
-```
-Open `.env` and fill in:
-- `WEATHER_API_KEY` — get a free key from https://openweathermap.org/api
-- (Optional) `SSLCOMMERZ_STORE_ID` and `SSLCOMMERZ_STORE_PASSWORD` for real payments (leave blank to use mock gateway)
-- `APP_KEY` — any random 32-character string
-
-**6. Open the app**
-Visit `http://localhost/AgroMart` in your browser.
+- Node.js
+- npm
+- A supported SQL database
+- Git
 
 ---
 
-## 🔑 Demo Accounts
+### 1. Clone the Repository
 
-All accounts use the password: **`password123`**
-
-| Role | Phone | Name | Location |
-|------|-------|------|----------|
-| Farmer | `01712345001` | করিম মিয়া | Mymensingh |
-| Farmer | `01812345002` | ফাতেমা বেগম | Comilla |
-| Farmer | `01912345003` | হালিম মিয়া | Rangpur |
-| Buyer | `01612345004` | হাসান চৌধুরী | Dhaka |
-| Buyer | `01512345005` | FreshMart | Dhaka |
-| Agent | `01312345006` | রফিক হোসেন | — |
-| Agent | `01412345007` | সালমা আক্তার | — |
-| Admin | `01212345008` | সুলতানা | — |
-
-You can sign in with **phone number** or **email**.
+```bash
+git clone https://github.com/adhamzarif/AgroMart.git
+cd AgroMart
+```
 
 ---
 
-## ⚙️ Background Tasks
+### 2. Install Backend Dependencies
 
-To enable scheduled background tasks (weather fetching, price updates, loan reminders, etc.), configure cron in your environment.
-
-On Linux/Mac:
 ```bash
-*/15 * * * * php /path/to/AgroMart/cron/run.php
+cd backend
+npm install
 ```
 
-On Windows (Task Scheduler): create a task that runs every 15 minutes invoking:
-```cmd
-C:\xampp\php\php.exe C:\xampp\htdocs\AgroMart\cron\run.php
+The backend has its own `package.json` and `package-lock.json`.
+
+---
+
+### 3. Configure the Backend
+
+Review the backend environment/configuration files:
+
+```text
+backend/src/config/
+├── db.js
+└── env.js
 ```
 
-To run a specific task manually:
+Configure the database connection and required environment values for your local environment.
+
+---
+
+### 4. Prepare the Database
+
+From the project root:
+
 ```bash
-php cron/run.php --task=weather_fetch
-php cron/run.php --task=market_price_fetch
+cd migrations
 ```
 
-See `cron/README.md` for details.
+Review the migration scripts and use the provided migration/verification scripts:
+
+```bash
+./apply_all.sh
+./verify_db.sh
+```
+
+On Windows, run the equivalent SQL files using your preferred MySQL-compatible database tool if shell scripts are not available.
+
+---
+
+### 5. Install Frontend Dependencies
+
+```bash
+cd ../frontend
+npm install
+```
+
+The frontend includes Vite, Tailwind configuration, React source files, and its own dependency manifest.
+
+---
+
+### 6. Start the Applications
+
+Use the scripts defined in each application's `package.json`.
+
+Backend:
+
+```bash
+cd backend
+npm run <backend-script>
+```
+
+Frontend:
+
+```bash
+cd frontend
+npm run <frontend-script>
+```
+
+For frontend-specific setup information, see:
+
+```text
+frontend/SETUP_FRONTEND.md
+```
+
+---
+
+## 🔌 API Overview
+
+The backend currently separates API functionality into route groups for:
+
+```text
+/auth
+/categories
+/crops
+/prices
+/stats
+```
+
+The corresponding frontend API modules are:
+
+```text
+frontend/src/api/
+├── auth.api.js
+├── crops.api.js
+├── prices.api.js
+└── stats.api.js
+```
+
+This separation keeps API communication independent from React page and component code.
 
 ---
 
 ## 🧪 Testing
 
-```bash
-php tests/run.php
+The repository contains a dedicated backend test directory:
+
+```text
+backend/
+└── tests/
 ```
 
-Tests cover both unit (individual class behavior) and integration (full request/response flows).
+Run the test command defined in `backend/package.json`.
 
 ---
 
-## 📄 Documentation
+## 🖼️ Crop Images
 
-The `docs/` folder contains:
-- **`AgroMart_Relational_Schema.md`** — All 39 tables documented in detail
-- **`AgroMart_Normalization_Analysis.md`** — 1NF → BCNF analysis with examples
-- **`AgroMart_SQL_Query_Demonstration.md`** — Advanced SQL features used (triggers, views, FOR UPDATE, UPSERT, etc.)
+Demo crop images are included in:
+
+```text
+frontend/public/crops/
+```
+
+Current image assets include:
+
+```text
+alu.jpg
+begun.jpg
+kachamorich.jpg
+lau.jpg
+mosurdal.jpg
+mugdal.jpg
+peyaj.jpg
+shorisha.jpg
+tomato.jpg
+```
+
+The backend also provides storage for uploaded crop images under:
+
+```text
+backend/storage/uploads/crops/
+```
+
+The project tree confirms both the frontend demo-image directory and backend crop-upload storage.
 
 ---
 
-## 🛡️ Security Features
+## 🌱 Project Scripts
 
-- **Password hashing:** bcrypt with cost factor 12
-- **CSRF protection:** All state-changing forms protected
-- **Session security:** HttpOnly, SameSite, configurable Secure flag
-- **Rate limiting:** Login, OTP, registration endpoints rate-limited
-- **OTP verification:** Phone verification at registration
-- **Audit logging:** Every admin action recorded with before/after state
-- **Input sanitization:** Server-side validation on every form
-- **SQL injection prevention:** PDO prepared statements throughout
+Useful project-level scripts include:
 
----
+```text
+backend/install_crops_api.sh
+frontend/install_i18n.sh
+migrations/apply_all.sh
+migrations/verify_db.sh
+seed/download_demo_images.sh
+seed/refresh_demo.sh
+```
 
-## 🌐 External Integrations
-
-| Service | Purpose | Required |
-|---------|---------|----------|
-| OpenWeatherMap | 5-day forecasts + severe weather alerts | Yes (free tier OK) |
-| SSLCommerz | Live payment gateway | Optional (mock available) |
-| SMS Gateway | OTP delivery | Optional (logs to file by default) |
+These scripts support API installation, frontend i18n setup, database migration/verification, and demo-data preparation.
 
 ---
 
 ## 👥 Team UIU_Return0
-SWE Lab Project 
+
+**SWE Lab Project**
+
+---
 
 ## 📝 License
 

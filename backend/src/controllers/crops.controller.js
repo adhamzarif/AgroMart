@@ -11,6 +11,7 @@ export async function listCrops(req, res, next) {
     const offset = Math.max(parseInt(req.query.offset ?? '0', 10) || 0, 0);
 
     const { crops, total } = await listAvailableCrops({
+      distinct: req.query.distinct === '1',
       categoryId: req.query.category ? parseInt(req.query.category, 10) : undefined,
       district: req.query.district?.trim() || undefined,
       search: req.query.q?.trim() || undefined,
