@@ -1,38 +1,123 @@
-// FEATURED_DEDUPE_PATCHED
 // crop.model.js — crop data access for the marketplace.
 // Ports the "list available crops with farmer + category + district" query
 // (was: CropModel.php listing methods / vw_active_crops_with_details).
 import { fetchAll, fetchOne } from '../config/db.js';
 
 /**
- * List available crops for the marketplace, newest first.
- * Supports optional filters: category_id, district_id, search (crop name), and pagination.
+ * List available crops for the marketplace, with full server-side
+ * filtering, sorting and pagination.
+ *
+ * `search` — a comma-separated list of already-expanded search terms
+ * (Bangla + English synonyms — see frontend/src/i18n/cropSynonyms.js's
+ * expandSearchTerms()). We match crop_name ILIKE ANY(terms) so bilingual
+ * search still works without the DB needing to know about synonyms.
+ *
+ * `district` — matched against d.district_name (not a district_id) since
+ * the districts table only has a handful of seeded rows shared with other
+ * modules; every crop's farmer district still comes from that table, so
+ * name-matching here is exact and simple.
+ *
+ * `distinct` — when true, collapses multiple listings with the same
+ * crop_name down to one (DISTINCT ON), newest first. NOTE: `total` is
+ * computed from the window function before DISTINCT ON is applied, so with
+ * distinct=true the reported total may be slightly higher than the number
+ * of rows actually returned across pages — acceptable for now, flagged here
+ * in case it needs exact correction later.
+ *
+ * Returns { crops, total } — `total` is the COUNT of all rows matching the
+ * filters (via a window function), independent of limit/offset, so the
+ * frontend can page/"Load More" without re-fetching everything.
+ *
+ * Two separate ratings are joined in:
+ *  - review_count / avg_rating         → this crop's own reviews (crop_reviews table, migrations/010_reviews.sql)
+ *  - farmer_review_count / farmer_avg_rating → the farmer's overall rating (farmer_ratings table)
+ * They're intentionally named differently so ProductCard/ProductDetails can show both without clashing.
  */
-export async function listAvailableCrops({ categoryId, districtId, search, limit = 12, offset = 0, distinct = false } = {}) {
+export async function listAvailableCrops({
+  categoryId,
+  district,
+  search,
+  minPrice,
+  maxPrice,
+  organicOnly,
+  inStockOnly,
+  sortBy = 'default',
+  distinct = false,
+  limit = 12,
+  offset = 0,
+} = {}) {
   const where = [`c.status = 'available'`];
   const params = [];
   let i = 1;
 
-  if (categoryId) { where.push(`c.category_id = $${i++}`); params.push(categoryId); }
-  if (districtId) { where.push(`u.district_id = $${i++}`); params.push(districtId); }
-  if (search)     { where.push(`c.crop_name ILIKE $${i++}`); params.push(`%${search}%`); }
+  if (categoryId) {
+    where.push(`c.category_id = $${i++}`);
+    params.push(categoryId);
+  }
+  if (district) {
+    where.push(`d.district_name ILIKE $${i++}`);
+    params.push(district);
+  }
+  if (search) {
+    const terms = search.split(',').map((s) => s.trim()).filter(Boolean);
+    if (terms.length) {
+      where.push(`c.crop_name ILIKE ANY($${i++})`);
+      params.push(terms.map((t) => `%${t}%`));
+    }
+  }
+  if (minPrice != null && minPrice !== '') {
+    where.push(`c.price_per_unit >= $${i++}`);
+    params.push(minPrice);
+  }
+  if (maxPrice != null && maxPrice !== '') {
+    where.push(`c.price_per_unit <= $${i++}`);
+    params.push(maxPrice);
+  }
+  if (organicOnly) {
+    where.push(`c.is_organic = TRUE`);
+  }
+  if (inStockOnly) {
+    where.push(`c.quantity > 0`);
+  }
 
-  // limit + offset are the last two params
+  // Whitelist sort options — never interpolate the raw sortBy value into SQL.
+  const ORDER_BY = {
+    'price-low': 'c.price_per_unit ASC',
+    'price-high': 'c.price_per_unit DESC',
+    name: 'c.crop_name ASC',
+    default: 'c.created_at DESC',
+  };
+  const orderClause = ORDER_BY[sortBy] || ORDER_BY.default;
+  // DISTINCT ON requires its leading ORDER BY expression(s) to match the
+  // DISTINCT ON columns, so crop_name must lead when distinct=true.
+  const finalOrderClause = distinct ? `c.crop_name, ${orderClause}` : orderClause;
+
   const limitIdx = i++;
   const offsetIdx = i++;
   params.push(limit, offset);
 
   const sql = `
-    SELECT ${distinct ? 'DISTINCT ON (c.crop_name) ' : ''}c.crop_id, c.crop_name, c.quantity, c.unit, c.price_per_unit,
-           c.is_organic, c.images, c.created_at,
+    SELECT ${distinct ? 'DISTINCT ON (c.crop_name) ' : ''}c.crop_id, c.category_id, c.crop_name, c.quantity, c.unit, c.price_per_unit,
+           c.is_organic, c.images, c.created_at, c.description,
            cc.category_name,
            u.full_name  AS farmer_name,
            d.district_name,
-           (c.created_at > NOW() - INTERVAL '7 days') AS is_new
+           (c.created_at > NOW() - INTERVAL '7 days') AS is_new,
+           COALESCE(r.review_count, 0)  AS review_count,
+           r.avg_rating                 AS avg_rating,
+           COALESCE(fr.review_count, 0) AS farmer_review_count,
+           fr.avg_rating                AS farmer_avg_rating,
+           COUNT(*) OVER()               AS total_count
     FROM crops c
     JOIN users u            ON c.farmer_id = u.user_id
     JOIN crop_categories cc ON c.category_id = cc.category_id
     LEFT JOIN districts d    ON u.district_id = d.district_id
+    LEFT JOIN (
+      SELECT crop_id, COUNT(*)::int AS review_count,
+             ROUND(AVG(rating)::numeric, 1) AS avg_rating
+      FROM crop_reviews
+      GROUP BY crop_id
+    ) r ON r.crop_id = c.crop_id
     LEFT JOIN (
       SELECT farmer_id,
              ROUND(AVG(overall_rating)::numeric, 1) AS avg_rating,
@@ -42,10 +127,14 @@ export async function listAvailableCrops({ categoryId, districtId, search, limit
       GROUP BY farmer_id
     ) fr ON u.user_id = fr.farmer_id
     WHERE ${where.join(' AND ')}
-    ORDER BY ${distinct ? 'c.crop_name, ' : ''}c.created_at DESC
+    ORDER BY ${finalOrderClause}
     LIMIT $${limitIdx} OFFSET $${offsetIdx}`;
 
-  return fetchAll(sql, params);
+  const rows = await fetchAll(sql, params);
+  const total = rows[0]?.total_count ? Number(rows[0].total_count) : 0;
+  // Strip the window-function column before handing rows back to the controller.
+  const crops = rows.map(({ total_count, ...rest }) => rest);
+  return { crops, total };
 }
 
 /** Single crop with full detail (for the detail page). */
@@ -59,6 +148,23 @@ export function getCropById(cropId) {
      LEFT JOIN districts d    ON u.district_id = d.district_id
      WHERE c.crop_id = $1`,
     [cropId]
+  );
+}
+
+/** A few other available crops from the same category, for "Related Products". */
+export function getRelatedCrops(categoryId, excludeCropId, limit = 4) {
+  return fetchAll(
+    `SELECT c.crop_id, c.crop_name, c.price_per_unit, c.unit, c.quantity,
+            c.is_organic, c.images, c.category_id,
+            cc.category_name, u.full_name AS farmer_name, d.district_name
+     FROM crops c
+     JOIN users u            ON c.farmer_id = u.user_id
+     JOIN crop_categories cc ON c.category_id = cc.category_id
+     LEFT JOIN districts d    ON u.district_id = d.district_id
+     WHERE c.status = 'available' AND c.category_id = $1 AND c.crop_id <> $2
+     ORDER BY c.created_at DESC
+     LIMIT $3`,
+    [categoryId, excludeCropId, limit]
   );
 }
 

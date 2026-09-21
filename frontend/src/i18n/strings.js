@@ -1,4 +1,5 @@
 // strings.js — bilingual UI text. bn = Bengali (default), en = English.
+// Add keys as pages need them; components read via useLang().t(key).
 export const strings = {
   bn: {
     brand: 'AgroMart',
@@ -29,50 +30,105 @@ export const strings = {
     footer_rights: 'সর্বস্বত্ব সংরক্ষিত।',
     market_error: 'ফসল লোড করা যায়নি।',
     market_empty: 'এই মুহূর্তে কোনো ফসল নেই।',
-    // HowItWorks
-    how_badge: 'কীভাবে এটি কাজ করে',
-    how_title: 'AgroMart কীভাবে কাজ করে',
-    how_sub: 'কৃষক, ক্রেতা এবং এজেন্টদের জন্য সহজ ধাপ — একই প্ল্যাটফর্মে সরাসরি বিক্রি, স্বচ্ছ মূল্য ও নিরাপদ লেনদেন।',
-    role_farmer: 'কৃষক',
-    role_farmer_sub: 'আপনার ফসল সরাসরি বিক্রি করুন',
-    role_buyer: 'ক্রেতা',
-    role_buyer_sub: 'সরাসরি কৃষকের কাছ থেকে কিনুন',
-    role_agent: 'এজেন্ট',
-    role_agent_sub: 'কৃষক ও ক্রেতার মধ্যে সেতুবন্ধন',
-    step_f1: 'রেজিস্টার করুন এবং প্রোফাইল সম্পূর্ণ করুন।',
-    step_f2: 'আপনার ফসল তালিকাভুক্ত করুন — পরিমাণ, দাম, ছবি।',
-    step_f3: 'অর্ডার গ্রহণ করুন এবং সরাসরি ক্রেতার সাথে যোগাযোগ।',
-    step_f4: 'নিরাপদ পেমেন্ট গ্রহণ করুন এবং ডেলিভারি নিশ্চিত করুন।',
-    step_b1: 'অ্যাকাউন্ট তৈরি করুন এবং ঠিকানা যোগ করুন।',
-    step_b2: 'মার্কেটপ্লেসে ফসল ব্রাউজ করুন এবং লাইভ দাম দেখুন।',
-    step_b3: 'অর্ডার দিন এবং নিরাপদ পেমেন্ট সম্পন্ন করুন।',
-    step_b4: 'ডেলিভারি বুঝে নিন এবং কৃষককে রেটিং দিন।',
-    step_a1: 'এজেন্ট হিসেবে রেজিস্টার করুন এবং যাচাই সম্পন্ন করুন।',
-    step_a2: 'আপনার এলাকার কৃষকদের সাথে সংযোগ স্থাপন করুন।',
-    step_a3: 'অর্ডার ও লেনদেন সমন্বয় করুন।',
-    step_a4: 'কমিশন উপার্জন করুন এবং কৃষককে সহায়তা করুন।',
-    how_stats_title: 'বাস্তব সংখ্যা — আজকের প্ল্যাটফর্ম',
-    stat_crops: 'উপলব্ধ ফসল',
-    stat_districts: 'সেবা প্রদত্ত জেলা',
-    how_cta_title: 'আজই শুরু করুন',
-    how_cta_sub: 'বিনামূল্যে রেজিস্টার করুন, দাম দেখুন, এবং সরাসরি কৃষি বাজারে যোগ দিন।',
-    // Live Price Section UI
-    lp_badge: 'রিয়েল-টাইম আপডেট',
-    lp_buyerTitle: ' লাইভ মার্কেট প্রাইস',
-    lp_farmerTitle: ' আজকের বাজার নির্দেশিকা',
-    lp_buyerBtn: ' ক্রেতা দৃশ্য',
-    lp_farmerBtn: ' কৃষক দৃশ্য',
-    lp_searchPlaceholder: ' ফসলের নাম...',
-    lp_allCat: 'সব ক্যাটাগরি',
-    lp_grains: 'দানাশস্য',
-    lp_vegetables: 'শাকসবজি',
-    lp_spices: 'মশলা',
-    lp_agroPrice: 'AgroMart মূল্য',
-    lp_marketPrice: 'বাজার দর',
-    lp_diff: 'পার্থক্য',
-    lp_savings: 'সাশ্রয়',
-    lp_perKg: 'কেজি',
+    featured_title: 'সর্বশেষ ফসল',
+    featured_sub: 'সরাসরি কৃষকের কাছ থেকে তাজা ফসল',
+    featured_see_all: 'সব দেখুন',
 
+    // ── Marketplace ──────────────────────────────────────────────
+    market_subtitle: 'কৃষকের কাছ থেকে সরাসরি তাজা ফসল কিনুন',
+    market_search: 'পণ্য খুঁজুন',
+    market_search_placeholder: 'ফসলের নাম লিখুন (বাংলা বা ইংরেজি) — যেমনঃ আম / Mango',
+    market_category: 'ক্যাটাগরি',
+    market_all_categories: 'সব ক্যাটাগরি',
+    market_district: 'জেলা',
+    market_all_districts: 'সব জেলা',
+    market_min_price: 'সর্বনিম্ন মূল্য',
+    market_max_price: 'সর্বোচ্চ মূল্য',
+    market_sort: 'সাজান',
+    market_sort_default: 'ডিফল্ট',
+    market_sort_low_high: 'মূল্যঃ কম থেকে বেশি',
+    market_sort_high_low: 'মূল্যঃ বেশি থেকে কম',
+    market_sort_name: 'নামঃ A-Z',
+    market_organic_only: 'শুধু অর্গানিক পণ্য',
+    market_in_stock_only: 'শুধু স্টকে আছে',
+    market_clear_filters: 'ফিল্টার মুছুন',
+    market_found: 'পাওয়া গেছে',
+    market_products: 'টি পণ্য',
+    market_filter_active: 'ফিল্টার সক্রিয়',
+    market_no_results: 'কোনো পণ্য পাওয়া যায়নি',
+    market_try_another: 'অন্য কিছু খুঁজুন বা ফিল্টার পরিবর্তন করুন।',
+    market_load_more: 'আরও দেখুন',
+    market_showing: 'দেখানো হচ্ছে',
+    market_of_total: 'এর মধ্যে',
+    market_demo_notice: 'সার্ভারের সাথে সংযোগ করা যায়নি — ডেমো পণ্য দেখানো হচ্ছে।',
+
+    // ── Product card / quick view / details ─────────────────────
+    badge_organic: 'জৈব',
+    stock_in: 'স্টকে আছে',
+    stock_low: 'স্বল্প স্টক',
+    stock_out: 'স্টক নেই',
+    quickview: 'দ্রুত দেখুন',
+    view_full_details: 'সম্পূর্ণ বিস্তারিত দেখুন',
+    quickview_close: 'বন্ধ করুন',
+    fav_add: 'পছন্দের তালিকায় যোগ করুন',
+    fav_remove: 'পছন্দের তালিকা থেকে সরান',
+    label_price: 'মূল্য',
+    label_quantity: 'পরিমাণ',
+    label_farmer: 'কৃষক',
+    label_district: 'জেলা',
+    label_description: 'বিবরণ',
+    organic_yes: 'জৈব পণ্য',
+    organic_no: 'জৈব নয়',
+    product_details_back: '← মার্কেটপ্লেসে ফিরে যান',
+    product_details_not_found: 'পণ্যটি খুঁজে পাওয়া যায়নি',
+    product_not_found_sub: 'এই পণ্যটি হয়তো সরিয়ে ফেলা হয়েছে বা বিক্রি হয়ে গেছে।',
+
+    // ── Cart ──────────────────────────────────────────────
+    cart_add: 'কার্টে যোগ করুন',
+    cart_title: 'কার্ট',
+    cart_empty_title: 'আপনার কার্ট খালি',
+    cart_empty_sub: 'মার্কেটপ্লেস থেকে পণ্য যোগ করে শুরু করুন।',
+    cart_browse_marketplace: 'মার্কেটপ্লেস দেখুন',
+    cart_clear: 'কার্ট খালি করুন',
+    cart_remove: 'সরান',
+    cart_subtotal: 'সাবটোটাল',
+    cart_checkout: 'চেকআউট',
+    cart_checkout_disabled_reason: 'লগইন চালু হলে চেকআউট করা যাবে — এখন এটি শুধু একটি ডেমো কার্ট।',
+    cart_continue_shopping: '← আরও কেনাকাটা করুন',
+    cart_local_notice: 'এই কার্টটি শুধু আপনার এই ব্রাউজারে সংরক্ষিত থাকে, একাউন্টের সাথে যুক্ত নয়।',
+    cart_max_stock: 'সর্বোচ্চ স্টক পৌঁছেছে',
+    market_loading_more: 'লোড হচ্ছে...',
+
+    // ── Reviews & Ratings ─────────────────────────────────
+    reviews_title: 'রিভিউ ও রেটিং',
+    reviews_count_suffix: 'টি রিভিউ',
+    reviews_none_yet: 'এখনো কোনো রিভিউ নেই — প্রথম রিভিউ আপনিই দিন!',
+    reviews_write: '✍️ রিভিউ লিখুন',
+    reviews_cancel: 'বাতিল করুন',
+    reviews_submit: 'রিভিউ জমা দিন',
+    reviews_submitting: 'জমা হচ্ছে...',
+    reviews_load_error: 'রিভিউ লোড করা যায়নি।',
+    review_form_name: 'আপনার নাম',
+    review_form_name_placeholder: 'যেমনঃ রহিম উদ্দিন',
+    review_form_rating: 'রেটিং দিন',
+    review_form_comment: 'মন্তব্য (ঐচ্ছিক)',
+    review_form_comment_placeholder: 'পণ্যটি সম্পর্কে আপনার অভিজ্ঞতা লিখুন...',
+    review_error_name: 'নাম লেখা আবশ্যক।',
+    review_error_rating: 'অন্তত ১টি স্টার দিয়ে রেটিং দিন।',
+    review_error_generic: 'রিভিউ জমা দেওয়া যায়নি, আবার চেষ্টা করুন।',
+
+    // ── Image lightbox ────────────────────────────────────
+    lightbox_label: 'ছবি বড় করে দেখুন',
+    lightbox_zoom_hint: 'বড় করে দেখুন',
+    lightbox_prev: 'আগের ছবি',
+    lightbox_next: 'পরের ছবি',
+
+    // ── Share ──────────────────────────────────────────────
+    share_button: 'শেয়ার করুন',
+    share_copied: 'লিংক কপি হয়েছে!',
+
+    // ── Related products ──────────────────────────────────
+    related_title: 'আপনার পছন্দ হতে পারে এমন পণ্য',
     // Crop Names for Live Price
     crop_kachamorich: 'কাঁচামরিচ',
     crop_begun: 'বেগুন',
@@ -83,15 +139,11 @@ export const strings = {
     crop_shorisha: 'সরিষা',
     crop_mugdal: 'মুগডাল',
     crop_mosurdal: 'মসুর ডাল',
-      lp_perPiece: 'পিস',
+    lp_perPiece: 'পিস',
     lp_othersCharge: 'অন্যরা চাচ্ছেন',
     lp_orderNow: 'অর্ডার করুন',
     lp_listNow: 'তালিকাভুক্ত করুন',
     lp_noListings: 'কোনো তালিকা নেই',
-
-    featured_title: 'সর্বশেষ ফসল',
-    featured_sub: 'সরাসরি কৃষকের কাছ থেকে তাজা ফসল',
-    featured_see_all: 'সব দেখুন',
     feat_badge: 'প্ল্যাটফর্ম ফিচার',
     feat_title: 'AgroMart কীভাবে আপনাকে সাহায্য করে',
     feat_sub: 'কৃষক, ক্রেতা এবং এজেন্টদের জন্য একটি স্মার্ট, স্বচ্ছ কৃষি প্ল্যাটফর্ম।',
@@ -107,7 +159,6 @@ export const strings = {
     feat_loans_desc: 'ফসল ও লেনদেনের ইতিহাসের ভিত্তিতে দ্রুত অনুমোদিত ছোট ঋণ সুবিধা।',
     feat_ai_title: 'AI পরামর্শ',
     feat_ai_desc: 'বাংলায় ফসল সুপারিশ, রোগ শনাক্তকরণ এবং বাজারদর ভবিষ্যদ্বাণী।',
-    // Direct Sales feature page
     feat_learn_more: 'বিস্তারিত জানুন',
     ds_hero_title: 'মধ্যস্বত্বভোগী ছাড়াই সরাসরি বিক্রি করুন',
     ds_hero_sub: 'আপনার ফসল সরাসরি ক্রেতার কাছে পৌঁছে দিন। বেশি লাভ, স্বচ্ছ দাম, দ্রুত পেমেন্ট।',
@@ -133,7 +184,6 @@ export const strings = {
     ds_step4_desc: 'ডেলিভারি সম্পন্ন হলে ক্রেতা রেটিং দেবে — বিশ্বাস তৈরি হবে।',
     ds_cta_title: 'আজই সরাসরি বিক্রি শুরু করুন',
     ds_cta_sub: 'বিনামূল্যে নিবন্ধন করুন এবং প্রথম ফসল তালিকাভুক্ত করুন।',
-    // Live Market Prices feature page
     lmp_hero_title: 'লাইভ বাজারদর, সব জেলায়',
     lmp_hero_sub: '৬৪ জেলার প্রতিদিনের পাইকারি ও খুচরা দাম — সিদ্ধান্ত নিন তথ্যের ভিত্তিতে।',
     lmp_cta_view: 'দাম দেখুন',
@@ -158,7 +208,6 @@ export const strings = {
     lmp_step4_desc: 'নির্দিষ্ট দামে পৌঁছালে SMS বা অ্যাপ নোটিফিকেশন পান।',
     lmp_cta_title: 'আজকের বাজারদর এখনই দেখুন',
     lmp_cta_sub: 'বিনামূল্যে ব্যবহার করুন — নিবন্ধন ছাড়াই দাম দেখা যায়।',
-    // Weather Alerts feature page
     wa_hero_title: 'আপনার জেলার জন্য আবহাওয়া সতর্কতা',
     wa_hero_sub: 'ঝড়, অতিবৃষ্টি, খরা বা শৈত্যপ্রবাহ — সময়মতো সতর্কতা পেয়ে ফসল রক্ষা করুন।',
     wa_cta_start: 'শুরু করুন',
@@ -183,7 +232,6 @@ export const strings = {
     wa_step4_desc: 'বিশেষজ্ঞদের দেওয়া করণীয় ধাপ অনুসরণ করে ফসল রক্ষা করুন।',
     wa_cta_title: 'আজই সতর্কতা চালু করুন',
     wa_cta_sub: 'বিনামূল্যে নিবন্ধন করুন — কোনো ফসল হারাতে দেবেন না।',
-    // AI Advisor feature page
     ai_hero_title: 'বাংলায় স্মার্ট AI কৃষি পরামর্শ',
     ai_hero_sub: 'ফসল সুপারিশ, রোগ শনাক্তকরণ, বাজারদর ভবিষ্যদ্বাণী — সব একই সহকারীতে।',
     ai_cta_start: 'শুরু করুন',
@@ -208,7 +256,6 @@ export const strings = {
     ai_step4_desc: 'পরামর্শ অনুসরণ করুন এবং ফলাফল দেখুন।',
     ai_cta_title: 'AI সহকারী এখনই ব্যবহার করুন',
     ai_cta_sub: 'বিনামূল্যে নিবন্ধন করুন এবং প্রথম প্রশ্ন করুন।',
-    // Micro-loans feature page
     ml_hero_title: 'কৃষকদের জন্য দ্রুত মাইক্রো-লোন',
     ml_hero_sub: 'ফসল ও লেনদেনের ইতিহাসের ভিত্তিতে সহজ শর্তে ছোট ঋণ — জামিন লাগবে না।',
     ml_cta_apply: 'আবেদন করুন',
@@ -233,7 +280,6 @@ export const strings = {
     ml_step4_desc: 'ফসল বিক্রির টাকা থেকেই স্বয়ংক্রিয়ভাবে কিস্তি কাটা হবে।',
     ml_cta_title: 'আজই আবেদন করুন',
     ml_cta_sub: 'বিনামূল্যে নিবন্ধন করুন — যোগ্যতা যাচাই মুহূর্তে।',
-    // Secure Payments feature page
     sp_hero_title: 'নিরাপদ পেমেন্ট, প্রতিটি লেনদেনে',
     sp_hero_sub: 'বিকাশ, নগদ, ব্যাংক বা AgroMart ওয়ালেট — যাচাইকৃত ও সুরক্ষিত লেনদেন।',
     sp_cta_start: 'শুরু করুন',
@@ -258,7 +304,6 @@ export const strings = {
     sp_step4_desc: 'নিশ্চিতকরণের পর টাকা কৃষকের ওয়ালেটে জমা হয়, রশিদ ইস্যু হয়।',
     sp_cta_title: 'নিরাপদে লেনদেন শুরু করুন',
     sp_cta_sub: 'বিনামূল্যে নিবন্ধন করুন — সব বড় পেমেন্ট পদ্ধতি সমর্থিত।',
-    // Contact page
     contact_badge: 'যোগাযোগ',
     contact_title: 'আমাদের সাথে যোগাযোগ করুন',
     contact_sub: 'কোনো প্রশ্ন, পরামর্শ বা সহায়তার প্রয়োজন? আমাদের জানান — দ্রুত সাড়া দেব।',
@@ -276,7 +321,6 @@ export const strings = {
     contact_sending: 'পাঠানো হচ্ছে...',
     contact_success: 'ধন্যবাদ! আপনার বার্তা পেয়েছি — শীঘ্রই যোগাযোগ করব।',
     contact_error: 'দুঃখিত, কিছু ভুল হয়েছে। আবার চেষ্টা করুন।',
-    // Price Compare page
     pc_title: 'জেলাভিত্তিক দাম তুলনা',
     pc_sub: 'একই ফসল বিভিন্ন জেলায় কত দামে বিক্রি হচ্ছে — এক নজরে তুলনা করুন।',
     pc_select_crop: 'ফসল বাছাই করুন',
@@ -293,7 +337,6 @@ export const strings = {
     pc_retail: 'খুচরা',
     pc_updated: 'হালনাগাদ',
     pc_best: 'সেরা',
-    // Price Compare — extra keys
     pc_badge: 'দাম তুলনা',
     pc_avg: 'গড়',
     pc_table_title: 'জেলাভিত্তিক বিস্তারিত দাম',
@@ -302,7 +345,6 @@ export const strings = {
     pc_highest: 'সর্বোচ্চ',
     pc_source: 'উৎস',
     pc_disclaimer: 'দাম প্রতিদিন হালনাগাদ হয়, স্থানীয় বাজারে সামান্য ভিন্ন হতে পারে।',
-    // Price History page
     ph_title: 'দামের ঐতিহাসিক প্রবণতা',
     ph_sub: 'গত ৭ / ৩০ / ৯০ / ৩৬৫ দিনের দাম দেখে বাজারের গতি বুঝুন।',
     ph_crop: 'ফসল',
@@ -322,7 +364,6 @@ export const strings = {
     ph_retail: 'খুচরা',
     ph_source: 'উৎস',
     ph_disclaimer: 'সিমুলেটেড ডেটা — শুধু ডেমো উদ্দেশ্যে।',
-    // Higher margins feature page
     hm_title: 'উচ্চ লাভের ক্যালকুলেটর',
     hm_sub: 'AgroMart-এ সরাসরি বিক্রি করলে কতটা বেশি আয় হবে — নিজে হিসাব করে দেখুন।',
     hm_crop: 'ফসল',
@@ -342,7 +383,6 @@ export const strings = {
     hm_best: 'সেরা',
     hm_farmer_gets: 'কৃষক পান',
     hm_of_total: 'মোট বিক্রির',
-    // Trust & Ratings marketing + Farmer Profile
     lang_code: 'bn',
     tr_hero_title: 'বিশ্বাস ও রেটিং সিস্টেম',
     tr_hero_sub: 'যাচাইকৃত ক্রেতা, সৎ রিভিউ, এবং প্রতিটি লেনদেনের রেকর্ড — এইভাবেই বিশ্বাস গড়ে ওঠে।',
@@ -368,7 +408,6 @@ export const strings = {
     tr_step4_desc: 'ভালো কৃষকদের সাথে দীর্ঘমেয়াদী সম্পর্ক তৈরি করুন।',
     tr_cta_title: 'বিশ্বস্ত মার্কেটপ্লেস — আজই শুরু করুন',
     tr_cta_sub: 'হাজারো যাচাইকৃত কৃষকের সাথে সরাসরি কেনাবেচা।',
-    // Farmer Profile
     fp_verified: 'যাচাইকৃত কৃষক',
     fp_avg_rating: 'গড় রেটিং',
     fp_reviews: 'রিভিউ',
@@ -387,7 +426,6 @@ export const strings = {
     fp_verified_purchase: 'যাচাইকৃত ক্রয়',
     fp_helpful: 'জন সহায়ক পেয়েছেন',
     fp_not_found: 'কৃষক পাওয়া যায়নি',
-    // Price Alerts page
     pa_title: 'দামের সতর্কতা',
     pa_sub: 'আপনার লক্ষ্য দামে বাজার পৌঁছালে সঙ্গে সঙ্গে জানুন — SMS ও অ্যাপ নোটিফিকেশনে।',
     pa_create_title: 'নতুন সতর্কতা তৈরি করুন',
@@ -412,7 +450,6 @@ export const strings = {
     pa_resume: 'পুনরায় চালু',
     pa_notify_sms: 'SMS নোটিফিকেশন',
     pa_notify_app: 'অ্যাপ নোটিফিকেশন',
-    // Sell at the right price page
     sr_title: 'সঠিক দামে বিক্রি করুন',
     sr_sub: 'বাজার ও প্রবণতা দেখে জানুন — এখনই বিক্রি করবেন, নাকি অপেক্ষা করবেন?',
     sr_crop: 'ফসল',
@@ -450,7 +487,6 @@ export const strings = {
     sr_reason2_detail: '৩০ দিনের গড়ের তুলনায়',
     sr_reason3_label: 'সাম্প্রতিক গতি',
     sr_reason3_detail: 'গত ৭ দিনের প্রবণতা',
-    // Transparent Pricing page
     tp_title: 'স্বচ্ছ দাম নীতি',
     tp_sub: 'ফসলের টাকা কোথায় যায়? প্রতিটি হাত পেরিয়ে ভোক্তার কাছে পৌঁছানোর যাত্রা দেখুন।',
     tp_pick_crop: 'ফসল বেছে নিন',
@@ -474,7 +510,6 @@ export const strings = {
     tp_cta_marketplace: 'মার্কেটপ্লেস দেখুন',
     tp_cta_calc: 'বিস্তারিত ক্যালকুলেটর',
     tp_disclaimer: 'শতাংশ স্থানীয় বাজার ও বিভিন্ন উৎস থেকে নেওয়া গড় মার্জিন — কিছুটা পরিবর্তিত হতে পারে।',
-    // Easy Delivery page
     de_title: 'সহজ ডেলিভারি',
     de_sub: 'যেকোনো জেলা থেকে যেকোনো জেলায় ফসল পাঠান — সময় ও দামের হিসাব এক নজরে।',
     de_calc_title: 'ডেলিভারি খরচ ক্যালকুলেটর',
@@ -489,7 +524,6 @@ export const strings = {
     de_feat_insured: 'বিমা সুরক্ষিত',
     de_feat_tracking: 'লাইভ ট্র্যাকিং',
     de_feat_cold_storage: 'কোল্ড স্টোরেজ',
-    
     de_cta_hint: 'ডেলিভারি বুক করতে চান? প্রথমে মার্কেটপ্লেস থেকে অর্ডার দিন।',
     de_cta_marketplace: 'মার্কেটপ্লেস দেখুন',
     de_how_title: 'কীভাবে কাজ করে',
@@ -500,7 +534,8 @@ export const strings = {
     de_step3_title: 'পিকআপ',
     de_step3_desc: 'AgroExpress আপনার বাড়ি থেকে ফসল সংগ্রহ করে।',
     de_step4_title: 'নিরাপদ ডেলিভারি',
-    de_step4_desc: 'লাইভ ট্র্যাকিং সহ ক্রেতার ঠিকানায় পৌঁছে দেওয়া হয়।',    de_tag_same_district: 'একই জেলা — দ্রুত ও সস্তা',
+    de_step4_desc: 'লাইভ ট্র্যাকিং সহ ক্রেতার ঠিকানায় পৌঁছে দেওয়া হয়।',
+    de_tag_same_district: 'একই জেলা — দ্রুত ও সস্তা',
     de_tag_standard: 'সাশ্রয়ী স্ট্যান্ডার্ড ডেলিভারি',
     de_tag_express: 'পরবর্তী দিন এক্সপ্রেস',
     de_tier_same: 'একই দিন',
@@ -511,28 +546,9 @@ export const strings = {
     de_express_badge: 'দ্রুত',
     de_overweight_title: 'বড় চালান? আমাদের কল করুন',
     de_overweight_desc: '৫০০ কেজির বেশি চালানের জন্য কাস্টম কোট প্রয়োজন।',
-
     de_disclaimer: 'দাম ও সময় আনুমানিক — চূড়ান্ত হিসাব বুকিং-এর সময়।',
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     de_unit_kg: 'কেজি',
     de_unit_km: 'কিমি',
-
     login_title: 'লগইন করুন',
     login_sub: 'ফোন নম্বর এবং পাসওয়ার্ড দিয়ে সাইন ইন করুন।',
     login_phone: 'ফোন নম্বর',
@@ -547,7 +563,7 @@ export const strings = {
     nav_admin: 'অ্যাডমিন প্যানেল',
     nav_orders: 'মার্কেটপ্লেস',
     role_admin: 'অ্যাডমিন',
-},
+  },
   en: {
     brand: 'AgroMart',
     nav_home: 'Home',
@@ -577,50 +593,105 @@ export const strings = {
     footer_rights: 'All rights reserved.',
     market_error: 'Could not load crops.',
     market_empty: 'No crops available right now.',
-    // HowItWorks
-    how_badge: 'How it works',
-    how_title: 'How AgroMart works',
-    how_sub: 'Simple steps for farmers, buyers, and agents — direct sales, transparent prices, and secure transactions on one platform.',
-    role_farmer: 'Farmer',
-    role_farmer_sub: 'Sell your crops directly',
-    role_buyer: 'Buyer',
-    role_buyer_sub: 'Buy straight from farmers',
-    role_agent: 'Agent',
-    role_agent_sub: 'Bridge farmers and buyers',
-    step_f1: 'Register and complete your profile.',
-    step_f2: 'List your crops — quantity, price, photos.',
-    step_f3: 'Accept orders and connect with buyers directly.',
-    step_f4: 'Receive secure payments and confirm delivery.',
-    step_b1: 'Create an account and add your address.',
-    step_b2: 'Browse crops in the marketplace and view live prices.',
-    step_b3: 'Place an order and complete secure payment.',
-    step_b4: 'Receive delivery and rate the farmer.',
-    step_a1: 'Register as an agent and complete verification.',
-    step_a2: 'Connect with farmers in your area.',
-    step_a3: 'Coordinate orders and transactions.',
-    step_a4: 'Earn commission and support farmers.',
-    how_stats_title: 'Real numbers — the platform today',
-    stat_crops: 'Available crops',
-    stat_districts: 'Districts served',
-    how_cta_title: 'Get started today',
-    how_cta_sub: 'Register for free, browse live prices, and join the direct agri-marketplace.',
-    // Live Price Section UI
-    lp_badge: 'Real-time Updates',
-    lp_buyerTitle: ' Live Market Prices',
-    lp_farmerTitle: " Today's Market Guide",
-    lp_buyerBtn: 'Buyer View',
-    lp_farmerBtn: 'Farmer View',
-    lp_searchPlaceholder: ' Search crop...',
-    lp_allCat: 'All Categories',
-    lp_grains: 'Grains',
-    lp_vegetables: 'Vegetables',
-    lp_spices: 'Spices',
-    lp_agroPrice: 'AgroMart Price',
-    lp_marketPrice: 'Market Rate',
-    lp_diff: 'Difference',
-    lp_savings: 'Savings',
-    lp_perKg: 'kg',
+    featured_title: 'Latest crops',
+    featured_sub: 'Fresh produce directly from farmers',
+    featured_see_all: 'See all',
 
+    // ── Marketplace ──────────────────────────────────────────────
+    market_subtitle: 'Buy fresh crops directly from farmers',
+    market_search: 'Search Products',
+    market_search_placeholder: 'Type a crop name (Bangla or English) — e.g. Mango / আম',
+    market_category: 'Category',
+    market_all_categories: 'All Categories',
+    market_district: 'District',
+    market_all_districts: 'All Districts',
+    market_min_price: 'Minimum Price',
+    market_max_price: 'Maximum Price',
+    market_sort: 'Sort',
+    market_sort_default: 'Default',
+    market_sort_low_high: 'Price: Low to High',
+    market_sort_high_low: 'Price: High to Low',
+    market_sort_name: 'Name: A-Z',
+    market_organic_only: 'Organic Products Only',
+    market_in_stock_only: 'In Stock Only',
+    market_clear_filters: 'Clear Filters',
+    market_found: 'Found',
+    market_products: 'products',
+    market_filter_active: 'Filters active',
+    market_no_results: 'No Products Found',
+    market_try_another: 'Try another search or filter.',
+    market_load_more: 'Load More',
+    market_showing: 'Showing',
+    market_of_total: 'of',
+    market_demo_notice: 'Could not reach the server — showing demo products.',
+
+    // ── Product card / quick view / details ─────────────────────
+    badge_organic: 'Organic',
+    stock_in: 'In Stock',
+    stock_low: 'Low Stock',
+    stock_out: 'Out of Stock',
+    quickview: 'Quick View',
+    view_full_details: 'View Full Details',
+    quickview_close: 'Close',
+    fav_add: 'Add to favorites',
+    fav_remove: 'Remove from favorites',
+    label_price: 'Price',
+    label_quantity: 'Quantity',
+    label_farmer: 'Farmer',
+    label_district: 'District',
+    label_description: 'Description',
+    organic_yes: 'Organic',
+    organic_no: 'Not organic',
+    product_details_back: '← Back to Marketplace',
+    product_details_not_found: 'Product not found',
+    product_not_found_sub: 'This product may have been removed or sold out.',
+
+    // ── Cart ──────────────────────────────────────────────
+    cart_add: 'Add to Cart',
+    cart_title: 'Cart',
+    cart_empty_title: 'Your cart is empty',
+    cart_empty_sub: 'Add some products from the marketplace to get started.',
+    cart_browse_marketplace: 'Browse Marketplace',
+    cart_clear: 'Clear Cart',
+    cart_remove: 'Remove',
+    cart_subtotal: 'Subtotal',
+    cart_checkout: 'Checkout',
+    cart_checkout_disabled_reason: 'Checkout will be available once login is ready — this is a demo cart for now.',
+    cart_continue_shopping: '← Continue Shopping',
+    cart_local_notice: 'This cart is stored only in this browser and is not linked to an account.',
+    cart_max_stock: 'Max stock reached',
+    market_loading_more: 'Loading...',
+
+    // ── Reviews & Ratings ─────────────────────────────────
+    reviews_title: 'Reviews & Ratings',
+    reviews_count_suffix: 'reviews',
+    reviews_none_yet: 'No reviews yet — be the first to review this!',
+    reviews_write: '✍️ Write a Review',
+    reviews_cancel: 'Cancel',
+    reviews_submit: 'Submit Review',
+    reviews_submitting: 'Submitting...',
+    reviews_load_error: 'Could not load reviews.',
+    review_form_name: 'Your Name',
+    review_form_name_placeholder: 'e.g. Rahim Uddin',
+    review_form_rating: 'Your Rating',
+    review_form_comment: 'Comment (optional)',
+    review_form_comment_placeholder: 'Share your experience with this product...',
+    review_error_name: 'Name is required.',
+    review_error_rating: 'Please give at least 1 star.',
+    review_error_generic: 'Could not submit your review, please try again.',
+
+    // ── Image lightbox ────────────────────────────────────
+    lightbox_label: 'Image viewer',
+    lightbox_zoom_hint: 'Zoom',
+    lightbox_prev: 'Previous image',
+    lightbox_next: 'Next image',
+
+    // ── Share ──────────────────────────────────────────────
+    share_button: 'Share',
+    share_copied: 'Link copied!',
+
+    // ── Related products ──────────────────────────────────
+    related_title: 'You Might Also Like',
     // Crop Names for Live Price
     crop_kachamorich: 'Green Chili',
     crop_begun: 'Eggplant',
@@ -631,15 +702,11 @@ export const strings = {
     crop_shorisha: 'Mustard',
     crop_mugdal: 'Mung Bean',
     crop_mosurdal: 'Lentils',
-      lp_perPiece: 'piece',
+    lp_perPiece: 'piece',
     lp_othersCharge: 'Others charge',
     lp_orderNow: 'Order now',
     lp_listNow: 'List this crop',
     lp_noListings: 'No listings',
-
-    featured_title: 'Latest crops',
-    featured_sub: 'Fresh produce directly from farmers',
-    featured_see_all: 'See all',
     feat_badge: 'Platform features',
     feat_title: 'How AgroMart helps you',
     feat_sub: 'A smart, transparent agriculture platform for farmers, buyers and agents.',
@@ -655,7 +722,6 @@ export const strings = {
     feat_loans_desc: 'Quick-approval small loans based on crop and transaction history.',
     feat_ai_title: 'AI advisor',
     feat_ai_desc: 'Crop recommendations, disease detection and price forecasts — in Bengali.',
-    // Direct Sales feature page
     feat_learn_more: 'Learn more',
     ds_hero_title: 'Sell directly, without middlemen',
     ds_hero_sub: 'Get your crops to buyers directly. Better margins, transparent prices, faster payments.',
@@ -681,7 +747,6 @@ export const strings = {
     ds_step4_desc: 'After delivery the buyer rates you — building lasting trust.',
     ds_cta_title: 'Start selling direct today',
     ds_cta_sub: 'Register free and list your first crop in under 5 minutes.',
-    // Live Market Prices feature page
     lmp_hero_title: 'Live market prices, every district',
     lmp_hero_sub: 'Daily wholesale and retail rates from all 64 districts — make decisions with real data.',
     lmp_cta_view: 'View prices',
@@ -706,7 +771,6 @@ export const strings = {
     lmp_step4_desc: 'Get SMS or in-app notifications when prices hit your target.',
     lmp_cta_title: 'See today\'s prices now',
     lmp_cta_sub: 'Free to use — you can browse prices without registering.',
-    // Weather Alerts feature page
     wa_hero_title: 'Weather alerts, tuned to your district',
     wa_hero_sub: 'Storms, heavy rain, drought or cold waves — get warnings early so you can save your crops.',
     wa_cta_start: 'Get started',
@@ -731,7 +795,6 @@ export const strings = {
     wa_step4_desc: 'Follow the expert steps and protect your harvest.',
     wa_cta_title: 'Turn on alerts today',
     wa_cta_sub: 'Free to register — never lose a crop to weather again.',
-    // AI Advisor feature page
     ai_hero_title: 'Smart AI advice for your farm, in Bengali',
     ai_hero_sub: 'Crop recommendations, disease detection and price forecasts — all in one assistant.',
     ai_cta_start: 'Get started',
@@ -756,7 +819,6 @@ export const strings = {
     ai_step4_desc: 'Follow the advice and see the results in your field.',
     ai_cta_title: 'Try the AI advisor today',
     ai_cta_sub: 'Register free and ask your first question in minutes.',
-    // Micro-loans feature page
     ml_hero_title: 'Fast micro-loans for farmers',
     ml_hero_sub: 'Small loans on easy terms based on your crop and transaction history — no collateral needed.',
     ml_cta_apply: 'Apply now',
@@ -781,7 +843,6 @@ export const strings = {
     ml_step4_desc: 'Instalments auto-deduct from your future crop sales.',
     ml_cta_title: 'Apply for a loan today',
     ml_cta_sub: 'Register free — eligibility check takes a minute.',
-    // Secure Payments feature page
     sp_hero_title: 'Secure payments, every transaction',
     sp_hero_sub: 'bKash, Nagad, bank transfer or AgroMart wallet — verified and protected end-to-end.',
     sp_cta_start: 'Get started',
@@ -806,7 +867,6 @@ export const strings = {
     sp_step4_desc: 'On confirmation, funds move to the farmer\'s wallet and a receipt is issued.',
     sp_cta_title: 'Start transacting securely',
     sp_cta_sub: 'Register free — all major payment methods supported.',
-    // Contact page
     contact_badge: 'Contact',
     contact_title: 'Get in touch',
     contact_sub: 'Questions, suggestions or need help? Let us know — we\'ll respond quickly.',
@@ -824,7 +884,6 @@ export const strings = {
     contact_sending: 'Sending...',
     contact_success: 'Thanks! Got your message — we\'ll be in touch shortly.',
     contact_error: 'Sorry, something went wrong. Please try again.',
-    // Price Compare page
     pc_title: 'Compare prices across districts',
     pc_sub: 'See how the same crop is priced in different districts — at a glance.',
     pc_select_crop: 'Select crop',
@@ -841,7 +900,6 @@ export const strings = {
     pc_retail: 'Retail',
     pc_updated: 'Updated',
     pc_best: 'Best',
-    // Price Compare — extra keys
     pc_badge: 'Price comparison',
     pc_avg: 'avg',
     pc_table_title: 'District-by-district price detail',
@@ -850,7 +908,6 @@ export const strings = {
     pc_highest: 'Highest',
     pc_source: 'Source',
     pc_disclaimer: 'Prices update daily and may vary slightly at local markets.',
-    // Price History page
     ph_title: 'Historical price trends',
     ph_sub: 'See how prices moved over the last 7 / 30 / 90 / 365 days.',
     ph_crop: 'Crop',
@@ -870,7 +927,6 @@ export const strings = {
     ph_retail: 'Retail',
     ph_source: 'Source',
     ph_disclaimer: 'Simulated data for demo purposes only.',
-    // Higher margins feature page
     hm_title: 'Higher margins calculator',
     hm_sub: 'See how much more you earn by selling directly on AgroMart.',
     hm_crop: 'Crop',
@@ -890,7 +946,6 @@ export const strings = {
     hm_best: 'Best',
     hm_farmer_gets: 'Farmer gets',
     hm_of_total: 'of total sale',
-    // Trust & Ratings marketing + Farmer Profile
     lang_code: 'en',
     tr_hero_title: 'Trust & ratings system',
     tr_hero_sub: 'Verified buyers, honest reviews and a record of every transaction — that\'s how trust is built.',
@@ -916,7 +971,6 @@ export const strings = {
     tr_step4_desc: 'Grow long-term relationships with trusted farmers.',
     tr_cta_title: 'A trusted marketplace — start today',
     tr_cta_sub: 'Trade directly with thousands of verified farmers.',
-    // Farmer Profile
     fp_verified: 'Verified farmer',
     fp_avg_rating: 'Avg rating',
     fp_reviews: 'Reviews',
@@ -935,7 +989,6 @@ export const strings = {
     fp_verified_purchase: 'Verified purchase',
     fp_helpful: 'people found this helpful',
     fp_not_found: 'Farmer not found',
-    // Price Alerts page
     pa_title: 'Price alerts',
     pa_sub: 'Get notified the moment the market hits your target price — via SMS and in-app.',
     pa_create_title: 'Create a new alert',
@@ -960,7 +1013,6 @@ export const strings = {
     pa_resume: 'Resume',
     pa_notify_sms: 'SMS notification',
     pa_notify_app: 'In-app notification',
-    // Sell at the right price page
     sr_title: 'Sell at the right price',
     sr_sub: 'See the market and trend at a glance — should you sell now, or wait?',
     sr_crop: 'Crop',
@@ -998,7 +1050,6 @@ export const strings = {
     sr_reason2_detail: 'Compared to 30-day average',
     sr_reason3_label: 'Recent motion',
     sr_reason3_detail: '7-day trend direction',
-    // Transparent Pricing page
     tp_title: 'Transparent pricing',
     tp_sub: 'Where does the money for your crop actually go? See the journey from farm to consumer.',
     tp_pick_crop: 'Pick a crop',
@@ -1022,7 +1073,6 @@ export const strings = {
     tp_cta_marketplace: 'Explore marketplace',
     tp_cta_calc: 'Detailed calculator',
     tp_disclaimer: 'Percentages are average margins from various market sources — actual splits may vary.',
-    // Easy Delivery page
     de_title: 'Easy delivery',
     de_sub: 'Send crops from any district to any district — see time and price at a glance.',
     de_calc_title: 'Delivery cost calculator',
@@ -1037,7 +1087,6 @@ export const strings = {
     de_feat_insured: 'Insured',
     de_feat_tracking: 'Live tracking',
     de_feat_cold_storage: 'Cold storage',
-    
     de_cta_hint: 'Want to book a delivery? Place an order from the marketplace first.',
     de_cta_marketplace: 'Explore marketplace',
     de_how_title: 'How it works',
@@ -1049,7 +1098,7 @@ export const strings = {
     de_step3_desc: 'AgroExpress collects the crop straight from your home.',
     de_step4_title: 'Safe delivery',
     de_step4_desc: 'Delivered to the buyer\'s address with live tracking.',
-        de_tag_same_district: 'Same district — fast & cheap',
+    de_tag_same_district: 'Same district — fast & cheap',
     de_tag_standard: 'Affordable standard delivery',
     de_tag_express: 'Next-day express',
     de_tier_same: 'Same-day',
@@ -1061,26 +1110,8 @@ export const strings = {
     de_overweight_title: 'Large shipment? Give us a call',
     de_overweight_desc: 'Shipments over 500 kg need a custom quote.',
     de_disclaimer: 'Prices and times are estimates — final numbers on booking.',
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     de_unit_kg: 'kg',
     de_unit_km: 'km',
-
     login_title: 'Sign in',
     login_sub: 'Sign in with your phone number and password.',
     login_phone: 'Phone number',
@@ -1095,5 +1126,5 @@ export const strings = {
     nav_admin: 'Admin panel',
     nav_orders: 'Marketplace',
     role_admin: 'Admin',
-},
+  },
 };

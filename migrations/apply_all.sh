@@ -11,7 +11,7 @@ PSQL="psql -U $DB_USER -d $DB_NAME -h $DB_HOST -v ON_ERROR_STOP=1"
 
 echo "Applying migrations to $DB_NAME@$DB_HOST as $DB_USER"
 for f in 000_prelude 001_init 002_reference 003_marketplace 004_transactions \
-         005_payments 006_financial 007_agent 008_smart 009_views; do
+         005_payments 006_financial 007_agent 008_smart 009_views 010_reviews; do
     echo "==> $f.sql"
     $PSQL -f "$f.sql"
 done

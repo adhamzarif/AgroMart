@@ -8,6 +8,7 @@ export default function Badge({ tone = 'category', children, className = '' }) {
     warning: 'bg-warning-bg text-warning-dark',
     danger: 'bg-danger-bg text-danger-dark',
     neutral: 'bg-gray-100 text-gray-600',
+    success: 'bg-success-bg text-success-dark',
   };
   return (
     <span
