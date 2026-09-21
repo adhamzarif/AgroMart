@@ -1,6 +1,5 @@
 // TransparentPricing.jsx — visualize the "price journey" from farm to consumer.
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useLang } from '../../context/LangContext.jsx';
 import { api } from '../../api/client.js';
 
@@ -239,32 +238,7 @@ export default function TransparentPricing() {
               </div>
             </div>
 
-            {/* CTA */}
-            <div className="rounded-3xl bg-gradient-to-r from-green-600 to-emerald-600 p-8 text-center text-white shadow-xl sm:p-10">
-              <div className="text-4xl">🌱</div>
-              <h2 className="mt-3 text-2xl font-bold font-display sm:text-3xl">
-                {t('tp_cta_title')}
-              </h2>
-              <p className="mx-auto mt-2 max-w-lg text-white/90">
-                {t('tp_cta_sub')}
-              </p>
-              <div className="mt-6 flex flex-wrap justify-center gap-3">
-                <Link
-                  to="/marketplace"
-                  className="rounded-full bg-white px-6 py-3 text-sm font-bold text-green-700 shadow-md transition hover:scale-105 hover:bg-gray-50"
-                >
-                  {t('tp_cta_marketplace')} →
-                </Link>
-                <Link
-                  to="/features/higher-margins"
-                  className="rounded-full border border-white/40 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10"
-                >
-                  {t('tp_cta_calc')}
-                </Link>
-              </div>
-            </div>
-
-            <p className="mt-6 text-center text-xs text-gray-400">
+<p className="mt-6 text-center text-xs text-gray-400">
               {t('tp_disclaimer')}
             </p>
           </>
