@@ -440,6 +440,16 @@ export const strings = {
     sr_local: 'আপনার জেলা',
     sr_last_7d: 'গত ৭ দিনের প্রবণতা',
     sr_disclaimer: 'সিদ্ধান্ত DAM ডেটা ও ৩০ দিনের প্রবণতার উপর ভিত্তি করে। চূড়ান্ত সিদ্ধান্ত আপনার।',
+    sr_recommendation: 'সুপারিশ',
+    sr_cta_alert: 'দাম বাড়লে জানতে সতর্কতা সেট করুন',
+    sr_retail: 'খুচরা দাম',
+    sr_how_title: 'কীভাবে এই সিদ্ধান্ত',
+    sr_reason1_label: 'বাজার তুলনা',
+    sr_reason1_detail: 'সেরা বাজারে অতিরিক্ত আয়',
+    sr_reason2_label: 'দাম বনাম গড়',
+    sr_reason2_detail: '৩০ দিনের গড়ের তুলনায়',
+    sr_reason3_label: 'সাম্প্রতিক গতি',
+    sr_reason3_detail: 'গত ৭ দিনের প্রবণতা',
 
 
 
@@ -896,6 +906,16 @@ export const strings = {
     sr_local: 'Your district',
     sr_last_7d: 'Last 7 days',
     sr_disclaimer: 'Recommendation based on DAM data and 30-day trends. Final decision is yours.',
+    sr_recommendation: 'Recommendation',
+    sr_cta_alert: 'Set an alert for when prices rise',
+    sr_retail: 'Retail price',
+    sr_how_title: 'How we decided',
+    sr_reason1_label: 'Market gap',
+    sr_reason1_detail: 'Extra earnings in best market',
+    sr_reason2_label: 'Price vs avg',
+    sr_reason2_detail: 'Compared to 30-day average',
+    sr_reason3_label: 'Recent motion',
+    sr_reason3_detail: '7-day trend direction',
 
 
 
