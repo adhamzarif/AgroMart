@@ -450,6 +450,31 @@ export const strings = {
     sr_reason2_detail: '৩০ দিনের গড়ের তুলনায়',
     sr_reason3_label: 'সাম্প্রতিক গতি',
     sr_reason3_detail: 'গত ৭ দিনের প্রবণতা',
+    // Transparent Pricing page
+    tp_title: 'স্বচ্ছ দাম নীতি',
+    tp_sub: 'ফসলের টাকা কোথায় যায়? প্রতিটি হাত পেরিয়ে ভোক্তার কাছে পৌঁছানোর যাত্রা দেখুন।',
+    tp_pick_crop: 'ফসল বেছে নিন',
+    tp_headline_label: 'দামের যাত্রা',
+    tp_headline_desc: 'নিচে দেখুন কীভাবে একই দামের মধ্যে কৃষক কতটা কম পান — এবং AgroMart কীভাবে সেটা বদলায়।',
+    tp_traditional: 'সাধারণ পদ্ধতি',
+    tp_traditional_title: 'ঐতিহ্যবাহী সরবরাহ ব্যবস্থা',
+    tp_traditional_sub: 'কৃষক থেকে ভোক্তা পর্যন্ত ৪টি ধাপ — প্রতি ধাপে কেউ না কেউ একটা অংশ নেয়।',
+    tp_hops: 'জন মধ্যস্বত্বভোগী',
+    tp_agromart: 'AgroMart',
+    tp_agromart_title: 'সরাসরি বিক্রি — AgroMart',
+    tp_agromart_sub: 'কৃষক থেকে ভোক্তা — কোনো মধ্যস্বত্বভোগী নেই। শুধু ১৫% প্ল্যাটফর্ম ফি।',
+    tp_hops_direct: 'কোনো মধ্যস্বত্বভোগী নয়',
+    tp_farmer_gets: 'কৃষক পান',
+    tp_of_retail: 'খুচরা দামের',
+    tp_more: 'বেশি',
+    tp_comparison_title: 'পাশাপাশি তুলনা',
+    tp_comparison_sub: 'দুই পদ্ধতিতে কৃষক কত পান — এক নজরে।',
+    tp_cta_title: 'স্বচ্ছ দামে কেনাবেচা শুরু করুন',
+    tp_cta_sub: 'কোনো লুকানো ফি নেই। কৃষক নিজেই দাম নির্ধারণ করেন। প্রতিটি লেনদেনের রশিদ।',
+    tp_cta_marketplace: 'মার্কেটপ্লেস দেখুন',
+    tp_cta_calc: 'বিস্তারিত ক্যালকুলেটর',
+    tp_disclaimer: 'শতাংশ স্থানীয় বাজার ও বিভিন্ন উৎস থেকে নেওয়া গড় মার্জিন — কিছুটা পরিবর্তিত হতে পারে।',
+
 
 
 
@@ -916,6 +941,31 @@ export const strings = {
     sr_reason2_detail: 'Compared to 30-day average',
     sr_reason3_label: 'Recent motion',
     sr_reason3_detail: '7-day trend direction',
+    // Transparent Pricing page
+    tp_title: 'Transparent pricing',
+    tp_sub: 'Where does the money for your crop actually go? See the journey from farm to consumer.',
+    tp_pick_crop: 'Pick a crop',
+    tp_headline_label: 'Price journey',
+    tp_headline_desc: 'See how little the farmer gets in the traditional system — and how AgroMart changes that.',
+    tp_traditional: 'Traditional',
+    tp_traditional_title: 'Traditional supply chain',
+    tp_traditional_sub: '4 hops from farmer to consumer — each one takes a cut.',
+    tp_hops: 'middlemen',
+    tp_agromart: 'AgroMart',
+    tp_agromart_title: 'Direct on AgroMart',
+    tp_agromart_sub: 'Farmer to consumer — no middlemen. Just a 15% platform fee.',
+    tp_hops_direct: 'No middlemen',
+    tp_farmer_gets: 'Farmer gets',
+    tp_of_retail: 'of retail',
+    tp_more: 'more',
+    tp_comparison_title: 'Side-by-side',
+    tp_comparison_sub: 'How much the farmer takes home under each system — at a glance.',
+    tp_cta_title: 'Start trading at transparent prices',
+    tp_cta_sub: 'No hidden fees. The farmer sets the price. A receipt for every transaction.',
+    tp_cta_marketplace: 'Explore marketplace',
+    tp_cta_calc: 'Detailed calculator',
+    tp_disclaimer: 'Percentages are average margins from various market sources — actual splits may vary.',
+
 
 
 
