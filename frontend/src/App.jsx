@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext.jsx';
+import ProtectedRoute from './components/routing/ProtectedRoute.jsx';
 import { LangProvider } from './context/LangContext.jsx';
 
 import Login from './pages/auth/Login.jsx';
@@ -80,10 +81,9 @@ export default function App() {
                 />
 
                 {/* Farmer */}
-                <Route
-                  path="/farmer/crops/new"
-                  element={<CropForm />}
-                />
+                <Route element={<ProtectedRoute roles={["farmer","admin"]} />}>
+        <Route path="/farmer/crops/new" element={<CropForm/>} />
+      </Route>
                 <Route
                   path="/farmers/:id"
                   element={<FarmerProfile />}

@@ -1,7 +1,8 @@
+// FROM_QUERY_PATCHED
 // DEMO_PANEL_REMOVED
 // Login.jsx — sign-in page with demo account quick-fill buttons.
 import { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useLang } from '../../context/LangContext.jsx';
 import { useAuth } from '../../context/AuthContext.jsx';
 
@@ -11,7 +12,8 @@ export default function Login() {
   const { login } = useAuth();
   const nav = useNavigate();
   const location = useLocation();
-  const from = location.state?.from || '/';
+  const [searchParams] = useSearchParams();
+  const from = searchParams.get('from') || location.state?.from || '/';
 
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
@@ -26,11 +28,12 @@ export default function Login() {
       const user = await login({ phone: phone.trim(), password });
       // route by role
       const roles = user.roles || [];
-      const dest =
-        roles.includes('admin')  ? '/admin' :
-        roles.includes('farmer') ? '/farmer/dashboard' :
-        roles.includes('buyer')  ? '/marketplace' :
-        from;
+      const dest = from !== '/'
+        ? from
+        : roles.includes('admin')  ? '/admin'
+        : roles.includes('farmer') ? '/farmer/dashboard'
+        : roles.includes('buyer')  ? '/marketplace'
+        : '/';
       nav(dest, { replace: true });
     } catch (err) {
       setError(err.message || 'Login failed');

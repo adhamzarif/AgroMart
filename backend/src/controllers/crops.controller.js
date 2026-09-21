@@ -1,86 +1,65 @@
 // crops.controller.js — marketplace crop endpoints.
-import { listAvailableCrops, getCropById, getRelatedCrops } from '../models/crop.model.js';
+// Layers 3 (auth) and 4 (ownership) apply here.
+// - listCrops / getCrop: PUBLIC (anyone can browse)
+// - postCrop / patchCrop / deleteCrop: farmer or admin only (wired via requireRole in routes)
+// - Ownership: farmers can only touch their own crops; admins bypass ownership.
+import path from 'path';
+import {
+  listAvailableCrops,
+  getCropById,
+  createCrop,
+  updateCrop,
+  deleteCropById,
+} from '../models/crop.model.js';
 
+const UNITS = ['kg', 'ton', 'mon', 'piece'];
+
+// ─── LIST (public) ───────────────────────────────────────────────
 export async function listCrops(req, res, next) {
   try {
-    // Now fully server-side: search, category, district, price range,
-    // organic/in-stock flags and sort are all applied in the DB query, and
-    // `total` (independent of limit/offset) lets the frontend "Load More"
-    // without re-fetching a large pool up front like before.
-    const limit = Math.min(parseInt(req.query.limit ?? '12', 10) || 12, 100);
+    const limit = Math.min(parseInt(req.query.limit ?? '12', 10) || 12, 50);
     const offset = Math.max(parseInt(req.query.offset ?? '0', 10) || 0, 0);
-
-    const { crops, total } = await listAvailableCrops({
+    const crops = await listAvailableCrops({
       distinct: req.query.distinct === '1',
       categoryId: req.query.category ? parseInt(req.query.category, 10) : undefined,
-      district: req.query.district?.trim() || undefined,
+      districtId: req.query.district ? parseInt(req.query.district, 10) : undefined,
       search: req.query.q?.trim() || undefined,
-      minPrice: req.query.minPrice !== undefined ? Number(req.query.minPrice) : undefined,
-      maxPrice: req.query.maxPrice !== undefined ? Number(req.query.maxPrice) : undefined,
-      organicOnly: req.query.organic === 'true',
-      inStockOnly: req.query.inStock === 'true',
-      sortBy: req.query.sort || 'default',
       limit,
       offset,
     });
-
-    res.json({ crops, total, limit, offset });
-  } catch (err) {
-    next(err);
-  }
+    res.json({ crops, count: crops.length, limit, offset });
+  } catch (err) { next(err); }
 }
 
+// ─── GET ONE (public) ────────────────────────────────────────────
 export async function getCrop(req, res, next) {
   try {
     const crop = await getCropById(parseInt(req.params.id, 10));
     if (!crop) return res.status(404).json({ error: 'Crop not found' });
     res.json({ crop });
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 }
 
-// "Related products" for the ProductDetails page — a few other available
-// crops from the same category, excluding the crop being viewed.
-export async function getRelated(req, res, next) {
-  try {
-    const cropId = parseInt(req.params.id, 10);
-    const crop = await getCropById(cropId);
-    if (!crop) return res.status(404).json({ error: 'Crop not found' });
-
-    const limit = Math.min(parseInt(req.query.limit ?? '4', 10) || 4, 12);
-    const crops = await getRelatedCrops(crop.category_id, cropId, limit);
-    res.json({ crops });
-  } catch (err) {
-    next(err);
-  }
-}
-
-// Add to backend/src/controllers/crops.controller.js (append the new handler + import).
-import { createCrop } from '../models/crop.model.js';
-import path from 'path';
-
-// req.files comes from the upload middleware; store web-accessible paths.
+// ─── CREATE (farmer + admin) ─────────────────────────────────────
+// SECURITY: farmerId ALWAYS comes from req.user.userId (session).
+// Any farmerId in the request body is IGNORED — never trust the client.
 export async function postCrop(req, res, next) {
   try {
     const b = req.body;
-    // basic validation
     const errors = {};
     if (!b.cropName || b.cropName.trim().length < 2) errors.cropName = 'Crop name required';
     if (!b.categoryId) errors.categoryId = 'Category required';
     if (!(Number(b.quantity) > 0)) errors.quantity = 'Quantity must be positive';
     if (!(Number(b.pricePerUnit) > 0)) errors.pricePerUnit = 'Price must be positive';
-    if (!['kg', 'ton', 'mon', 'piece'].includes(b.unit)) errors.unit = 'Invalid unit';
+    if (!UNITS.includes(b.unit)) errors.unit = 'Invalid unit';
     if (Object.keys(errors).length) {
       return res.status(422).json({ error: 'Validation failed', fields: errors });
     }
 
-    // map uploaded files to the URL the API serves them at
     const images = (req.files || []).map((f) => `/uploads/crops/${path.basename(f.path)}`);
 
     const crop = await createCrop({
-      // farmerId: hardcoded demo farmer for now (auth wires this later — slice A2)
-      farmerId: Number(b.farmerId) || 4,
+      farmerId: req.user.userId,      // ← from session, not from client body
       categoryId: Number(b.categoryId),
       cropName: b.cropName.trim(),
       cropVariety: b.cropVariety?.trim() || null,
@@ -93,7 +72,62 @@ export async function postCrop(req, res, next) {
     });
 
     res.status(201).json({ message: 'Crop listed', crop });
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
+}
+
+// ─── UPDATE (farmer owner + admin) ───────────────────────────────
+export async function patchCrop(req, res, next) {
+  try {
+    const cropId = parseInt(req.params.id, 10);
+    const existing = await getCropById(cropId);
+    if (!existing) return res.status(404).json({ error: 'Crop not found' });
+
+    // Ownership check: admin bypasses, farmer must own the crop
+    const isAdmin = req.user.roles?.includes('admin');
+    const isOwner = existing.farmer_id === req.user.userId;
+    if (!isAdmin && !isOwner) return res.status(403).json({ error: 'Not your crop' });
+
+    // Whitelist fields — don't let a client change farmer_id or crop_id
+    const b = req.body;
+    const patch = {};
+    if (b.cropName !== undefined) patch.cropName = String(b.cropName).trim();
+    if (b.categoryId !== undefined) patch.categoryId = Number(b.categoryId);
+    if (b.quantity !== undefined) patch.quantity = Number(b.quantity);
+    if (b.unit !== undefined) {
+      if (!UNITS.includes(b.unit)) return res.status(422).json({ error: 'Invalid unit' });
+      patch.unit = b.unit;
+    }
+    if (b.pricePerUnit !== undefined) patch.pricePerUnit = Number(b.pricePerUnit);
+    if (b.description !== undefined) patch.description = String(b.description).trim() || null;
+    if (b.isOrganic !== undefined) patch.isOrganic = b.isOrganic === true || b.isOrganic === 'true';
+    if (b.status !== undefined) {
+      if (!['available', 'sold', 'expired'].includes(b.status)) {
+        return res.status(422).json({ error: 'Invalid status' });
+      }
+      patch.status = b.status;
+    }
+
+    if (Object.keys(patch).length === 0) {
+      return res.status(400).json({ error: 'No fields to update' });
+    }
+
+    const crop = await updateCrop(cropId, patch);
+    res.json({ message: 'Crop updated', crop });
+  } catch (err) { next(err); }
+}
+
+// ─── DELETE (farmer owner + admin) ───────────────────────────────
+export async function deleteCrop(req, res, next) {
+  try {
+    const cropId = parseInt(req.params.id, 10);
+    const existing = await getCropById(cropId);
+    if (!existing) return res.status(404).json({ error: 'Crop not found' });
+
+    const isAdmin = req.user.roles?.includes('admin');
+    const isOwner = existing.farmer_id === req.user.userId;
+    if (!isAdmin && !isOwner) return res.status(403).json({ error: 'Not your crop' });
+
+    await deleteCropById(cropId);
+    res.json({ message: 'Crop deleted', cropId });
+  } catch (err) { next(err); }
 }

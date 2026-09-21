@@ -1,5 +1,4 @@
-// Navbar.jsx — top nav. Shows Login/Register when logged out,
-// or {name} ▾ dropdown with role-specific links + Logout when logged in.
+// Navbar.jsx — role-aware nav. Links visible per role.
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLang } from '../../context/LangContext.jsx';
@@ -12,7 +11,6 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
-  // close dropdown when clicking outside
   useEffect(() => {
     const onClick = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
@@ -21,7 +19,12 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', onClick);
   }, []);
 
-  const links = [
+  const roles = user?.roles || [];
+  const isFarmer = roles.includes('farmer');
+  const isAdmin  = roles.includes('admin');
+
+  // Public links everyone sees
+  const publicLinks = [
     ['nav_home', '/'],
     ['nav_features', '/features'],
     ['nav_marketplace', '/marketplace'],
@@ -30,18 +33,22 @@ export default function Navbar() {
     ['nav_contact', '/contact'],
   ];
 
+  // Role-only navbar link (Add crop is farmer-facing convenience)
+  const roleLinks = [];
+  if (isFarmer || isAdmin) roleLinks.push(['nav_add_crop', '/farmer/crops/new']);
+
   async function onLogout() {
     setMenuOpen(false);
     await logout();
     nav('/');
   }
 
-  // role-specific menu items shown inside the dropdown
-  const roleLinks = user
+  // Dropdown role-specific items
+  const dropdownLinks = user
     ? [
-        user.roles?.includes('admin')  && { label: t('nav_admin'),  to: '/admin' },
-        user.roles?.includes('farmer') && { label: t('nav_dashboard'), to: '/farmer/dashboard' },
-        user.roles?.includes('buyer')  && { label: t('nav_orders'), to: '/marketplace' },
+        isAdmin  && { label: t('nav_admin'),    to: '/admin' },
+        isFarmer && { label: t('nav_dashboard'),to: '/farmer/dashboard' },
+        roles.includes('buyer') && { label: t('nav_orders'), to: '/marketplace' },
       ].filter(Boolean)
     : [];
 
@@ -58,8 +65,13 @@ export default function Navbar() {
 
       {/* Links */}
       <nav className="hidden items-center gap-7 md:flex">
-        {links.map(([key, to]) => (
+        {publicLinks.map(([key, to]) => (
           <Link key={key} to={to} className="text-sm font-medium text-gray-700 hover:text-m1">
+            {t(key)}
+          </Link>
+        ))}
+        {roleLinks.map(([key, to]) => (
+          <Link key={key} to={to} className="text-sm font-medium text-m1 hover:text-m1-dark">
             {t(key)}
           </Link>
         ))}
@@ -76,7 +88,6 @@ export default function Navbar() {
         </button>
 
         {user ? (
-          // Logged-in dropdown
           <div className="relative" ref={menuRef}>
             <button
               onClick={() => setMenuOpen((v) => !v)}
@@ -95,14 +106,14 @@ export default function Navbar() {
                   <div className="text-xs text-gray-500">{t('login_signed_in_as')}</div>
                   <div className="text-sm font-semibold text-gray-900">{user.phone}</div>
                   <div className="mt-1 flex flex-wrap gap-1">
-                    {user.roles?.map((r) => (
+                    {roles.map((r) => (
                       <span key={r} className="rounded-full bg-success-bg px-2 py-0.5 text-xs font-semibold text-m1-dark">
                         {t(`role_${r}`)}
                       </span>
                     ))}
                   </div>
                 </div>
-                {roleLinks.map((item) => (
+                {dropdownLinks.map((item) => (
                   <Link
                     key={item.to}
                     to={item.to}
@@ -122,7 +133,6 @@ export default function Navbar() {
             )}
           </div>
         ) : (
-          // Logged-out buttons
           <>
             <Link to="/login" className="text-sm font-medium text-gray-700 hover:text-m1">
               {t('login')}

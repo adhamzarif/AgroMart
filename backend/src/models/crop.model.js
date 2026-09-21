@@ -1,7 +1,7 @@
 // crop.model.js — crop data access for the marketplace.
 // Ports the "list available crops with farmer + category + district" query
 // (was: CropModel.php listing methods / vw_active_crops_with_details).
-import { fetchAll, fetchOne } from '../config/db.js';
+import { fetchAll, fetchOne, pool } from '../config/db.js';
 
 /**
  * List available crops for the marketplace, with full server-side
@@ -187,4 +187,42 @@ export async function createCrop(data) {
     [farmerId, categoryId, cropName, cropVariety, quantity, unit,
      pricePerUnit, isOrganic, description, JSON.stringify(images)]
   );
+}
+// Additions to backend/src/models/crop.model.js
+// (Append these to the existing file — do not replace.)
+
+// Update whitelisted fields on a crop. `patch` keys are camelCase; SQL columns snake_case.
+export async function updateCrop(cropId, patch) {
+  const map = {
+    cropName: 'crop_name',
+    cropVariety: 'crop_variety',
+    categoryId: 'category_id',
+    quantity: 'quantity',
+    unit: 'unit',
+    pricePerUnit: 'price_per_unit',
+    description: 'description',
+    isOrganic: 'is_organic',
+    status: 'status',
+  };
+  const setParts = [];
+  const values = [];
+  let n = 1;
+  for (const [key, val] of Object.entries(patch)) {
+    if (!(key in map)) continue;
+    setParts.push(`${map[key]} = $${n++}`);
+    values.push(val);
+  }
+  if (setParts.length === 0) return getCropById(cropId);
+  values.push(cropId);
+  const { rows } = await pool.query(
+    `UPDATE crops SET ${setParts.join(', ')}, updated_at = NOW()
+       WHERE crop_id = $${n} RETURNING *`,
+    values
+  );
+  return rows[0];
+}
+
+export async function deleteCropById(cropId) {
+  await pool.query('DELETE FROM crops WHERE crop_id = $1', [cropId]);
+  return true;
 }
