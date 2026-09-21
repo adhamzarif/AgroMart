@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext.jsx';
+import Login from './pages/auth/Login.jsx';
 import { LangProvider } from './context/LangContext.jsx';
 import { CartProvider } from './context/CartContext.jsx'; // 1. CartProvider import
 import CartDrawer from './components/ui/CartDrawer.jsx'; // 2. CartDrawer import
