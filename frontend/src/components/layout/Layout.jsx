@@ -1,14 +1,22 @@
-// Layout.jsx — page shell: Navbar on top, page content, Footer at bottom.
-// Wrap any page in <Layout>...</Layout>, or use it once around <Routes> in App.jsx.
-import Navbar from './Navbar.jsx';
-import Footer from './Footer.jsx';
+// src/components/layout/Layout.jsx
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import Navbar from './Navbar';
+import Footer from './Footer';
 
-export default function Layout({ children }) {
+const Layout = () => {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex flex-col min-h-screen">
+    
       <Navbar />
-      <main className="flex-1">{children}</main>
+
+      <main className="flex-grow">
+        <Outlet />
+      </main>
+
       <Footer />
     </div>
   );
-}
+};
+
+export default Layout;

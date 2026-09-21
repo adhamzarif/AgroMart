@@ -1,64 +1,61 @@
-// index.js — Express application entry point.
 import express from 'express';
-import helmet from 'helmet';
 import cors from 'cors';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { env, isDev } from './config/env.js';
-import { ping } from './config/db.js';
-import authRoutes from './routes/auth.routes.js';        // ← CHANGE 1
-import cropRoutes from './routes/crops.routes.js';
-import priceRoutes from './routes/prices.routes.js';
-import priceCompareRoutes from './routes/priceCompare.routes.js';
-import marginRoutes from './routes/margins.routes.js';
-import farmerRoutes from './routes/farmers.routes.js';
-import alertRoutes from './routes/alerts.routes.js';
+import dotenv from 'dotenv';
+
+// Existing Routes Import
+import authRoutes from './routes/auth.routes.js';
+import cropsRoutes from './routes/crops.routes.js';
+import pricesRoutes from './routes/prices.routes.js';
+import farmersRoutes from './routes/farmers.routes.js';
+import categoriesRoutes from './routes/categories.routes.js';
 import statsRoutes from './routes/stats.routes.js';
-import categoryRoutes from './routes/categories.routes.js';     // ← ADD THIS
+import alertsRoutes from './routes/alerts.routes.js';
+import marginsRoutes from './routes/margins.routes.js';
+import priceCompareRoutes from './routes/priceCompare.routes.js';
+
+// Payment Route Import
+import paymentRoutes from './routes/payment.routes.js';
+
+dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 4000;
 
-app.use(helmet());
-app.use(cors({ origin: env.CLIENT_ORIGIN, credentials: true }));
+// CORS Fix for credentials: 'include'
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
+
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Health check
-app.get('/api/health', async (_req, res) => {
-  let db = false;
-  try { db = await ping(); } catch { db = false; }
-  res.status(db ? 200 : 503).json({ ok: db, db, env: env.NODE_ENV });
+app.use(express.urlencoded({ extended: false }));
+// Health Check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', message: 'AgroMart API is healthy' });
 });
 
-// ── Routes ──
-app.use('/api/auth', authRoutes);                        // ← CHANGE 2
-app.use('/api/crops', cropRoutes);
-app.use('/api/prices', priceRoutes);
-app.use('/api/prices', priceCompareRoutes);
-app.use('/api/margins', marginRoutes);
-app.use('/api/farmers', farmerRoutes);
-app.use('/api/alerts', alertRoutes);
+// API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/crops', cropsRoutes);
+app.use('/api/prices', pricesRoutes);
+app.use('/api/farmers', farmersRoutes);
+app.use('/api/categories', categoriesRoutes);
 app.use('/api/stats', statsRoutes);
-const __b2dir = path.dirname(fileURLToPath(import.meta.url));
-app.use('/uploads', express.static(path.resolve(__b2dir, '../storage/uploads')));
-app.use('/api/categories', categoryRoutes);
+app.use('/api/alerts', alertsRoutes);
+app.use('/api/margins', marginsRoutes);
+app.use('/api/price-compare', priceCompareRoutes);
+app.use('/api/payment', paymentRoutes);
 
-
-// 404
-app.use((_req, res) => {
-  res.status(404).json({ error: 'Not found' });
-});
-
-// Central error handler
-// eslint-disable-next-line no-unused-vars
-app.use((err, _req, res, _next) => {
-  console.error('[error]', err.message);
-  res.status(err.status || 500).json({
-    error: isDev ? err.message : 'Internal server error',
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    message: err.message || 'Internal Server Error',
   });
 });
 
-app.listen(env.PORT, () => {
-  console.log(`AgroMart API on http://localhost:${env.PORT}  (${env.NODE_ENV})`);
-  console.log(`Health: http://localhost:${env.PORT}/api/health`);
+app.listen(PORT, () => {
+  console.log(`AgroMart API running on http://localhost:${PORT}`);
 });
