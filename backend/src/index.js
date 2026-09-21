@@ -2,6 +2,7 @@
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
+import session from 'express-session';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { env, isDev } from './config/env.js';
@@ -32,6 +33,21 @@ app.get('/api/health', async (_req, res) => {
 });
 
 // ── Routes ──
+
+// Sessions (in-memory store — fine for demo; use connect-pg-simple in production).
+app.use(session({
+  name: 'agromart.sid',
+  secret: process.env.SESSION_SECRET || 'agromart-dev-change-me',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: false, // set true when running behind HTTPS
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+  },
+}));
+
 app.use('/api/auth', authRoutes);                        // ← CHANGE 2
 app.use('/api/crops', cropRoutes);
 app.use('/api/prices', priceRoutes);
