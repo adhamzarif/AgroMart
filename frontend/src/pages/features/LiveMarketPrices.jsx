@@ -8,7 +8,7 @@ export default function LiveMarketPrices() {
   const { t } = useLang();
 
   const benefits = [
-    { icon: '📊', title: 'lmp_benefit1_title', desc: 'lmp_benefit1_desc',
+    { icon: '📊', title: 'lmp_benefit1_title', desc: 'lmp_benefit1_desc', to: '/prices/sell-now',
       img: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600' },
     { icon: '🗺️', title: 'lmp_benefit2_title', desc: 'lmp_benefit2_desc', to: '/prices/compare',
       img: 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600' },

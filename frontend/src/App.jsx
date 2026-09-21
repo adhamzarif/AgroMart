@@ -7,7 +7,10 @@ import Contact from './pages/Contact.jsx';
 import PriceCompare from './pages/prices/PriceCompare.jsx';
 import PriceHistory from './pages/prices/PriceHistory.jsx';
 import PriceAlerts from './pages/prices/PriceAlerts.jsx';
+import SellNow from './pages/prices/SellNow.jsx';
 import HigherMargins from './pages/features/HigherMargins.jsx';
+import TransparentPricing from './pages/features/TransparentPricing.jsx';
+import EasyDelivery from './pages/features/EasyDelivery.jsx';
 import TrustRatings from './pages/features/TrustRatings.jsx';
 import FarmerProfile from './pages/farmers/FarmerProfile.jsx';
 import Register from './pages/auth/Register.jsx';
@@ -46,7 +49,10 @@ export default function App() {
           <Route path="/prices/compare" element={<PriceCompare />} />
           <Route path="/prices/history" element={<PriceHistory />} />
           <Route path="/prices/alerts" element={<PriceAlerts />} />
+          <Route path="/prices/sell-now" element={<SellNow />} />
           <Route path="/features/higher-margins" element={<HigherMargins />} />
+          <Route path="/features/transparent-pricing" element={<TransparentPricing />} />
+          <Route path="/features/easy-delivery" element={<EasyDelivery />} />
           <Route path="/features/trust-ratings" element={<TrustRatings />} />
           <Route path="/farmers/:id" element={<FarmerProfile />} />
         </Routes>
