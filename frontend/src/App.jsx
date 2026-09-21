@@ -1,28 +1,34 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext.jsx';
-import Login from './pages/auth/Login.jsx';
 import { LangProvider } from './context/LangContext.jsx';
+
+import Login from './pages/auth/Login.jsx';
 import Navbar from './components/layout/Navbar.jsx';
+import Footer from './components/layout/Footer.jsx';
 
 import Home from './pages/Home.jsx';
 import Contact from './pages/Contact.jsx';
+
 import PriceCompare from './pages/prices/PriceCompare.jsx';
 import PriceHistory from './pages/prices/PriceHistory.jsx';
 import PriceAlerts from './pages/prices/PriceAlerts.jsx';
 import SellNow from './pages/prices/SellNow.jsx';
+
 import HigherMargins from './pages/features/HigherMargins.jsx';
 import TransparentPricing from './pages/features/TransparentPricing.jsx';
 import EasyDelivery from './pages/features/EasyDelivery.jsx';
 import TrustRatings from './pages/features/TrustRatings.jsx';
+
 import FarmerProfile from './pages/farmers/FarmerProfile.jsx';
 import Register from './pages/auth/Register.jsx';
 import CropForm from './pages/farmer/CropForm.jsx';
+
 import HowItWorks from './pages/HowItWorks.jsx';
 import LivePrice from './pages/LivePrice.jsx';
 import Marketplace from './pages/Marketplace.jsx';
 import ProductDetails from './pages/ProductDetails.jsx';
-import Cart from './pages/Cart.jsx';
 import Features from './pages/Features.jsx';
+
 import DirectSales from './pages/features/DirectSales.jsx';
 import LiveMarketPrices from './pages/features/LiveMarketPrices.jsx';
 import WeatherAlerts from './pages/features/WeatherAlerts.jsx';
@@ -32,38 +38,130 @@ import SecurePayments from './pages/features/SecurePayments.jsx';
 
 export default function App() {
   return (
-    <AuthProvider><LangProvider>
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/marketplace" element={<Marketplace />} />
-          <Route path="/marketplace/cart" element={<Cart />} />
-          <Route path="/marketplace/:cropId" element={<ProductDetails />} />
-          <Route path="/prices" element={<LivePrice />} />
-          <Route path="/how-it-works" element={<HowItWorks />} />
-          <Route path="/farmer/crops/new" element={<CropForm />} />
-          <Route path="/features" element={<Features />} />
-          <Route path="/features/direct-sales" element={<DirectSales />} />
-          <Route path="/features/live-prices" element={<LiveMarketPrices />} />
-          <Route path="/features/weather-alerts" element={<WeatherAlerts />} />
-          <Route path="/features/ai-advisor" element={<AiAdvisor />} />
-          <Route path="/features/micro-loans" element={<MicroLoans />} />
-          <Route path="/features/secure-payments" element={<SecurePayments />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/prices/compare" element={<PriceCompare />} />
-          <Route path="/prices/history" element={<PriceHistory />} />
-          <Route path="/prices/alerts" element={<PriceAlerts />} />
-          <Route path="/prices/sell-now" element={<SellNow />} />
-          <Route path="/features/higher-margins" element={<HigherMargins />} />
-          <Route path="/features/transparent-pricing" element={<TransparentPricing />} />
-          <Route path="/features/easy-delivery" element={<EasyDelivery />} />
-          <Route path="/features/trust-ratings" element={<TrustRatings />} />
-          <Route path="/farmers/:id" element={<FarmerProfile />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </BrowserRouter>
-    </LangProvider></AuthProvider>
+    <AuthProvider>
+      <LangProvider>
+        <BrowserRouter>
+          <div className="flex min-h-screen flex-col">
+            <Navbar />
+
+            <main className="flex-grow">
+              <Routes>
+                {/* Main */}
+                <Route path="/" element={<Home />} />
+
+                {/* Authentication */}
+                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<Login />} />
+
+                {/* Marketplace */}
+                <Route path="/marketplace" element={<Marketplace />} />
+                <Route
+                  path="/marketplace/:cropId"
+                  element={<ProductDetails />}
+                />
+
+                {/* Prices */}
+                <Route path="/prices" element={<LivePrice />} />
+                <Route
+                  path="/prices/compare"
+                  element={<PriceCompare />}
+                />
+                <Route
+                  path="/prices/history"
+                  element={<PriceHistory />}
+                />
+                <Route
+                  path="/prices/alerts"
+                  element={<PriceAlerts />}
+                />
+                <Route
+                  path="/prices/sell-now"
+                  element={<SellNow />}
+                />
+
+                {/* Farmer */}
+                <Route
+                  path="/farmer/crops/new"
+                  element={<CropForm />}
+                />
+                <Route
+                  path="/farmers/:id"
+                  element={<FarmerProfile />}
+                />
+
+                {/* General */}
+                <Route
+                  path="/how-it-works"
+                  element={<HowItWorks />}
+                />
+
+                <Route
+                  path="/contact"
+                  element={<Contact />}
+                />
+
+                {/* Features */}
+                <Route
+                  path="/features"
+                  element={<Features />}
+                />
+
+                <Route
+                  path="/features/direct-sales"
+                  element={<DirectSales />}
+                />
+
+                <Route
+                  path="/features/live-prices"
+                  element={<LiveMarketPrices />}
+                />
+
+                <Route
+                  path="/features/weather-alerts"
+                  element={<WeatherAlerts />}
+                />
+
+                <Route
+                  path="/features/ai-advisor"
+                  element={<AiAdvisor />}
+                />
+
+                <Route
+                  path="/features/micro-loans"
+                  element={<MicroLoans />}
+                />
+
+                <Route
+                  path="/features/secure-payments"
+                  element={<SecurePayments />}
+                />
+
+                <Route
+                  path="/features/higher-margins"
+                  element={<HigherMargins />}
+                />
+
+                <Route
+                  path="/features/transparent-pricing"
+                  element={<TransparentPricing />}
+                />
+
+                <Route
+                  path="/features/easy-delivery"
+                  element={<EasyDelivery />}
+                />
+
+                <Route
+                  path="/features/trust-ratings"
+                  element={<TrustRatings />}
+                />
+              </Routes>
+            </main>
+
+            <Footer />
+          </div>
+        </BrowserRouter>
+      </LangProvider>
+    </AuthProvider>
   );
 }
