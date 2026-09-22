@@ -7,14 +7,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { getPrices, getPricesFallback } from "../api/prices.api.js";
+import { useLang as useLangSafe } from "../context/LangContext.jsx";
 
-const useLangSafe = () => {
-  try {
-    const mod = require("../context/LangContext.jsx");
-    if (mod?.useLang) return mod.useLang();
-  } catch (e) {}
-  return { lang: "en", setLang: () => {} };
-};
+
 
 const toBnNum = (num) => {
   const bnDigits = ["০","১","২","৩","৪","৫","৬","৭","৮","৯"];
