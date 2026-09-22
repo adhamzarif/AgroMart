@@ -1,6 +1,10 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext.jsx';
 import Login from './pages/auth/Login.jsx';
+import BuyerDashboard from './pages/buyer/BuyerDashboard.jsx';
+import AdminDashboard from './pages/admin/AdminDashboard.jsx';
+import FarmerDashboard from './pages/farmer/FarmerDashboard.jsx';
+import ProtectedRoute from './components/routing/ProtectedRoute.jsx';
 import { LangProvider } from './context/LangContext.jsx';
 import { CartProvider } from './context/CartContext.jsx'; // 1. CartProvider import
 import CartDrawer from './components/ui/CartDrawer.jsx'; // 2. CartDrawer import
@@ -65,6 +69,16 @@ export default function App() {
                 <Route path="/features/trust-ratings" element={<TrustRatings />} />
                 <Route path="/farmers/:id" element={<FarmerProfile />} />
                 <Route path="/login" element={<Login />} />
+                <Route element={<ProtectedRoute roles={["farmer","admin"]} />}>
+                  <Route path="/farmer/dashboard" element={<FarmerDashboard />} />
+                </Route>
+                <Route element={<ProtectedRoute roles={["admin"]} />}>
+                  <Route path="/admin" element={<AdminDashboard />} />
+                </Route>
+                <Route element={<ProtectedRoute roles={["buyer","admin"]} />}>
+                  <Route path="/buyer/dashboard" element={<BuyerDashboard />} />
+                </Route>
+
               </Routes>
             </main>
 
