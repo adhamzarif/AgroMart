@@ -9,6 +9,7 @@ import { ping } from './config/db.js';
 
 // Route Imports
 import authRoutes from './routes/auth.routes.js';
+import aiRoutes from './routes/ai.routes.js';
 import dashboardsRoutes from './routes/dashboards.routes.js';
 import cropRoutes from './routes/crops.routes.js';
 import priceRoutes from './routes/prices.routes.js';
@@ -56,6 +57,7 @@ app.use(session({
 }));
 
 app.use('/api/auth', authRoutes);
+app.use('/api/ai', aiRoutes);
 app.use('/api', dashboardsRoutes);
 app.use('/api/crops', cropRoutes);
 app.use('/api/prices', priceRoutes);
