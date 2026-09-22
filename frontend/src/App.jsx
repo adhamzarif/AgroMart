@@ -33,7 +33,7 @@ import SecurePayments from './pages/features/SecurePayments.jsx';
 
 export default function App() {
   return (
-    <LangProvider>
+    <AuthProvider><LangProvider>
       <CartProvider> {/* Wrap with CartProvider */}
         <BrowserRouter>
           <div className="flex flex-col min-h-screen">
@@ -64,6 +64,7 @@ export default function App() {
                 <Route path="/features/higher-margins" element={<HigherMargins />} />
                 <Route path="/features/trust-ratings" element={<TrustRatings />} />
                 <Route path="/farmers/:id" element={<FarmerProfile />} />
+                <Route path="/login" element={<Login />} />
               </Routes>
             </main>
 
@@ -71,6 +72,6 @@ export default function App() {
           </div>
         </BrowserRouter>
       </CartProvider>
-    </LangProvider>
+    </LangProvider></AuthProvider>
   );
 }

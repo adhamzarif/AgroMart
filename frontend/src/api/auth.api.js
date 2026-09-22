@@ -1,5 +1,4 @@
-// auth.api.js — auth endpoints. All calls use credentials:'include' so the
-// session cookie is sent with every request.
+// auth.api.js — auth endpoints. credentials:'include' sends the session cookie.
 const BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
 async function post(path, body) {
