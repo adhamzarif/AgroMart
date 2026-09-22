@@ -1,3 +1,4 @@
+// MARKETPLACE_PROTECTED
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext.jsx';
 import Login from './pages/auth/Login.jsx';
@@ -50,7 +51,9 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/marketplace" element={<Marketplace />} />
+                <Route element={<ProtectedRoute roles={["buyer","admin","farmer"]} />}>
+                  <Route path="/marketplace" element={<Marketplace />} />
+                </Route>
                 <Route path="/prices" element={<LivePrice />} />
                 <Route path="/how-it-works" element={<HowItWorks />} />
                 <Route path="/farmer/crops/new" element={<CropForm />} />
