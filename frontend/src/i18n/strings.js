@@ -642,6 +642,12 @@ export const strings = {
     rg_success: 'স্বাগতম, {name}! এখন লগইন করুন।',
     rg_error: 'কিছু ভুল হয়েছে',
     rg_have_account: 'ইতিমধ্যে অ্যাকাউন্ট আছে?',
+
+    contact_follow: 'অনুসরণ করুন',
+    contact_form_title: 'একটি বার্তা পাঠান',
+    contact_form_sub: 'ফর্মটি পূরণ করুন — আমরা দ্রুত যোগাযোগ করব।',
+    contact_info_title: 'যোগাযোগের তথ্য',
+    contact_info_sub: 'নিচের যেকোনো মাধ্যমে আমাদের সাথে যোগাযোগ করুন।',
 },
   en: {
     brand: 'AgroMart',
@@ -1285,5 +1291,11 @@ export const strings = {
     rg_success: 'Welcome, {name}! Please sign in.',
     rg_error: 'Something went wrong',
     rg_have_account: 'Already have an account?',
+
+    contact_follow: 'Follow us',
+    contact_form_title: 'Send us a message',
+    contact_form_sub: "Fill in the form below — we'll get back to you shortly.",
+    contact_info_title: 'Contact information',
+    contact_info_sub: 'Reach out to us through any of the channels below.',
 },
 };
