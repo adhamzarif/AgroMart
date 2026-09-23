@@ -48,7 +48,7 @@ export default function Navbar() {
       style={{ height: 'var(--nav-h)' }}
     >
       <Link to="/" className="flex items-center gap-2">
-        <span className="grid h-8 w-8 place-items-center rounded-lg bg-m1 text-white font-bold">A</span>
+        <img src="/logo.svg" alt="AgroMart" className="h-8 w-8" />
         <span className="text-xl font-bold font-display text-m1">{t('brand')}</span>
       </Link>
 

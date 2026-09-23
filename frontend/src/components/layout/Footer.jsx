@@ -20,9 +20,7 @@ export default function Footer() {
         {/* Brand */}
         <div>
           <div className="flex items-center gap-2">
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-white text-m1 font-bold">
-              A
-            </span>
+            <img src="/logo.svg" alt="AgroMart" className="h-8 w-8 rounded-lg bg-white p-1" />
             <span className="text-lg font-bold font-display text-white">{t('brand')}</span>
           </div>
           <p className="mt-3 text-sm leading-relaxed text-white/70">{t('footer_tagline')}</p>
