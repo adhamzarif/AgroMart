@@ -3,10 +3,13 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLang } from '../../context/LangContext.jsx';
 import { useAuth } from '../../context/AuthContext.jsx';
+import AiChatDrawer from '../../components/ui/AiChatDrawer.jsx';
 
 const BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
 export default function FarmerDashboard() {
+  const [chatOpen, setChatOpen] = useState(false);
+
   const { t } = useLang();
   const { user } = useAuth();
   const [crops, setCrops] = useState([]);
@@ -85,6 +88,17 @@ export default function FarmerDashboard() {
           </div>
         )}
       </div>
+      {/* Floating AI Help button */}
+      <button
+        onClick={() => setChatOpen(true)}
+        className="fixed bottom-6 right-6 z-[800] flex items-center gap-2 rounded-full bg-m1 px-5 py-3 font-semibold text-white shadow-3 hover:bg-m1-dark transition"
+        aria-label="AI Help"
+      >
+        <span className="text-lg">🤖</span>
+        <span>{t('ai_help_button')}</span>
+      </button>
+      <AiChatDrawer open={chatOpen} onClose={() => setChatOpen(false)} />
+
     </>
   );
 }
