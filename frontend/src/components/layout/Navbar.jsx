@@ -1,5 +1,4 @@
-// Navbar.jsx — top nav. Shows Login/Register when logged out,
-// or {name} ▾ dropdown with role-specific links + Logout when logged in.
+// Navbar.jsx — public links + login/register OR user dropdown.
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLang } from '../../context/LangContext.jsx';
@@ -12,7 +11,6 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
-  // close dropdown when clicking outside
   useEffect(() => {
     const onClick = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
@@ -36,12 +34,11 @@ export default function Navbar() {
     nav('/');
   }
 
-  // role-specific menu items shown inside the dropdown
   const roleLinks = user
     ? [
-        user.roles?.includes('admin')  && { label: t('nav_admin'),  to: '/admin' },
+        user.roles?.includes('admin')  && { label: t('nav_admin'),     to: '/admin' },
         user.roles?.includes('farmer') && { label: t('nav_dashboard'), to: '/farmer/dashboard' },
-        user.roles?.includes('buyer')  && { label: t('nav_orders'), to: '/marketplace' },
+        user.roles?.includes('buyer')  && { label: t('nav_orders'),    to: '/marketplace' },
       ].filter(Boolean)
     : [];
 
@@ -50,13 +47,11 @@ export default function Navbar() {
       className="sticky top-0 z-50 flex items-center justify-between bg-white px-6 shadow-1"
       style={{ height: 'var(--nav-h)' }}
     >
-      {/* Brand */}
       <Link to="/" className="flex items-center gap-2">
-        <span className="grid h-8 w-8 place-items-center rounded-lg bg-m1 text-white font-bold">A</span>
+        <img src="/logo.svg" alt="AgroMart" className="h-8 w-8" />
         <span className="text-xl font-bold font-display text-m1">{t('brand')}</span>
       </Link>
 
-      {/* Links */}
       <nav className="hidden items-center gap-7 md:flex">
         {links.map(([key, to]) => (
           <Link key={key} to={to} className="text-sm font-medium text-gray-700 hover:text-m1">
@@ -65,7 +60,6 @@ export default function Navbar() {
         ))}
       </nav>
 
-      {/* Right side */}
       <div className="flex items-center gap-3">
         <button
           onClick={toggle}
@@ -76,7 +70,6 @@ export default function Navbar() {
         </button>
 
         {user ? (
-          // Logged-in dropdown
           <div className="relative" ref={menuRef}>
             <button
               onClick={() => setMenuOpen((v) => !v)}
@@ -95,7 +88,7 @@ export default function Navbar() {
                   <div className="text-xs text-gray-500">{t('login_signed_in_as')}</div>
                   <div className="text-sm font-semibold text-gray-900">{user.phone}</div>
                   <div className="mt-1 flex flex-wrap gap-1">
-                    {user.roles?.map((r) => (
+                    {(user.roles || []).map((r) => (
                       <span key={r} className="rounded-full bg-success-bg px-2 py-0.5 text-xs font-semibold text-m1-dark">
                         {t(`role_${r}`)}
                       </span>
@@ -122,7 +115,6 @@ export default function Navbar() {
             )}
           </div>
         ) : (
-          // Logged-out buttons
           <>
             <Link to="/login" className="text-sm font-medium text-gray-700 hover:text-m1">
               {t('login')}

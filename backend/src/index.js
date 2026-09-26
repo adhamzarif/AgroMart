@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import session from 'express-session';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -8,6 +9,8 @@ import { ping } from './config/db.js';
 
 // Route Imports
 import authRoutes from './routes/auth.routes.js';
+import aiRoutes from './routes/ai.routes.js';
+import dashboardsRoutes from './routes/dashboards.routes.js';
 import cropRoutes from './routes/crops.routes.js';
 import priceRoutes from './routes/prices.routes.js';
 import priceCompareRoutes from './routes/priceCompare.routes.js';
@@ -38,7 +41,24 @@ app.get('/api/health', (req, res) => {
 });
 
 // API Routes
+
+// Sessions (in-memory — dev only; use connect-pg-simple in prod).
+app.use(session({
+  name: 'agromart.sid',
+  secret: process.env.SESSION_SECRET || 'agromart-dev-change-me',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: false,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+}));
+
 app.use('/api/auth', authRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api', dashboardsRoutes);
 app.use('/api/crops', cropRoutes);
 app.use('/api/prices', priceRoutes);
 app.use('/api/price-compare', priceCompareRoutes);

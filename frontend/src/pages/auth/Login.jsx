@@ -1,10 +1,8 @@
-// DEMO_PANEL_REMOVED
-// Login.jsx — sign-in page with demo account quick-fill buttons.
+// Login.jsx — sign-in page (no demo panel).
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useLang } from '../../context/LangContext.jsx';
 import { useAuth } from '../../context/AuthContext.jsx';
-
 
 export default function Login() {
   const { t } = useLang();
@@ -24,7 +22,6 @@ export default function Login() {
     setBusy(true);
     try {
       const user = await login({ phone: phone.trim(), password });
-      // route by role
       const roles = user.roles || [];
       const dest =
         roles.includes('admin')  ? '/admin' :
@@ -38,9 +35,9 @@ export default function Login() {
       setBusy(false);
     }
   }
+
   return (
     <>
-      {/* Green header band */}
       <section className="bg-gradient-to-br from-m1-dark via-m1 to-m1-light py-12 text-center text-white">
         <div className="mx-auto max-w-xl px-6">
           <h1 className="text-4xl font-bold font-display">{t('login_title')}</h1>
@@ -48,7 +45,6 @@ export default function Login() {
         </div>
       </section>
 
-      {/* Card, overlapping the band */}
       <div className="mx-auto -mt-8 max-w-md px-6 pb-16">
         <div className="rounded-xl2 bg-white p-6 shadow-3">
           <form onSubmit={onSubmit} className="space-y-4">

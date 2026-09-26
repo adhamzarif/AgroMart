@@ -1,5 +1,4 @@
-// AuthContext.jsx — global auth state. On mount, calls /api/auth/me to hydrate.
-// After login/logout, updates the context and the whole app re-renders.
+// AuthContext.jsx — global auth state. Hydrates via /api/auth/me on mount.
 import { createContext, useContext, useEffect, useState } from 'react';
 import { login as apiLogin, logout as apiLogout, me as apiMe } from '../api/auth.api.js';
 
@@ -14,12 +13,11 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Hydrate on mount — figure out if there's already a session
   useEffect(() => {
     let alive = true;
     apiMe()
       .then((res) => { if (alive) setUser(res.user); })
-      .catch(() => { /* not logged in, that's fine */ })
+      .catch(() => {})
       .finally(() => { if (alive) setLoading(false); });
     return () => { alive = false; };
   }, []);
@@ -31,7 +29,7 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
-    try { await apiLogout(); } catch { /* even if the server errors, we clear locally */ }
+    try { await apiLogout(); } catch {}
     setUser(null);
   };
 
