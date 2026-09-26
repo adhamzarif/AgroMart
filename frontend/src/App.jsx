@@ -1,5 +1,3 @@
-// MARKETPLACE_PROTECTED
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import { AuthProvider } from './context/AuthContext.jsx';
@@ -60,7 +58,10 @@ export default function App() {
                     Public Routes
                 ========================== */}
 
-                <Route path="/" element={<Home />} />
+                <Route
+                  path="/"
+                  element={<Home />}
+                />
 
                 <Route
                   path="/register"
@@ -71,6 +72,24 @@ export default function App() {
                   path="/login"
                   element={<Login />}
                 />
+
+                {/* =========================
+                    Marketplace - Public
+                ========================== */}
+
+                <Route
+                  path="/marketplace"
+                  element={<Marketplace />}
+                />
+
+                <Route
+                  path="/marketplace/:cropId"
+                  element={<ProductDetails />}
+                />
+
+                {/* =========================
+                    Price Routes
+                ========================== */}
 
                 <Route
                   path="/prices"
@@ -97,10 +116,28 @@ export default function App() {
                   element={<SellNow />}
                 />
 
+                {/* =========================
+                    General Public Routes
+                ========================== */}
+
                 <Route
                   path="/how-it-works"
                   element={<HowItWorks />}
                 />
+
+                <Route
+                  path="/contact"
+                  element={<Contact />}
+                />
+
+                <Route
+                  path="/farmers/:id"
+                  element={<FarmerProfile />}
+                />
+
+                {/* =========================
+                    Feature Routes
+                ========================== */}
 
                 <Route
                   path="/features"
@@ -157,43 +194,8 @@ export default function App() {
                   element={<TrustRatings />}
                 />
 
-                <Route
-                  path="/contact"
-                  element={<Contact />}
-                />
-
-                <Route
-                  path="/farmers/:id"
-                  element={<FarmerProfile />}
-                />
-
                 {/* =========================
-                    Marketplace
-                    Buyer / Admin / Farmer
-                ========================== */}
-
-                <Route
-                  element={
-                    <ProtectedRoute
-                      roles={['buyer', 'admin', 'farmer']}
-                    />
-                  }
-                >
-                  <Route
-                    path="/marketplace"
-                    element={<Marketplace />}
-                  />
-                </Route>
-
-                {/* Product Details */}
-
-                <Route
-                  path="/marketplace/:cropId"
-                  element={<ProductDetails />}
-                />
-
-                {/* =========================
-                    Farmer Routes
+                    Farmer Protected Routes
                 ========================== */}
 
                 <Route
@@ -215,7 +217,7 @@ export default function App() {
                 </Route>
 
                 {/* =========================
-                    Admin Routes
+                    Admin Protected Routes
                 ========================== */}
 
                 <Route
@@ -232,7 +234,7 @@ export default function App() {
                 </Route>
 
                 {/* =========================
-                    Buyer Routes
+                    Buyer Protected Routes
                 ========================== */}
 
                 <Route
