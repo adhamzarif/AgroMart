@@ -1,102 +1,346 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 import { useLang } from '../../context/LangContext.jsx';
 
-// Helper for converting numbers to Bangla digits
+import Card from './Card.jsx';
+import Badge from './Badge.jsx';
+import StarBadge from './StarBadge.jsx';
+
+import { getStockStatus } from '../../utils/stock.js';
+
+// Convert English numbers to Bangla digits
 const toBnNum = (num) => {
   if (num === null || num === undefined) return '';
-  const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-  return String(num).replace(/\d/g, (digit) => bnDigits[digit]);
+
+  const bnDigits = [
+    '০',
+    '১',
+    '২',
+    '৩',
+    '৪',
+    '৫',
+    '৬',
+    '৭',
+    '৮',
+    '৯',
+  ];
+
+  return String(num).replace(
+    /\d/g,
+    (digit) => bnDigits[digit]
+  );
 };
 
-export default function ProductCard({ crop, onSelect }) {
-  const { lang } = useLang();
+export default function ProductCard({
+  crop,
+  onQuickView,
+  isFavorite = false,
+  onToggleFavorite,
+}) {
+  const { t, lang } = useLang();
 
-  // Translations & Fallbacks
-  const cropName = lang === 'bn' 
-    ? (crop.crop_name_bn || crop.crop_name || crop.name) 
-    : (crop.crop_name_en || crop.crop_name || crop.name);
+  const {
+    crop_id,
 
-  const categoryName = lang === 'bn'
-    ? (crop.category_name_bn || crop.category_name || crop.category || 'খাদ্যশস্য')
-    : (crop.category_name_en || crop.category_name || crop.category || 'Grains');
+    crop_name,
+    crop_name_en,
+    crop_name_bn,
 
-  const farmerName = lang === 'bn'
-    ? (crop.farmer_name_bn || crop.farmer_name || 'আব্দুল হালিম')
-    : (crop.farmer_name_en || crop.farmer_name || 'Abdul Halim');
+    category_name,
+    category_name_en,
+    category_name_bn,
 
-  const districtName = lang === 'bn'
-    ? (crop.district_name_bn || crop.district_name || 'রাঙ্গামাটি')
-    : (crop.district_name_en || crop.district_name || 'Rangamati');
+    farmer_id,
+    farmer_name,
+    farmer_name_en,
+    farmer_name_bn,
 
-  // 1. Dynamic Unit Name
-  const rawUnit = crop.unit_en || crop.unit || 'piece';
-  const unitName = lang === 'bn'
-    ? (crop.unit_bn || (rawUnit === 'kg' ? 'কেজি' : rawUnit === 'piece' ? 'টি' : rawUnit))
-    : rawUnit;
+    district_name,
+    district_name_en,
+    district_name_bn,
 
-  // 2. Dynamic Price Digits
-  const rawPrice = Number(crop.price_per_unit ?? crop.price ?? 0).toFixed(2);
-  const formattedPrice = lang === 'bn' ? toBnNum(rawPrice) : rawPrice;
+    price_per_unit,
+    price,
 
-  const imageUrl = crop.image_url || crop.image || (Array.isArray(crop.images) ? crop.images[0] : '');
+    unit,
+    unit_en,
+    unit_bn,
+
+    quantity,
+
+    is_organic,
+    is_new = false,
+
+    images,
+    image_url,
+    image,
+
+    is_demo,
+
+    farmer_avg_rating,
+    farmer_review_count,
+  } = crop;
+
+  // Crop name
+  const displayName =
+    lang === 'bn'
+      ? crop_name_bn ||
+        crop_name ||
+        crop_name_en ||
+        'পণ্য'
+      : crop_name_en ||
+        crop_name ||
+        crop_name_bn ||
+        'Product';
+
+  // Category
+  const displayCategory =
+    lang === 'bn'
+      ? category_name_bn ||
+        category_name ||
+        category_name_en
+      : category_name_en ||
+        category_name ||
+        category_name_bn;
+
+  // Farmer
+  const displayFarmer =
+    lang === 'bn'
+      ? farmer_name_bn ||
+        farmer_name ||
+        farmer_name_en
+      : farmer_name_en ||
+        farmer_name ||
+        farmer_name_bn;
+
+  // District
+  const displayDistrict =
+    lang === 'bn'
+      ? district_name_bn ||
+        district_name ||
+        district_name_en
+      : district_name_en ||
+        district_name ||
+        district_name_bn;
+
+  // Unit
+  const rawUnit = unit_en || unit || 'piece';
+
+  const displayUnit =
+    lang === 'bn'
+      ? unit_bn ||
+        (rawUnit === 'kg'
+          ? 'কেজি'
+          : rawUnit === 'piece'
+            ? 'টি'
+            : rawUnit === 'ton'
+              ? 'টন'
+              : rawUnit)
+      : rawUnit;
+
+  // Image
+  const img =
+    image_url ||
+    image ||
+    (Array.isArray(images)
+      ? images[0]
+      : images);
+
+  // Price
+  const rawPrice = Number(
+    price_per_unit ?? price ?? 0
+  ).toFixed(2);
+
+  const displayPrice =
+    lang === 'bn'
+      ? toBnNum(rawPrice)
+      : rawPrice;
+
+  // Quantity
+  const displayQuantity =
+    lang === 'bn'
+      ? toBnNum(quantity ?? 0)
+      : quantity ?? 0;
+
+  // Stock status
+  const stockStatus =
+    getStockStatus(quantity);
+
+  const stockTone =
+    stockStatus === 'in'
+      ? 'success'
+      : stockStatus === 'low'
+        ? 'warning'
+        : 'danger';
+
+  const stockLabel =
+    t(`stock_${stockStatus}`);
 
   return (
-    <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all hover:shadow-md">
-      <div>
-        {/* Image & Badge */}
-        <div className="relative mb-3 h-48 w-full overflow-hidden rounded-xl bg-gray-100">
-          {imageUrl ? (
-            <img
-              src={imageUrl}
-              alt={cropName}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center text-4xl">🌾</div>
+    <Card hover className="overflow-hidden">
+      {/* Product Image */}
+
+      <div className="relative h-48 bg-gray-100">
+        {img ? (
+          <img
+            src={img}
+            alt={displayName}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <div className="grid h-full place-items-center text-4xl text-gray-400">
+            🌾
+          </div>
+        )}
+
+        {/* Badges */}
+
+        <div className="absolute right-3 top-3 flex flex-col items-end gap-2">
+          {is_new && (
+            <Badge tone="new">
+              ★{' '}
+              {lang === 'bn'
+                ? 'নতুন'
+                : t('badge_new')}
+            </Badge>
           )}
 
-          <span className="absolute top-2 right-2 rounded-full bg-white/90 px-2.5 py-0.5 text-xs font-semibold text-gray-700 shadow-sm backdrop-blur-sm">
-            ★ {lang === 'bn' ? 'নতুন' : 'New'}
-          </span>
+          {is_demo && (
+            <Badge tone="warning">
+              DEMO
+            </Badge>
+          )}
         </div>
 
-        {/* Category Pill */}
-        <div className="mb-2">
-          <span className="inline-block rounded-md bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
-            {categoryName}
-          </span>
-        </div>
+        {/* Favorite */}
 
-        {/* Title */}
-        <h3 className="text-lg font-bold text-gray-900">{cropName}</h3>
-
-        {/* Farmer Info */}
-        <div className="mt-1 space-y-0.5 text-xs text-gray-500">
-          <p className="flex items-center gap-1">👤 {farmerName}</p>
-          <p className="flex items-center gap-1">📍 {districtName}</p>
-        </div>
+        {onToggleFavorite && (
+          <button
+            type="button"
+            onClick={() =>
+              onToggleFavorite(crop_id)
+            }
+            aria-label={
+              isFavorite
+                ? t('fav_remove')
+                : t('fav_add')
+            }
+            aria-pressed={isFavorite}
+            className="absolute left-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-white/90 text-lg shadow hover:bg-white"
+          >
+            {isFavorite ? '❤️' : '🤍'}
+          </button>
+        )}
       </div>
 
-      {/* Price & Details Button */}
-      <div className="mt-4 flex items-end justify-between border-t border-gray-50 pt-3">
-        <div>
-          <div className="flex items-baseline gap-1">
-            <span className="text-xl font-extrabold text-emerald-600">৳{formattedPrice}</span>
+      <div className="p-5">
+        {/* Category */}
+
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          {displayCategory && (
+            <Badge tone="category">
+              {displayCategory}
+            </Badge>
+          )}
+
+          {is_organic && (
+            <Badge tone="success">
+              🌱 {t('badge_organic')}
+            </Badge>
+          )}
+        </div>
+
+        {/* Name */}
+
+        <h3 className="text-xl font-bold text-gray-900">
+          {displayName}
+        </h3>
+
+        {/* Farmer / District / Quantity */}
+
+        <div className="mt-2 space-y-1.5 text-sm text-gray-500">
+          {displayFarmer && (
+            <div className="flex items-center justify-between gap-2">
+              <Link
+                to={
+                  farmer_id
+                    ? `/farmers/${farmer_id}`
+                    : '#'
+                }
+                className="flex items-center gap-1.5 hover:text-m1"
+              >
+                <span>👤</span>
+
+                {displayFarmer}
+              </Link>
+
+              <StarBadge
+                rating={farmer_avg_rating}
+                count={farmer_review_count}
+              />
+            </div>
+          )}
+
+          {displayDistrict && (
+            <div className="flex items-center gap-1.5">
+              <span>📍</span>
+
+              {displayDistrict}
+            </div>
+          )}
+
+          <div className="flex items-center gap-1.5">
+            <span>📦</span>
+
+            {displayQuantity}{' '}
+            {displayUnit}
           </div>
-          <span className="text-xs text-gray-400">
-            {lang === 'bn' ? `প্রতি ${unitName}` : `per ${unitName}`}
-          </span>
         </div>
 
-        {/* 3. Translated Details Button */}
-        <button
-          type="button"
-          onClick={onSelect}
-          className="rounded-xl bg-emerald-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-900 shadow-sm active:scale-95 cursor-pointer"
-        >
-          {lang === 'bn' ? 'বিস্তারিত' : 'Details'}
-        </button>
+        {/* Stock */}
+
+        <div className="mt-2">
+          <Badge tone={stockTone}>
+            {stockLabel}
+          </Badge>
+        </div>
+
+        {/* Price */}
+
+        <div className="mb-3 mt-3">
+          <div className="text-2xl font-bold text-m1 font-display">
+            ৳ {displayPrice}
+          </div>
+
+          <div className="text-xs text-gray-400">
+            {lang === 'bn'
+              ? `প্রতি ${displayUnit}`
+              : `${t('per')} ${displayUnit}`}
+          </div>
+        </div>
+
+        {/* Actions */}
+
+        <div className="flex items-center gap-2">
+          {onQuickView && (
+            <button
+              type="button"
+              onClick={() =>
+                onQuickView(crop)
+              }
+              className="flex-1 rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+            >
+              {t('quickview')}
+            </button>
+          )}
+
+          <Link
+            to={`/marketplace/${crop_id}`}
+            className="flex-1 rounded-lg bg-m1 px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-m1-dark"
+          >
+            {t('details')}
+          </Link>
+        </div>
       </div>
-    </div>
+    </Card>
   );
 }

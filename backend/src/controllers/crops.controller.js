@@ -1,19 +1,30 @@
 // crops.controller.js — marketplace crop endpoints.
-import { listAvailableCrops, getCropById } from '../models/crop.model.js';
+import { listAvailableCrops, getCropById, getRelatedCrops } from '../models/crop.model.js';
 
 export async function listCrops(req, res, next) {
   try {
-    const limit = Math.min(parseInt(req.query.limit ?? '12', 10) || 12, 50);
+    // Now fully server-side: search, category, district, price range,
+    // organic/in-stock flags and sort are all applied in the DB query, and
+    // `total` (independent of limit/offset) lets the frontend "Load More"
+    // without re-fetching a large pool up front like before.
+    const limit = Math.min(parseInt(req.query.limit ?? '12', 10) || 12, 100);
     const offset = Math.max(parseInt(req.query.offset ?? '0', 10) || 0, 0);
-    const crops = await listAvailableCrops({
+
+    const { crops, total } = await listAvailableCrops({
       distinct: req.query.distinct === '1',
       categoryId: req.query.category ? parseInt(req.query.category, 10) : undefined,
-      districtId: req.query.district ? parseInt(req.query.district, 10) : undefined,
+      district: req.query.district?.trim() || undefined,
       search: req.query.q?.trim() || undefined,
+      minPrice: req.query.minPrice !== undefined ? Number(req.query.minPrice) : undefined,
+      maxPrice: req.query.maxPrice !== undefined ? Number(req.query.maxPrice) : undefined,
+      organicOnly: req.query.organic === 'true',
+      inStockOnly: req.query.inStock === 'true',
+      sortBy: req.query.sort || 'default',
       limit,
       offset,
     });
-    res.json({ crops, count: crops.length, limit, offset });
+
+    res.json({ crops, total, limit, offset });
   } catch (err) {
     next(err);
   }
@@ -24,6 +35,22 @@ export async function getCrop(req, res, next) {
     const crop = await getCropById(parseInt(req.params.id, 10));
     if (!crop) return res.status(404).json({ error: 'Crop not found' });
     res.json({ crop });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// "Related products" for the ProductDetails page — a few other available
+// crops from the same category, excluding the crop being viewed.
+export async function getRelated(req, res, next) {
+  try {
+    const cropId = parseInt(req.params.id, 10);
+    const crop = await getCropById(cropId);
+    if (!crop) return res.status(404).json({ error: 'Crop not found' });
+
+    const limit = Math.min(parseInt(req.query.limit ?? '4', 10) || 4, 12);
+    const crops = await getRelatedCrops(crop.category_id, cropId, limit);
+    res.json({ crops });
   } catch (err) {
     next(err);
   }
